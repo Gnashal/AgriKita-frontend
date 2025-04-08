@@ -13,6 +13,12 @@
         android:theme="@style/Theme.AgrikitaFrontend"
         tools:targetApi="31">
         <activity
+            android:name=".pages.Login"
+            android:exported="false" />
+        <activity
+            android:name=".pages.LandingPage"
+            android:exported="false" />
+        <activity
             android:name=".pages.Home"
             android:exported="false" />
         <activity
