@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F3ED"
+    tools:context=".pages.LandingPage"
+    tools:ignore="ExtraText">
+
+    <ImageView
+        android:id="@+id/agriText"
+        android:layout_width="109dp"
+        android:layout_height="78dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:contentDescription="AgriKita Logo"
+        android:src="@drawable/agrikita_header_text_g2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/agriLogo"
+        android:layout_width="72dp"
+        android:layout_height="78dp"
+        android:layout_marginStart="320dp"
+        android:layout_marginTop="28dp"
+        android:contentDescription="AgriKita Logo"
+        android:src="@drawable/agrikita_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/titleEmpowering"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Empowering"
+        android:textColor="#2C6B2F"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/agriLogo"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/titleMain"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Filipino Farmers\nThrough\nTechnology"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/titleEmpowering"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="AgriKita connects farmers with resources, markets, and each other to improve livelihoods and strengthen local agriculture."
+        android:textColor="#333333"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/titleMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btnGetStarted"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Get Started"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#2C6B2F"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnLearnMore"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="24dp"
+        tools:ignore="HardcodedText" />
+
+    <!-- Learn More Button -->
+    <Button
+        android:id="@+id/btnLearnMore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Learn More"
+        android:textColor="#000000"
+        android:backgroundTint="#FCE5C7"
+        app:layout_constraintTop_toTopOf="@id/btnGetStarted"
+        app:layout_constraintStart_toEndOf="@id/btnGetStarted"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/farmerImage"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/farmer_bg1"
+        android:contentDescription="Farmer Image"
+        app:layout_constraintTop_toBottomOf="@id/btnGetStarted"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/footerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="© AgriKita 2025"
+        android:textSize="12sp"
+        android:textColor="#555555"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="16dp"
+        tools:ignore="HardcodedText" />
+
+    <!-- Social Media Icons -->
+    <LinearLayout
+        android:id="@+id/socialIcons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp">
+
+        <ImageButton
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/facebook_black_logo_icon"
+            android:contentDescription="Facebook"
+            tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/instagram_black_logo_icon"
+            android:contentDescription="Instagram"
+            tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/telegram_black_logo_icon"
+            android:contentDescription="Website"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
