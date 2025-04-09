@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/agrikita_background"
+    tools:context=".pages.BuyerPage">
+
+    <!-- Filter Button Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/agrikita_background"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!--pfp -> profile picture-->
+        <ImageView
+            android:id="@+id/user_pfp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <ImageView
+            android:id="@+id/logo_holder"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/agrikita_logo" />
+
+        <ImageButton
+            android:id="@+id/notification_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/ic_popup_reminder" />
+
+        <ImageButton
+            android:id="@+id/checkout_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/shopping_basket_svgrepo_com" />
+
+        <ImageButton
+            android:id="@+id/side_menu_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/alert_dark_frame" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="2dp">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="2dp">
+
+                <Button
+                    android:id="@+id/pork_filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:text="Pork"/>
+
+                <Button
+                    android:id="@+id/beef_filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:text="Beef" />
+
+                <Button
+                    android:id="@+id/poultry_filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:text="Poultry" />
+
+                <Button
+                    android:id="@+id/vegetable_filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:text="Vegetables" />
+
+                <Button
+                    android:id="@+id/fruit_filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:text="Fruits" />
+
+                <Button
+                    android:id="@+id/herb_filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:text="Herbs" />
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- List View Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/agrikita_background"
+            android:divider="@color/agrikita_lighter_green"
+            android:dividerHeight="1dp"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Bottom Navigation Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/agrikita_dark_green"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:elevation="8dp">
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:srcCompat="@android:drawable/btn_dialog" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:srcCompat="@android:drawable/btn_dialog" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:srcCompat="@android:drawable/btn_dialog" />
+
+        <ImageButton
+            android:id="@+id/imageButton4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:srcCompat="@android:drawable/btn_dialog" />
+    </LinearLayout>
+
+</LinearLayout>
