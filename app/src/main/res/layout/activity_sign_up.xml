@@ -7,30 +7,40 @@
     android:layout_height="match_parent"
     android:background="#FFF9F0"
     tools:context=".pages.SignUp">
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="109dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="28dp"
-        android:contentDescription="AgriKita Logo"
-        android:src="@drawable/agrikita_header_text_g2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="DuplicateIds,HardcodedText" />
-
-    <TextView
-        android:id="@+id/titleEmpowering"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/topContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:textColor="#2C6B2F"
-        android:textSize="29sp"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText,MissingConstraints"
-        tools:layout_editor_absoluteX="255dp"
-        tools:layout_editor_absoluteY="48dp" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="109dp"
+            android:layout_height="78dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="28dp"
+            android:contentDescription="AgriKita Logo"
+            android:src="@drawable/agrikita_header_text_g2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="DuplicateIds,HardcodedText" />
+
+        <TextView
+            android:id="@+id/titleEmpowering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:textColor="#2C6B2F"
+            android:textSize="29sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            tools:ignore="HardcodedText,MissingConstraints"
+            android:layout_marginStart="120dp"/>
+
+    </LinearLayout>
 
     <!-- Name Label -->
     <TextView
@@ -43,8 +53,8 @@
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintStart_toStartOf="@+id/topContainer"
+        app:layout_constraintTop_toBottomOf="@id/topContainer"
         tools:ignore="HardcodedText" />
 
     <!-- Name Input -->
@@ -258,7 +268,7 @@
         android:layout_marginEnd="24dp"
         android:backgroundTint="#4CAF50"
         android:elevation="4dp"
-        android:text="Login"
+        android:text="Sign up"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -293,11 +303,12 @@
             android:layout_marginEnd="4dp"
             android:contentDescription="Info icon"
             android:padding="4dp"
+            android:layout_gravity="center"
             android:tint="@color/white"
             android:src="@drawable/vertical_bars_icon_2"
             tools:ignore="HardcodedText,UseAppTint" />
 
-        <TextView
+        <Button
             android:id="@+id/toLoginPage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -305,7 +316,13 @@
             android:textColor="#2C6B2F"
             android:textSize="13sp"
             android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:padding="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:elevation="0dp"
             tools:ignore="HardcodedText" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

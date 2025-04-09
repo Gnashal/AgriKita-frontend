@@ -52,6 +52,7 @@ public class Login extends AppCompatActivity {
         fbSignIn = findViewById(R.id.fbBtn);
 
         signIn.setOnClickListener(v -> login());
+        toSignUp.setOnClickListener(v -> navigateToSignUp());
     }
 
     private void login() {
@@ -78,6 +79,10 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    private void navigateToSignUp() {
+        startActivity(new Intent(this, SignUp.class));
+        finish();
+    }
     private void navigateToHomeScreen() {
         Intent intent = new Intent(this, Home.class);
         startActivity(intent);
