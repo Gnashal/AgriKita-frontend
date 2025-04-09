@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
+
+    <TextView
+        android:id="@+id/text_farm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cebu Farm"
+        android:textSize="12sp"
+        android:textColor="#007f00"
+        app:layout_constraintTop_toTopOf="@+id/image_product"
+        app:layout_constraintStart_toEndOf="@+id/image_product"
+        android:layout_marginStart="12dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/image_product"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/agrikita_logo"
+            app:layout_constraintBottom_toTopOf="@+id/text_product_name"
+            app:layout_constraintEnd_toStartOf="@+id/text_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⭐ 4.8"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₱26"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/text_rating"
+            app:layout_constraintStart_toEndOf="@+id/image_product"
+            android:layout_marginStart="12dp"/>
+
+        <TextView
+            android:id="@+id/text_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Per kilo"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/text_price"
+            app:layout_constraintStart_toStartOf="@+id/text_price" />
+
+        <TextView
+            android:id="@+id/text_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock: "
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/text_unit"
+            app:layout_constraintStart_toStartOf="@+id/text_category" />
+
+        <TextView
+            android:id="@+id/text_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Produce"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/inventory_management_product_container"
+            android:backgroundTint="#007f00"
+            android:padding="4dp"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/text_quantity"
+            app:layout_constraintStart_toStartOf="@+id/text_unit"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/text_product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Fresh Tomatoes"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/image_product"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/text_product_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Locally sourced, high-quality fresh potatoes, hand-picked."
+            android:textSize="12sp"
+            android:maxLines="2"
+            app:layout_constraintTop_toBottomOf="@+id/text_product_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/text_product_desc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btn_add_to_cart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit"
+                android:backgroundTint="#007f00"
+                android:textColor="#ffffff"/>
+
+            <Button
+                android:id="@+id/btn_buy_now"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Remove"
+                android:backgroundTint="#004d00"
+                android:textColor="#ffffff"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

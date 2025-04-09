@@ -27,6 +27,10 @@
             android:name=".pages.LandingPage"
             android:exported="false" />
         <activity
+            android:name=".pages.InventoryManagement"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".pages.Home"
             android:exported="false" />
         <activity
@@ -39,5 +43,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
