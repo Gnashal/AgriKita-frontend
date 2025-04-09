@@ -9,40 +9,39 @@
     tools:context=".pages.Login">
 
 
-    <ImageView
-        android:id="@+id/agriText"
-        android:layout_width="109dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="28dp"
-        android:contentDescription="AgriKita Logo"
-        android:src="@drawable/agrikita_header_text_g2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F9F3ED"
-        tools:context=".pages.Login"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="DuplicateIds">
-
-        <!-- AgriKita Logo -->
-        <ImageView
-            android:id="@+id/agriText"
-            android:layout_width="109dp"
-            android:layout_height="78dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="28dp"
-            android:contentDescription="AgriKita Logo"
-            android:src="@drawable/agrikita_header_text_g2"
-            app:layout_constraintStart_toStartOf="parent"
+        <LinearLayout
+            android:id="@+id/topPanel"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="DuplicateIds,HardcodedText" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="28dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/agriText"
+                android:layout_width="109dp"
+                android:layout_height="78dp"
+                android:layout_marginStart="24dp"
+                android:contentDescription="AgriKita Logo"
+                android:src="@drawable/agrikita_header_text_g2"
+                tools:ignore="DuplicateIds,HardcodedText" />
+
+            <!--There was a problem nga nag double ang constraint layout lmao-->
+            <TextView
+                android:id="@+id/titleEmpowering"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="120dp"
+                android:text="Login"
+                android:textColor="#2C6B2F"
+                android:textSize="29sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:gravity="center" />
+        </LinearLayout>
+
 
         <!-- Sign In Title -->
 
@@ -58,7 +57,7 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/agriText"
+            app:layout_constraintTop_toBottomOf="@+id/topPanel"
             tools:ignore="HardcodedText" />
 
         <!-- Email Field -->
@@ -130,14 +129,23 @@
                 android:padding="4dp"
                 android:tint="@color/white"
                 android:src="@drawable/vertical_bars_icon_2"
+                android:layout_gravity="center"
                 tools:ignore="HardcodedText,UseAppTint" />
 
-            <TextView
+            <Button
+                android:id="@+id/btnForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Forgot Password?"
-                android:textColor="#000000"
-                android:textSize="13sp" />
+                android:text="Forgot Password"
+                android:textColor="#2C6B2F"
+                android:textSize="14sp"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                android:padding="0dp"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:textAllCaps="false"
+                />
         </LinearLayout>
 
         <!-- Sign In Button -->
@@ -202,7 +210,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/orDivider">
 
+            <!--TODO: Change this to Facebook icon instead of Apple-->
             <ImageView
+                android:id="@+id/fbBtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:clickable="true"
@@ -212,9 +222,10 @@
                 android:padding="10dp"
                 android:tint="@color/white"
                 android:src="@drawable/apple_icon"
-                tools:ignore="HardcodedText,KeyboardInaccessibleWidget,UseAppTint" />
+                tools:ignore="HardcodedText,InvalidId,KeyboardInaccessibleWidget,UseAppTint" />
 
             <ImageView
+                android:id="@+id/googleBtn"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:clickable="true"
@@ -254,32 +265,27 @@
                 android:layout_marginEnd="4dp"
                 android:contentDescription="Info icon"
                 android:padding="4dp"
+                android:layout_gravity="center"
                 android:tint="@color/white"
                 android:src="@drawable/vertical_bars_icon_2"
                 tools:ignore="HardcodedText,UseAppTint" />
 
-            <TextView
+            <Button
                 android:id="@+id/btnSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign Up"
                 android:textColor="#2C6B2F"
                 android:textSize="13sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                android:padding="0dp"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:textAllCaps="false"
+                />
+
         </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/titleEmpowering"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textColor="#2C6B2F"
-        android:textSize="29sp"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText,MissingConstraints"
-        tools:layout_editor_absoluteX="285dp"
-        tools:layout_editor_absoluteY="48dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
