@@ -1,10 +1,7 @@
-package mobdev.agrikita.models;
-
-import android.widget.Toast;
+package mobdev.agrikita.models.auth;
 
 import mobdev.agrikita.api.AuthServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.pages.Login;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +37,8 @@ public class AuthService {
             }
         });
     }
+
+    public void signup()
     public interface AuthServiceCallback {
         void onSuccess(LoginResponse loginResponse);
         void onFailure(String errorMessage);

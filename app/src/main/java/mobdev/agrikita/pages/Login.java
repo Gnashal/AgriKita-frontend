@@ -16,14 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.api.AuthServiceApi;
-import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.models.AuthService;
-import mobdev.agrikita.models.LoginRequest;
-import mobdev.agrikita.models.LoginResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import mobdev.agrikita.models.auth.AuthService;
+import mobdev.agrikita.models.auth.LoginResponse;
 
 public class Login extends AppCompatActivity {
     EditText emailField, passwordField;
