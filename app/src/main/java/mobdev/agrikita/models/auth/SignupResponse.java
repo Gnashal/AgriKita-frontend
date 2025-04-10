@@ -26,4 +26,8 @@ public class SignupResponse {
     public void setNewUser(UserRecord newUser) {
         this.newUser = newUser;
     }
+
+    public String getEmail() {
+        return newUser != null ? newUser.getEmail() : null;
+    }
 }

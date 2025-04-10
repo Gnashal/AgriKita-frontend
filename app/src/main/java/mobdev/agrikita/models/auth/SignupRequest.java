@@ -10,9 +10,6 @@ public class SignupRequest {
     @SerializedName("phone")
     private String phone;
 
-    @SerializedName("role")
-    private String role;
-
     @SerializedName("username")
     private String username;
 
@@ -44,14 +41,6 @@ public class SignupRequest {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -69,11 +58,10 @@ public class SignupRequest {
     }
 
     // Constructor
-    public SignupRequest(String email, String password, String phone, String role, String username, String name) {
+    public SignupRequest(String email, String password, String phone, String username, String name) {
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.role = role;
         this.username = username;
         this.name = name;
     }

@@ -45,6 +45,12 @@ public class Login extends AppCompatActivity {
         googleSignIn = findViewById(R.id.googleBtn);
         fbSignIn = findViewById(R.id.fbBtn);
 
+        String newEmail = getIntent().getStringExtra("email");
+        if (newEmail != null){
+            emailField.setText(newEmail);
+        }
+
+
         signIn.setOnClickListener(v -> login());
         toSignUp.setOnClickListener(v -> navigateToSignUp());
     }
@@ -58,7 +64,7 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        authService.loginUser(email, password, new AuthService.AuthServiceCallback()
+        authService.loginUser(email, password, new AuthService.LoginCallback()
         {
             @Override
             public void onSuccess(LoginResponse loginResponse) {
