@@ -27,9 +27,6 @@
             android:name=".pages.LandingPage"
             android:exported="false" />
         <activity
-            android:name=".pages.ProductDetail"
-            android:exported="false" />
-        <activity
             android:name=".pages.BuyerPage"
             android:exported="true">
             <intent-filter>

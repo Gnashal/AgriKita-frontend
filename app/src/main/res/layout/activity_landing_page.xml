@@ -28,7 +28,7 @@
         android:layout_marginStart="320dp"
         android:layout_marginTop="28dp"
         android:contentDescription="AgriKita Logo"
-        android:src="@drawable/agrikita_logo"
+        android:src="@drawable/agrikita_logo_circle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />

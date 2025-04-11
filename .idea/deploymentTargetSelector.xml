@@ -4,17 +4,6 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-<<<<<<< HEAD
-        <DropdownSelection timestamp="2025-04-08T16:00:31.051761400Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Raidi\.android\avd\Medium_Phone_API_35.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-=======
->>>>>>> 53a8b91f21c1d52c97d86a8c616a19aa7dfe9e83
       </SelectionState>
     </selectionStates>
   </component>

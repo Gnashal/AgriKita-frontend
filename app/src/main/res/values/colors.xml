@@ -10,10 +10,9 @@
 
     <!--  Agri-kita Colors  -->
     <color name="agrikita_dark_green">#00490C</color>
-    <color name="agrikita_light_green">#489A4E</color>
-    <color name="agrikita_lighter_green">#B8E7AE</color>
+    <color name="agrikita_green">#489A4E</color>
+    <color name="agrikita_light_green">#B8E7AE</color>
     <color name="agrikita_coin_yellow">#F7B11E</color>
     <color name="agrikita_background">#F9F2E5</color>
-    <color name="button_pressed">#1B5E20</color>
 
 </resources>

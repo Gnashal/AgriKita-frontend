@@ -9,161 +9,326 @@
     android:background="@color/agrikita_background"
     tools:context=".pages.BuyerPage">
 
-    <!-- Filter Button Section -->
+    <!-- Header: Notification and Checkout -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/agrikita_background"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <!--pfp -> profile picture-->
-        <ImageView
-            android:id="@+id/user_pfp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:background="@color/agrikita_background"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="320sp"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/notification_button"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                app:srcCompat="@android:drawable/ic_popup_reminder" />
+
+            <ImageButton
+                android:id="@+id/checkout_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                app:srcCompat="@drawable/shopping_basket_svgrepo_com" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/logo_holder"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/agrikita_logo" />
+            app:srcCompat="@drawable/agrikita_logo_text" />
 
-        <ImageButton
-            android:id="@+id/notification_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@android:drawable/ic_popup_reminder" />
+        <!-- Location + Profile -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="1sp">
 
-        <ImageButton
-            android:id="@+id/checkout_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/shopping_basket_svgrepo_com" />
+            <!-- Location -->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edge_2">
 
-        <ImageButton
-            android:id="@+id/side_menu_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@android:drawable/alert_dark_frame" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@android:drawable/ic_menu_compass" />
 
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="300sp"
+                        android:layout_height="wrap_content"
+                        android:text="location here!!!"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16dp" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- User PFP -->
+            <FrameLayout
+                android:layout_width="50sp"
+                android:layout_height="50sp"
+                android:background="@drawable/round_frame"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:id="@+id/user_pfp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 
+    <!-- Weather Info Box -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_top"
+        android:layout_gravity="center"
+        android:padding="10sp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Weather type and temperature -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/type_of_day_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Cloudy Day!" />
+
+                <TextView
+                    android:id="@+id/temperature_display"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="30dp"
+                    android:textColor="@color/white"
+                    android:text="16^o" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="90sp"
+                android:layout_height="match_parent" />
+
+            <!-- Icon + Time -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@android:drawable/btn_star_big_on" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="Partial Cloudly" />
+
+                        <TextView
+                            android:id="@+id/date_and_time_display"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="5:30 PM | Apr 5" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/go_to_weather_forecast"
+                    android:layout_width="120sp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/agrikita_dark_green"
+                    android:textSize="10dp"
+                    android:textColor="@color/white"
+                    android:text="View Weather Forecast" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Navigation Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="2dp">
+        android:background="@drawable/rounded_top_2"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:padding="5dp"
+        android:orientation="horizontal">
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!-- Each item (repeated layout structure) -->
+        <!-- Marketplace -->
+        <LinearLayout
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <ImageButton
+                android:id="@+id/imageButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="2dp">
+                android:background="@drawable/rounded_edge"
+                android:padding="10sp"
+                app:srcCompat="@android:drawable/btn_dialog" />
 
-                <Button
-                    android:id="@+id/pork_filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/agrikita_dark_green"
-                    android:text="Pork"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:text="Marketplace" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/beef_filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/agrikita_dark_green"
-                    android:text="Beef" />
+        <!-- My Orders -->
+        <LinearLayout
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/poultry_filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/agrikita_dark_green"
-                    android:text="Poultry" />
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edge"
+                android:padding="10sp"
+                app:srcCompat="@android:drawable/btn_dialog" />
 
-                <Button
-                    android:id="@+id/vegetable_filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/agrikita_dark_green"
-                    android:text="Vegetables" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:text="My Orders" />
+        </LinearLayout>
 
-                <Button
-                    android:id="@+id/fruit_filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/agrikita_dark_green"
-                    android:text="Fruits" />
+        <!-- My Shop -->
+        <LinearLayout
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/herb_filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/agrikita_dark_green"
-                    android:text="Herbs" />
-            </LinearLayout>
-        </HorizontalScrollView>
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edge"
+                android:padding="10sp"
+                app:srcCompat="@android:drawable/btn_dialog" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:text="My Shop" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- List View Section -->
+    <!-- News Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:textColor="@color/agrikita_green"
+                android:textSize="20dp"
+                android:text="NEWS " />
+        </FrameLayout>
+
         <ListView
+            android:id="@+id/news_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/agrikita_background"
-            android:divider="@color/agrikita_lighter_green"
-            android:dividerHeight="1dp"
-            android:padding="8dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/agrikita_background" />
     </LinearLayout>
 
-    <!-- Bottom Navigation Section -->
+    <!-- Orders Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/agrikita_dark_green"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:elevation="8dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10sp"
+        android:background="@drawable/rounded_edge_3"
+        android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/imageButton1"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:textColor="@color/agrikita_green"
+            android:textSize="20dp"
+            android:text="Orders " />
 
-            app:srcCompat="@android:drawable/btn_dialog" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:srcCompat="@android:drawable/btn_dialog" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:srcCompat="@android:drawable/btn_dialog" />
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:srcCompat="@android:drawable/btn_dialog" />
+            <ListView
+                android:id="@+id/orders_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
