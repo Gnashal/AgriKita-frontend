@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="12dp"
+    android:elevation="4dp">
+
+    <!-- Profile Picture -->
+    <ImageView
+        android:id="@+id/profileIcon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_profile"
+        android:layout_alignParentStart="true"
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_bg"
+        android:padding="4dp" />
+
+    <!-- App Logo -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/agrikita_header_text_g1"
+        android:contentDescription="Logo" />
+
+    <!-- Notification Icon -->
+    <ImageView
+        android:id="@+id/notificationIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_notification"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="72dp" />
+
+    <!-- Cart Icon -->
+    <ImageView
+        android:id="@+id/cartIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_cart"
+        android:layout_toStartOf="@id/menuIcon"
+        android:layout_marginEnd="16dp" />
+
+    <!-- Menu Icon -->
+    <ImageView
+        android:id="@+id/menuIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_menu"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
