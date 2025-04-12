@@ -21,23 +21,20 @@ public class RetrofitClient {
     public static Retrofit getClient(Context context) {
         if (retrofit == null) {
             OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(new Interceptor() {
-                        @Override
-                        public Response intercept(Chain chain) throws IOException {
-                            SharedPreferences prefs = context.getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE);
-                            String idToken = prefs.getString("idToken", null);
+                    .addInterceptor(chain -> {
+                        SharedPreferences prefs = context.getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE);
+                        String idToken = prefs.getString("idToken", null);
 
-                            Request originalRequest = chain.request();
-                            Request.Builder builder = originalRequest.newBuilder();
+                        Request originalRequest = chain.request();
+                        Request.Builder builder = originalRequest.newBuilder();
 
-                            // Only add header if token is not null
-                            if (idToken != null && !idToken.isEmpty()) {
-                                builder.addHeader("Authorization", "Bearer " + idToken);
-                            }
-
-                            Request newRequest = builder.build();
-                            return chain.proceed(newRequest);
+                        // Only add header if token is not null
+                        if (idToken != null && !idToken.isEmpty()) {
+                            builder.addHeader("Authorization", "Bearer " + idToken);
                         }
+
+                        Request newRequest = builder.build();
+                        return chain.proceed(newRequest);
                     })
                     .build();
 
