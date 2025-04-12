@@ -1,13 +1,14 @@
 package mobdev.agrikita.pages;
 
 import android.os.Bundle;
-import android.widget.GridView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import mobdev.agrikita.models.Product;
 
 public class Marketplace extends AppCompatActivity {
 
-    GridView productGridView;
+    RecyclerView productGridView;
     List<Product> productList = new ArrayList<>();
     ProductAdapter adapter;
 
@@ -27,17 +28,24 @@ public class Marketplace extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_marketplace);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Initialize RecyclerView (formerly GridView)
         productGridView = findViewById(R.id.product_grid_view);
+        productGridView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         // Sample data
         productList.add(new Product("Tomatoes", "Fresh red tomatoes", "Produce", 25.00, 4.5, 30, R.drawable.test_tomato));
         productList.add(new Product("Bananas", "Sweet yellow bananas", "Fruits", 15.00, 4.2, 50, R.drawable.test_banana));
+        productList.add(new Product("Carrots", "Fresh orange carrots", "Produce", 20.00, 4.3, 40, R.drawable.test_carrot));
+        productList.add(new Product("Eggs", "Farm fresh eggs", "Poultry", 10.00, 4.6, 60, R.drawable.test_eggs));
+        productList.add(new Product("Rice", "Premium quality rice", "Grains", 50.00, 4.4, 25, R.drawable.test_rice));
+        productList.add(new Product("Onions", "Fresh white onions", "Produce", 18.00, 4.1, 35, R.drawable.test_onion));
         productList.add(new Product("Chicken", "Whole dressed chicken", "Meat", 120.00, 4.7, 10, R.drawable.test_chicken));
 
         adapter = new ProductAdapter(this, productList);
