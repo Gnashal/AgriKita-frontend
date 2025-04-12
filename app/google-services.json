@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "825349126677",
+    "firebase_url": "https://agrikita-70574-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "agrikita-70574",
+    "storage_bucket": "agrikita-70574.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825349126677:android:e24e557b91c41363e52c1c",
+        "android_client_info": {
+          "package_name": "mobdev.agrikita"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXujIAvDbBwM9xK1CpwQJQ4_7bCnpX8vg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
