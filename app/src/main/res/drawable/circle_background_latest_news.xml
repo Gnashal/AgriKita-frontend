@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- Background fill color (adjust as needed) -->
+    <solid android:color="#65262626" /> <!-- Example: purple -->
+
+    <!-- Optional border -->
+    <stroke
+        android:width="2dp"
+        android:color="#FFFFFFFF" /> <!-- White border -->
+
+    <!-- Optional padding inside the circle -->
+    <padding
+        android:left="4dp"
+        android:top="4dp"
+        android:right="4dp"
+        android:bottom="4dp" />
+
+</shape>
