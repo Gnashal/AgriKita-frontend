@@ -16,14 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.api.AuthServiceApi;
-import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.models.AuthService;
-import mobdev.agrikita.models.LoginRequest;
-import mobdev.agrikita.models.LoginResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import mobdev.agrikita.models.auth.AuthService;
+import mobdev.agrikita.models.auth.LoginResponse;
 
 public class Login extends AppCompatActivity {
     EditText emailField, passwordField;
@@ -41,7 +35,7 @@ public class Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        authService = new AuthService();
+        authService = new AuthService(this);
 
         emailField = findViewById(R.id.emailField);
         passwordField = findViewById(R.id.passwordField);
@@ -50,6 +44,12 @@ public class Login extends AppCompatActivity {
         forgotPassword = findViewById(R.id.btnForgotPassword);
         googleSignIn = findViewById(R.id.googleBtn);
         fbSignIn = findViewById(R.id.fbBtn);
+
+        String newEmail = getIntent().getStringExtra("email");
+        if (newEmail != null){
+            emailField.setText(newEmail);
+        }
+
 
         signIn.setOnClickListener(v -> login());
         toSignUp.setOnClickListener(v -> navigateToSignUp());
@@ -64,7 +64,7 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        authService.loginUser(email, password, new AuthService.AuthServiceCallback()
+        authService.loginUser(email, password, new AuthService.LoginCallback()
         {
             @Override
             public void onSuccess(LoginResponse loginResponse) {
@@ -97,6 +97,7 @@ public class Login extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("idToken", loginResponse.getIdToken());
         editor.putString("refreshToken", loginResponse.getRefreshToken());
+        /*Use this to pass as the current user DocRef*/
         editor.putString("localId", loginResponse.getLocalId());
         editor.apply();
     }

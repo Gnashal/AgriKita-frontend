@@ -1,4 +1,4 @@
-package mobdev.agrikita.models;
+package mobdev.agrikita.models.auth;
 
 import com.google.gson.annotations.SerializedName;
 

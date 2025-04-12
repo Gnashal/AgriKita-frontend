@@ -10,13 +10,21 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AgrikitaFrontend"
-        tools:targetApi="31"
         android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config"
-        >
+        tools:targetApi="31">
+        <activity
+            android:name=".pages.CreateNewPassword"
+            android:exported="false" />
+        <activity
+            android:name=".pages.VerifyPhoneNumber"
+            android:exported="false" />
+        <activity
+            android:name=".pages.ForgotPassword"
+            android:exported="false" />
         <activity
             android:name=".pages.SignUp"
             android:exported="false" />
