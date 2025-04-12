@@ -1,5 +1,7 @@
 package mobdev.agrikita.models.auth;
 
+import android.content.Context;
+
 import mobdev.agrikita.api.AuthServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
 import retrofit2.Call;
@@ -9,8 +11,8 @@ import retrofit2.Response;
 public class AuthService {
     private AuthServiceApi serviceApi;
 
-    public AuthService() {
-        serviceApi = RetrofitClient.getClient().create(AuthServiceApi.class);
+    public AuthService(Context context) {
+        serviceApi = RetrofitClient.getClient(context).create(AuthServiceApi.class);
     }
     public void loginUser(String email, String password, final LoginCallback callback) {
         LoginRequest loginRequest = new LoginRequest(email, password);

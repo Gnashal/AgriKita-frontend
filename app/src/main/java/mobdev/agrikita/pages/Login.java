@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        authService = new AuthService();
+        authService = new AuthService(this);
 
         emailField = findViewById(R.id.emailField);
         passwordField = findViewById(R.id.passwordField);

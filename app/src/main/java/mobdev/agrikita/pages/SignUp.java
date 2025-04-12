@@ -34,7 +34,7 @@ public class SignUp extends AppCompatActivity {
             return insets;
         });
 
-        authService = new AuthService();
+        authService = new AuthService(this);
 
         emailInput = findViewById(R.id.emailInput);
         usernameInput = findViewById(R.id.usernameInput);
