@@ -97,6 +97,7 @@ public class Login extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("idToken", loginResponse.getIdToken());
         editor.putString("refreshToken", loginResponse.getRefreshToken());
+        /*Use this to pass as the current user DocRef*/
         editor.putString("localId", loginResponse.getLocalId());
         editor.apply();
     }

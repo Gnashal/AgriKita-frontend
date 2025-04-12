@@ -1,6 +1,8 @@
 package mobdev.agrikita.pages;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -110,7 +112,7 @@ public class SignUp extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    private void toLogin(){
+    private void toLogin() {
         startActivity(new Intent(this, Login.class));
         finish();
     }
