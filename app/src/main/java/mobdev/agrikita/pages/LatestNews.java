@@ -1,20 +1,23 @@
 package mobdev.agrikita.pages;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kwabenaberko.newsapilib.NewsApiClient;
+import com.kwabenaberko.newsapilib.models.request.TopHeadlinesRequest;
+import com.kwabenaberko.newsapilib.models.response.ArticleResponse;
+
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
-import mobdev.agrikita.models.LatestNewsViewModel;
 
 public class LatestNews extends AppCompatActivity {
 
@@ -24,15 +27,15 @@ public class LatestNews extends AppCompatActivity {
     private LinearLayout shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
-    private LatestNewsViewModel viewModel;
+    private NewsApiClient newsApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.latest_news);
 
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(LatestNewsViewModel.class);
+        // Initialize News API client
+        newsApiClient = new NewsApiClient("d1b68dc7b791475fb691ee39d51dfa42"); // Replace with your API key
 
         // Initialize views
         locationSearchView = findViewById(R.id.searchView);
@@ -50,8 +53,8 @@ public class LatestNews extends AppCompatActivity {
         // Set click listeners for the three sections
         setupSectionClickListeners();
 
-        // Observe news data changes
-        observeNewsData();
+        // Fetch initial news
+        fetchTopHeadlines("agriculture"); // Default query
     }
 
     private void setupRecyclerView() {
@@ -64,7 +67,7 @@ public class LatestNews extends AppCompatActivity {
         locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                fetchNews(query);
+                fetchTopHeadlines(query);
                 return true;
             }
 
@@ -76,21 +79,45 @@ public class LatestNews extends AppCompatActivity {
         });
     }
 
-    private void fetchNews(String query) {
-        String apiKey = "d1b68dc7b791475fb691ee39d51dfa42"; // Replace with your actual API key
-        viewModel.fetchNews(query, apiKey);
-    }
+    private void fetchTopHeadlines(String query) {
+        newsApiClient.getTopHeadlines(
+                new TopHeadlinesRequest.Builder()
+                        .q(query)
+                        .language("en")
+                        .pageSize(4) // Limit to 4 articles
+                        .build(),
+                new NewsApiClient.ArticlesResponseCallback() {
+                    @Override
+                    public void onSuccess(ArticleResponse response) {
+                        runOnUiThread(() -> {
+                            if (response.getArticles() != null) {
+                                newsAdapter.setArticles(response.getArticles());
+                            }
+                        });
+                    }
 
-    private void observeNewsData() {
-        viewModel.getNewsLiveData().observe(this, newsResponse -> {
-            if (newsResponse != null && newsResponse.getArticles() != null) {
-                newsAdapter.setNewsList(newsResponse.getArticles());
-            }
-        });
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        runOnUiThread(() -> {
+                            String errorMessage = "Failed to load news";
 
-        viewModel.getErrorLiveData().observe(this, errorMessage -> {
-            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
-        });
+                            if (throwable instanceof UnknownHostException) {
+                                errorMessage = "No internet connection";
+                            } else if (throwable instanceof SocketTimeoutException) {
+                                errorMessage = "Connection timeout";
+                            } else if (throwable.getMessage() != null) {
+                                if (throwable.getMessage().contains("associated address")) {
+                                    errorMessage = "Network connection failed";
+                                } else {
+                                    errorMessage = throwable.getMessage();
+                                }
+                            }
+
+                            Toast.makeText(LatestNews.this, errorMessage, Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
+        );
     }
 
     private void setupSectionClickListeners() {
