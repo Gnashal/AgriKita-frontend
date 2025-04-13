@@ -31,14 +31,10 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Products product = productList.get(position);
-        holder.textFarm.setText(product.getFarmName());
-        holder.imageProduct.setImageResource(product.getImageResId());
-        holder.textRating.setText(product.getRating());
-        holder.textPrice.setText(product.getPrice());
-        holder.textUnit.setText(product.getUnit());
-        holder.textCategory.setText(product.getCategory());
         holder.textProductName.setText(product.getProductName());
-        holder.textDescription.setText(product.getDescription());
+        holder.textPrice.setText(String.format("%.2f", product.getPrice()));
+        holder.textProductStock.setText(String.valueOf(product.getQuantity()));
+//        holder.imageProduct.setImageResource(product.getImageUrl());
     }
 
     @Override
@@ -47,19 +43,15 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView textFarm, textRating, textPrice, textUnit, textCategory, textProductName, textDescription;
+        TextView textProductName, textPrice, textProductStock;
         ImageView imageProduct;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
-            textFarm = itemView.findViewById(R.id.text_farm);
-            imageProduct = itemView.findViewById(R.id.image_product);
-            textRating = itemView.findViewById(R.id.text_rating);
-            textPrice = itemView.findViewById(R.id.text_price);
-            textUnit = itemView.findViewById(R.id.text_unit);
-            textCategory = itemView.findViewById(R.id.text_category);
-            textProductName = itemView.findViewById(R.id.text_product_name);
-            textDescription = itemView.findViewById(R.id.text_product_desc);
+            textProductName = itemView.findViewById(R.id.productName);
+            textPrice = itemView.findViewById(R.id.productPrice);
+            textProductStock = itemView.findViewById(R.id.productStock);
+//            imageProduct = itemView.findViewById(R.id.productImage);
         }
     }
 }
