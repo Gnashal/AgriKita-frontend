@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F3ED"
+    android:background="#F9F2E5"
     tools:context=".pages.Login">
 
     <ImageView
@@ -20,12 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="DuplicateIds,HardcodedText" />
 
-    <!-- Name Label -->
 
-
-    <!-- Sign In Title -->
-
-        <!-- Email Label -->
     <TextView
         android:id="@+id/Login"
         android:layout_width="0dp"
@@ -156,7 +151,8 @@
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/forgotPasswordContainer" />
+            app:layout_constraintTop_toBottomOf="@id/forgotPasswordContainer"
+            tools:ignore="HardcodedText" />
 
         <!-- Divider Text -->
 

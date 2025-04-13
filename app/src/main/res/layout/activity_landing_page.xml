@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F3ED"
+    android:background="#F9F2E5"
     tools:context=".pages.LandingPage"
     tools:ignore="ExtraText">
 
