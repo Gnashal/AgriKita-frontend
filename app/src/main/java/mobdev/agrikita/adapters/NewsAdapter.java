@@ -1,5 +1,6 @@
 package mobdev.agrikita.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +32,20 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         Article article = articles.get(position);
-        holder.titleTextView.setText(article.getTitle());
-        holder.descriptionTextView.setText(article.getDescription());
+
+        String title = article.getTitle() != null ? article.getTitle() : "No title available";
+        String description = article.getDescription() != null ? article.getDescription() : "No description available";
+
+        holder.titleTextView.setText(title);
+        holder.descriptionTextView.setText(description);
 
         // Load image using Glide or Picasso
         if (article.getUrlToImage() != null) {
             Glide.with(holder.itemView.getContext())
                     .load(article.getUrlToImage())
                     .into(holder.newsImageView);
+        } else {
+            holder.newsImageView.setVisibility(View.GONE);
         }
     }
 
@@ -49,6 +56,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
+        Log.d("NewsAPI", "Articles size: " + articles.size());
         notifyDataSetChanged();
     }
 
