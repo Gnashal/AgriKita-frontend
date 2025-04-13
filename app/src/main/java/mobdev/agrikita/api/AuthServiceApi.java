@@ -1,5 +1,7 @@
 package mobdev.agrikita.api;
 
+import mobdev.agrikita.models.auth.ForgotPasswordRequest;
+import mobdev.agrikita.models.auth.ForgotPasswordResponse;
 import mobdev.agrikita.models.auth.LoginRequest;
 import mobdev.agrikita.models.auth.LoginResponse;
 import mobdev.agrikita.models.auth.SignupRequest;
@@ -13,4 +15,6 @@ public interface AuthServiceApi {
     Call<LoginResponse> loginUser(@Body LoginRequest request);
     @POST("auth/signup")
     Call<SignupResponse>registerUser(@Body SignupRequest request);
+    @POST("auth/forgot-password")
+    Call<ForgotPasswordResponse>forgotPassword(@Body ForgotPasswordRequest request);
 }

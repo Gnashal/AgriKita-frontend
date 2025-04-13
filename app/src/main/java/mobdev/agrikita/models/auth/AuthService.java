@@ -65,6 +65,38 @@ public class AuthService {
             }
         });
     }
+
+    public void sendEmail(String email, final ForgotPasswordCallback callback) {
+        ForgotPasswordRequest request = new ForgotPasswordRequest(email);
+        Call<ForgotPasswordResponse> call = serviceApi.forgotPassword(request);
+
+        call.enqueue(new Callback<ForgotPasswordResponse>() {
+            @Override
+            public void onResponse(Call<ForgotPasswordResponse> call, Response<ForgotPasswordResponse> response) {
+                if (response.isSuccessful()){
+                    ForgotPasswordResponse res = response.body();
+                    if (res != null) {
+                        callback.onSuccess(res);
+                    } else {
+                        callback.onFailure("Sending email failed: Empty response from backend");
+                    }
+                } else {
+                    callback.onFailure("Sending email failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ForgotPasswordResponse> call, Throwable t) {
+                callback.onFailure("Network failure: " + t.getMessage());
+            }
+        });
+    }
+
+    public interface ForgotPasswordCallback{
+       void onSuccess(ForgotPasswordResponse response);
+       void onFailure(String error);
+    }
+
     public interface LoginCallback {
         void onSuccess(LoginResponse loginResponse);
         void onFailure(String errorMessage);
