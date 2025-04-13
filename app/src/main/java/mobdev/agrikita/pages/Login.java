@@ -53,6 +53,7 @@ public class Login extends AppCompatActivity {
 
         signIn.setOnClickListener(v -> login());
         toSignUp.setOnClickListener(v -> navigateToSignUp());
+        forgotPassword.setOnClickListener(v -> toForgotPassword());
     }
 
     private void login() {
@@ -101,4 +102,9 @@ public class Login extends AppCompatActivity {
         editor.putString("localId", loginResponse.getLocalId());
         editor.apply();
     }
+    public void toForgotPassword() {
+        startActivity(new Intent(this, ForgotPassword.class));
+        finish();
+    }
+
 }
