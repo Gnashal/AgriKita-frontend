@@ -43,7 +43,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.github.bumptech.glide:glide:4.15.1") // or the latest version
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
-    implementation("com.github.KwabenBerko:News-API-Java:1.0.2")
+//    implementation("com.github.KwabenBerko:News-API-Java:1.0.2")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))

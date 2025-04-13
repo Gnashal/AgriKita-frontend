@@ -14,15 +14,20 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kwabenaberko.newsapilib.NewsApiClient;
-import com.kwabenaberko.newsapilib.models.request.TopHeadlinesRequest;
-import com.kwabenaberko.newsapilib.models.response.ArticleResponse;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
+import mobdev.agrikita.api.NewsApiResponse;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
     private SearchView locationSearchView;
@@ -31,20 +36,21 @@ public class Home extends AppCompatActivity {
     private LinearLayout shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
-    private NewsApiClient newsApiClient;
+    // private NewsApiClient newsApiClient; //  No longer needed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        newsApiClient = new NewsApiClient("2e4ccecff1244970bd1240c65c99a2f2"); // Replace with your API key
+        // newsApiClient = new NewsApiClient("YOUR_API_KEY"); // ❌ Old library not used
 
         // Initialize views
         locationSearchView = findViewById(R.id.searchView);
@@ -62,8 +68,8 @@ public class Home extends AppCompatActivity {
         // Set click listeners for the three sections
         setupSectionClickListeners();
 
-        // Fetch initial news
-        fetchTopHeadlines("nature"); // Default query
+        // Optional: fetch news on load
+        fetchEverythingNews("trees OR food OR farming OR nature OR agribusiness");
     }
 
     private void setupRecyclerView() {
@@ -76,81 +82,62 @@ public class Home extends AppCompatActivity {
         locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                fetchTopHeadlines(query);
+                fetchEverythingNews(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Optional: implement real-time search if needed
-                return false;
+                return false; // Real-time search not implemented
             }
         });
     }
 
-    private void fetchTopHeadlines(String query) {
-        Log.d("NewsAPI", "Fetching top headlines for query: " + query);
-        newsApiClient.getTopHeadlines(
-                new TopHeadlinesRequest.Builder()
-                        .q(query)
-                        .language("en")
-                        .pageSize(4) // Limit to 4 articles
-                        .build(),
-                new NewsApiClient.ArticlesResponseCallback() {
-                    @Override
-                    public void onSuccess(ArticleResponse response) {
-                        Log.d("NewsAPI", "onSuccess called");
-                        runOnUiThread(() -> {
-                            if (response.getArticles() != null) {
-                                newsAdapter.setArticles(response.getArticles());
-                            } else {
-                                Toast.makeText(Home.this, "No articles found", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+    private void fetchEverythingNews(String query) {
+        String apiKey = "2e4ccecff1244970bd1240c65c99a2f2"; // ✅ Your API key
+        String url = "https://newsapi.org/v2/everything?q=" + query + "&language=en&sortBy=publishedAt&pageSize=4&apiKey=" + apiKey;
 
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        Log.e("NewsAPI", "Error: ", throwable);
-                        runOnUiThread(() -> {
-                            String errorMessage = "Failed to load news";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url(url).build();
 
-                            if (throwable instanceof UnknownHostException) {
-                                errorMessage = "No internet connection";
-                            } else if (throwable instanceof SocketTimeoutException) {
-                                errorMessage = "Connection timeout";
-                            } else if (throwable.getMessage() != null) {
-                                if (throwable.getMessage().contains("associated address")) {
-                                    errorMessage = "Network connection failed";
-                                } else {
-                                    errorMessage = throwable.getMessage();
-                                }
-                            }
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(() ->
+                        Toast.makeText(Home.this, "Error fetching news: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+            }
 
-                            Toast.makeText(Home.this, errorMessage, Toast.LENGTH_SHORT).show();
-                        });
-                    }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String json = response.body().string();
+                    Gson gson = new Gson();
+                    NewsApiResponse newsApiResponse = gson.fromJson(json, NewsApiResponse.class);
+
+                    runOnUiThread(() -> {
+                        if (newsApiResponse.getArticles() != null) {
+                            newsAdapter.setArticles(newsApiResponse.getArticles());
+                        } else {
+                            Toast.makeText(Home.this, "No news articles found", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-        );
+            }
+        });
     }
 
     private void setupSectionClickListeners() {
         marketplaceLayout.setOnClickListener(v -> {
             Toast.makeText(this, "Marketplace clicked", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(LatestNews.this, MarketplaceActivity.class);
-            // startActivity(intent);
         });
 
         ordersLayout.setOnClickListener(v -> {
             Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(LatestNews.this, OrdersActivity.class);
-            // startActivity(intent);
         });
 
         shopLayout.setOnClickListener(v -> {
             Toast.makeText(this, "My Shop clicked", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(LatestNews.this, MyShopActivity.class);
-            // startActivity(intent);
         });
     }
 }

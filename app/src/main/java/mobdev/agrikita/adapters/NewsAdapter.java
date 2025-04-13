@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.kwabenaberko.newsapilib.models.Article;
+
 import mobdev.agrikita.R;
+import mobdev.agrikita.models.Article; // Updated Article model
 
-
-// NewsAdapter.java
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     private List<Article> articles = new ArrayList<>();
 
@@ -39,8 +39,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.titleTextView.setText(title);
         holder.descriptionTextView.setText(description);
 
-        // Load image using Glide or Picasso
-        if (article.getUrlToImage() != null) {
+        // Check if the image URL is available
+        if (article.getUrlToImage() != null && !article.getUrlToImage().isEmpty()) {
+            holder.newsImageView.setVisibility(View.VISIBLE);
             Glide.with(holder.itemView.getContext())
                     .load(article.getUrlToImage())
                     .into(holder.newsImageView);
@@ -56,7 +57,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
-        Log.d("NewsAPI", "Articles size: " + articles.size());
+        Log.d("NewsAdapter", "Articles size: " + articles.size());
         notifyDataSetChanged();
     }
 
