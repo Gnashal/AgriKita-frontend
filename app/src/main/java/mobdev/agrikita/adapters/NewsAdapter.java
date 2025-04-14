@@ -1,5 +1,6 @@
 package mobdev.agrikita.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.NewsItem;
+import mobdev.agrikita.models.Article; // Updated Article model
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
-
-    private List<NewsItem> newsItems;
-
-    public NewsAdapter(List<NewsItem> newsItems) {
-        this.newsItems = newsItems;
-    }
+    private List<Article> articles = new ArrayList<>();
 
     @NonNull
     @Override
@@ -32,26 +31,46 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        NewsItem item = newsItems.get(position);
-        holder.title.setText(item.getTitle());
-        holder.description.setText(item.getDescription());
-        // Load image using Glide/Picasso if needed
+        Article article = articles.get(position);
+
+        String title = article.getTitle() != null ? article.getTitle() : "No title available";
+        String description = article.getDescription() != null ? article.getDescription() : "No description available";
+
+        holder.titleTextView.setText(title);
+        holder.descriptionTextView.setText(description);
+
+        // Check if the image URL is available
+        if (article.getUrlToImage() != null && !article.getUrlToImage().isEmpty()) {
+            holder.newsImageView.setVisibility(View.VISIBLE);
+            Glide.with(holder.itemView.getContext())
+                    .load(article.getUrlToImage())
+                    .into(holder.newsImageView);
+        } else {
+            holder.newsImageView.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return newsItems.size();
+        return Math.min(articles.size(), 4); // Limit to 4 items
     }
 
-    public static class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView title, description;
-        ImageView image;
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+        Log.d("NewsAdapter", "Articles size: " + articles.size());
+        notifyDataSetChanged();
+    }
+
+    static class NewsViewHolder extends RecyclerView.ViewHolder {
+        ImageView newsImageView;
+        TextView titleTextView;
+        TextView descriptionTextView;
 
         public NewsViewHolder(@NonNull View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.newsTitle);
-            description = itemView.findViewById(R.id.newsDescription);
-            image = itemView.findViewById(R.id.newsImage);
+            newsImageView = itemView.findViewById(R.id.newsImage);
+            titleTextView = itemView.findViewById(R.id.newsTitle);
+            descriptionTextView = itemView.findViewById(R.id.newsDescription);
         }
     }
 }
