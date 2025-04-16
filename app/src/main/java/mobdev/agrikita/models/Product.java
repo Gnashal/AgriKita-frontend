@@ -3,23 +3,22 @@ package mobdev.agrikita.models;
 import java.io.Serializable;
 
 public class Product implements Serializable {
-    private String name, description, category;
+    private String name, description, category, seller;
     private double price, rating;
     private int quantity, imageResId;
 
-    public Product(String name, String description, String category, double price, double rating, int quantity, int imageResId) {
+    public Product(String name, String description, String category, String seller, double price, double rating, int quantity, int imageResId) {
         this.name = name;
         this.description = description;
         this.category = category;
+        this.seller = seller;
         this.price = price;
         this.rating = rating;
         this.quantity = quantity;
         this.imageResId = imageResId;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
 
     public void setName(String name) {
         this.name = name;
@@ -39,6 +38,14 @@ public class Product implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
     }
 
     public double getPrice() {

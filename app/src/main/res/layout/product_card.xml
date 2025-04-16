@@ -48,7 +48,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:background="@drawable/product_card_rounded_edges"
-                    app:srcCompat="@drawable/agrikita_logo_circle" />
+                    app:srcCompat="@drawable/agrikita_logo" />
             </FrameLayout>
 
             <!-- Price and Rating -->

@@ -1,19 +1,26 @@
 package mobdev.agrikita.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.Product;
+import mobdev.agrikita.pages.Marketplace;
+import mobdev.agrikita.pages.ShoppingCartPage;
+import mobdev.agrikita.utils.ShoppingCartController;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
@@ -33,6 +40,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     @Override
+    public int getItemCount() {
+        return productList.size();
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product productItem = productList.get(position);
 
@@ -42,16 +54,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.price.setText("P " + productItem.getPrice());
         holder.rating.setText(String.valueOf(productItem.getRating()));
         holder.productImage.setImageResource(productItem.getImageResId());
-    }
 
-    @Override
-    public int getItemCount() {
-        return productList.size();
+        holder.addToCart_btn.setOnClickListener(v -> {
+            ShoppingCartController.getInstance().addToCart(productItem);
+            Toast.makeText(context, "Product has been Added to the Cart!", Toast.LENGTH_SHORT).show();
+        });
+
+        holder.buyNow_btn.setOnClickListener(v -> {
+            ShoppingCartController.getInstance().addToCart(productItem);
+            context.startActivity(new Intent(context, ShoppingCartPage.class));
+        });
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView name, description, category, price, rating;
         ImageView productImage;
+
+        MaterialButton addToCart_btn, buyNow_btn;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +80,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             price = itemView.findViewById(R.id.productcard_product_price);
             rating = itemView.findViewById(R.id.productcard_product_rating);
             productImage = itemView.findViewById(R.id.productcard_product_image);
+            addToCart_btn = itemView.findViewById(R.id.productcard_addtocart);
+            buyNow_btn = itemView.findViewById(R.id.productcard_buynow);
         }
     }
 }
