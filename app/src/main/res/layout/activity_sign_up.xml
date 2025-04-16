@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF9F0"
+    android:background="#F9F2E5"
     tools:context=".pages.SignUp">
-    <LinearLayout
-        android:id="@+id/topContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
 
         <ImageView
             android:id="@+id/logo"
@@ -29,35 +27,37 @@
             tools:ignore="DuplicateIds,HardcodedText" />
 
         <TextView
-            android:id="@+id/titleEmpowering"
-            android:layout_width="wrap_content"
+            android:id="@+id/Signup"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sign Up"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="24dp"
+            android:text="Sign up"
             android:textColor="#2C6B2F"
             android:textSize="29sp"
             android:textStyle="bold"
-            android:layout_gravity="center"
-            tools:ignore="HardcodedText,MissingConstraints"
-            android:layout_marginStart="120dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,MissingConstraints" />
 
-    </LinearLayout>
 
     <!-- Name Label -->
+
+    <!-- Name Input -->
     <TextView
         android:id="@+id/nameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:text="Name"
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/topContainer"
-        app:layout_constraintTop_toBottomOf="@id/topContainer"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        tools:ignore="HardcodedText"  />
 
-    <!-- Name Input -->
     <EditText
         android:id="@+id/nameInput"
         android:layout_width="0dp"
@@ -77,6 +77,43 @@
         app:layout_constraintTop_toBottomOf="@id/nameLabel"
         tools:ignore="HardcodedText,RtlSymmetry,TextFields" />
 
+    <!-- Username Label -->
+
+    <!-- Username Input -->
+
+    <TextView
+        android:id="@+id/usernameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="15dp"
+        android:text="Username"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/nameInput"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/usernameInput"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/input_field_01"
+        android:backgroundTint="#D3D3D3"
+        android:hint="Enter your username"
+        android:importantForAutofill="no"
+        android:textColorHint="#777777"
+        android:textSize="14sp"
+        android:paddingStart="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/usernameLabel"
+        tools:ignore="HardcodedText,RtlSymmetry,TextFields" />
+
     <!-- Email Label -->
     <TextView
         android:id="@+id/emailLabel"
@@ -89,7 +126,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nameInput"
+        app:layout_constraintTop_toBottomOf="@id/usernameInput"
         tools:ignore="HardcodedText" />
 
     <!-- Email Input -->
@@ -325,4 +362,5 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

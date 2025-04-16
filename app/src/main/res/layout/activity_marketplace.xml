@@ -9,6 +9,8 @@
     tools:context=".pages.Marketplace"
     android:background="@color/agrikita_background">
 
+    <include layout="@layout/navbar"/>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -19,62 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Header Bar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="2dp">
-
-            <FrameLayout
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="5sp"
-                android:background="@drawable/round_profile_picture_frame"
-                android:backgroundTint="@color/white"
-                android:clipToOutline="true"
-                android:elevation="4dp">
-
-                <ImageView
-                    android:id="@+id/proile_picture_display"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:srcCompat="@tools:sample/avatars" />
-            </FrameLayout>
-
-            <ImageView
-                android:layout_width="100sp"
-                android:layout_height="30sp"
-                android:layout_marginLeft="85sp"
-                android:layout_marginRight="10sp"
-                app:srcCompat="@drawable/agrikita_header_text_g1" />
-
-            <ImageButton
-                android:id="@+id/notification_bell_button"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:layout_margin="10sp"
-                android:backgroundTint="@color/white"
-                app:srcCompat="@drawable/market_bell" />
-
-            <ImageButton
-                android:id="@+id/go_to_checkout_button"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:layout_margin="10sp"
-                android:backgroundTint="@color/white"
-                app:srcCompat="@drawable/market_shopping_cart" />
-
-            <ImageButton
-                android:id="@+id/mk_dropdown_menu_button"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:layout_margin="5sp"
-                android:backgroundTint="@color/white"
-                app:srcCompat="@drawable/market_menu_burger" />
-        </LinearLayout>
 
         <!-- Title -->
         <LinearLayout

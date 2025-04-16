@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F3ED"
+    android:background="#F9F2E5"
     tools:context=".pages.LandingPage"
     tools:ignore="ExtraText">
 
@@ -23,13 +23,13 @@
 
     <ImageView
         android:id="@+id/agriLogo"
-        android:layout_width="72dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="320dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="106dp"
+        android:layout_height="102dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="AgriKita Logo"
-        android:src="@drawable/agrikita_logo_circle"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/agrikita_logo"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 

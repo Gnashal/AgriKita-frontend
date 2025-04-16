@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -17,13 +19,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".pages.Marketplace"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".pages.CreateNewPassword"
+            android:exported="false" />
+        <activity
+            android:name=".pages.VerifyPhoneNumber"
+            android:exported="false" />
+        <activity
+            android:name=".pages.ForgotPassword"
+            android:exported="false" />
         <activity
             android:name=".pages.SignUp"
             android:exported="false" />
@@ -34,19 +37,25 @@
             android:name=".pages.LandingPage"
             android:exported="false" />
         <activity
+            android:name=".pages.InventoryManagement"
+            android:exported="false">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
             android:name=".pages.Home"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--             <intent-filter> -->
-<!--             <action android:name="android.intent.action.MAIN" /> -->
-
-
-<!--             <category android:name="android.intent.category.LAUNCHER" /> -->
-<!--             </intent-filter> -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
-
 </manifest>
