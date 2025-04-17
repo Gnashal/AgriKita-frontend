@@ -1,4 +1,4 @@
-package mobdev.agrikita.models;
+package mobdev.agrikita.models.news;
 
 public class Article {
     private String title;

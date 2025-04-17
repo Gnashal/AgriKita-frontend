@@ -8,9 +8,11 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +50,8 @@ public class InventoryManagement extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        setupNavbar();
 
         layoutProducts = findViewById(R.id.containerProduct);
         layoutOrders = findViewById(R.id.containerOrder);
@@ -103,5 +107,12 @@ public class InventoryManagement extends AppCompatActivity {
                 tabProducts.setBackgroundResource(R.drawable.tab_selector);
             }
         });
+    }
+
+    private void setupNavbar() {
+        Navbar navbarFragment = new Navbar();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.navbarContainer, navbarFragment);
+        transaction.commit();
     }
 }

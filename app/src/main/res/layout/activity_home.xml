@@ -14,7 +14,11 @@
     android:background="#7AA93C"
     android:orientation="vertical"
     tools:context=".pages.Home">
-    <include layout="@layout/navbar" />
+    <FrameLayout
+        android:id="@+id/navbarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
 
     <!-- Top Search + Profile -->
     <LinearLayout
