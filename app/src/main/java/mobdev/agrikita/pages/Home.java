@@ -1,7 +1,6 @@
 package mobdev.agrikita.pages;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -11,18 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
-import mobdev.agrikita.api.NewsApiResponse;
+import mobdev.agrikita.models.auth.NewsApiResponse;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -43,6 +41,8 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
+
+        setupNavbar();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -139,5 +139,12 @@ public class Home extends AppCompatActivity {
         shopLayout.setOnClickListener(v -> {
             Toast.makeText(this, "My Shop clicked", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    private void setupNavbar() {
+        Navbar navbarFragment = new Navbar();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.navbarContainer, navbarFragment);
+        transaction.commit();
     }
 }

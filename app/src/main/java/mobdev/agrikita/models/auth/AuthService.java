@@ -16,17 +16,17 @@ public class AuthService {
     }
     public void loginUser(String email, String password, final LoginCallback callback) {
         LoginRequest loginRequest = new LoginRequest(email, password);
-        Call<LoginResponse> call = serviceApi.loginUser(loginRequest);
+        Call<LoginResponseWrapper> call = serviceApi.loginUser(loginRequest);
 
-        call.enqueue(new Callback<LoginResponse>() {
+        call.enqueue(new Callback<LoginResponseWrapper>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<LoginResponseWrapper> call, Response<LoginResponseWrapper> response) {
                 if (response.isSuccessful()) {
-                    LoginResponse loginResponse = response.body();
-                    if (loginResponse != null) {
-                        callback.onSuccess(loginResponse);
+                    LoginResponseWrapper wrapper = response.body();
+                    if (wrapper != null && wrapper.getResponse() != null) {
+                        callback.onSuccess(wrapper.getResponse());
                     } else {
-                        callback.onFailure("Login failed: Empty response");
+                        callback.onFailure("Login failed: Invalid response structure");
                     }
                 } else {
                     callback.onFailure("Login failed: " + response.message());
@@ -34,7 +34,7 @@ public class AuthService {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<LoginResponseWrapper> call, Throwable t) {
                 callback.onFailure("Network failure: " + t.getMessage());
             }
         });
