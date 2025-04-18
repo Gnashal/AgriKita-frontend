@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import mobdev.agrikita.MainActivity;
 import mobdev.agrikita.R;
+import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
@@ -27,30 +28,35 @@ public class Navbar extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navbar, container, false);
 
-        /*
-        * TODO: Change this nya because it is still temporary, this will be
-        *  replaced with the actual logout button
-        */
         menuButton = view.findViewById(R.id.menuIcon);
-        menuButton.setOnClickListener(v -> logout());
+       /* menuButton.setOnClickListener(v -> logout());*/
 
         return view;
     }
 
-    private void logout() {
-        SharedPreferences prefs = requireActivity().getSharedPreferences("AuthPrefs", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("idToken");
-        editor.remove("refreshToken");
-        editor.remove("localId");
-        editor.putBoolean("isLoggedIn", false);
-        editor.apply();
+    /*private void logout() {
+        SharedPreferences authPrefs = requireActivity().getSharedPreferences("AuthPrefs", getContext().MODE_PRIVATE);
+        SharedPreferences.Editor authEditor = authPrefs.edit();
+        authEditor.remove("idToken");
+        authEditor.remove("refreshToken");
+        authEditor.remove("localId");
+        authEditor.putBoolean("isLoggedIn", false);
+        authEditor.apply();
+        SharedPreferences userPrefs = requireActivity().getSharedPreferences("UserPrefs", getContext().MODE_PRIVATE);
+        SharedPreferences.Editor userEditor = userPrefs.edit();
+        userEditor.remove("UserID");
+        if (userPrefs.getBoolean("HasShop", false)) {
+            userEditor.remove("ShopID");
+        }
+        userEditor.remove("HasShop");
+        userEditor.apply();
 
+        CurrentUser.clear();
         Intent intent = new Intent(requireActivity(), Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
         requireActivity().finish();
-    }
+    }*/
 
 }
