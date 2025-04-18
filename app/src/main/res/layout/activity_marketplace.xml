@@ -9,7 +9,7 @@
     tools:context=".pages.Marketplace"
     android:background="@color/agrikita_background">
 
-    <include layout="@layout/navbar"
+    <include layout="@layout/fragment_navbar"
         android:id="@+id/navbar_added"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
