@@ -1,5 +1,8 @@
 package mobdev.agrikita.pages;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -14,6 +17,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import mobdev.agrikita.R;
+import mobdev.agrikita.models.user.CurrentUser;
+
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.app.Dialog;
@@ -21,24 +26,37 @@ import android.widget.Button;
 import android.view.View;
 import android.os.Bundle;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.google.android.material.button.MaterialButton;
 
 
 
 public class Profile extends AppCompatActivity {
+    TextView userName, userEmail, memberSinceText;
 
     LinearLayout profileLayout, securityLayout, preferencesLayout;
-    MaterialButton btnProfile, btnSecurity, btnPreferences;
+    MaterialButton btnProfile, btnSecurity, btnPreferences, btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        userName = findViewById(R.id.userName);
+        userEmail = findViewById(R.id.userEmail);
+        memberSinceText = findViewById(R.id.memeberSinceText);
 
         profileLayout = findViewById(R.id.profileLayout);
         securityLayout = findViewById(R.id.securityLayout);
         preferencesLayout = findViewById(R.id.preferencesLayout);
 
+        btnLogout = findViewById(R.id.logout_button);
         btnProfile = findViewById(R.id.btnProfile);
         btnSecurity = findViewById(R.id.btnSecurity);
         btnPreferences = findViewById(R.id.btnPreferences);
@@ -49,6 +67,8 @@ public class Profile extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         languageSpinner.setAdapter(adapter);
 
+        userInformationSetup();
+        btnLogout.setOnClickListener(v -> logout());
 
         btnProfile.setOnClickListener(v -> {
             profileLayout.setVisibility(View.VISIBLE);
@@ -103,4 +123,32 @@ public class Profile extends AppCompatActivity {
         selectedButton.setBackgroundColor(getResources().getColor(R.color.white)); // selected button
     }
 
+    private void logout() {
+        SharedPreferences authPrefs = getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor authEditor = authPrefs.edit();
+        authEditor.remove("idToken");
+        authEditor.remove("refreshToken");
+        authEditor.remove("localId");
+        authEditor.putBoolean("isLoggedIn", false);
+        authEditor.apply();
+        SharedPreferences userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor userEditor = userPrefs.edit();
+        userEditor.remove("UserID");
+        if (userPrefs.getBoolean("HasShop", false)) {
+            userEditor.remove("ShopID");
+        }
+        userEditor.remove("HasShop");
+        userEditor.apply();
+
+        CurrentUser.clear();
+        Intent intent = new Intent(this, Login.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        finish();
+    }
+    private void userInformationSetup() {
+        userName.setText(CurrentUser.getInstance().getUserName());
+        userEmail.setText(CurrentUser.getInstance().getUserEmail());
+    }
 }
