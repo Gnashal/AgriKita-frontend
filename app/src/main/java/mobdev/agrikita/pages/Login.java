@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -18,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.auth.AuthService;
 import mobdev.agrikita.models.auth.LoginResponse;
+import mobdev.agrikita.models.auth.LoginResponseWrapper;
 
 public class Login extends AppCompatActivity {
     EditText emailField, passwordField;
@@ -35,6 +37,8 @@ public class Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
         authService = new AuthService(this);
 
         emailField = findViewById(R.id.emailField);
@@ -98,8 +102,10 @@ public class Login extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("idToken", loginResponse.getIdToken());
         editor.putString("refreshToken", loginResponse.getRefreshToken());
-        /*Use this to pass as the current user DocRef*/
+        editor.putBoolean("isLoggedIn", true);
+        /*TODO: Use this to pass as the current user DocRef*/
         editor.putString("localId", loginResponse.getLocalId());
+
         editor.apply();
     }
     public void toForgotPassword() {

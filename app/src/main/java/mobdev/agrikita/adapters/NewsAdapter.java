@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.Article; // Updated Article model
+import mobdev.agrikita.models.news.Article; // Updated Article model
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     private List<Article> articles = new ArrayList<>();

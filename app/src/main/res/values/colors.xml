@@ -7,12 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-    <!--  Agri-kita Colors  -->
-    <color name="agrikita_dark_green">#00490C</color>
-    <color name="agrikita_green">#489A4E</color>
-    <color name="agrikita_light_green">#B8E7AE</color>
-    <color name="agrikita_coin_yellow">#F7B11E</color>
-    <color name="agrikita_background">#F9F2E5</color>
-
+    <color name="gray">#808080</color>
+    <color name="light_gray">#c1d2e3</color>
 </resources>
