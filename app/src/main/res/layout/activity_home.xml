@@ -9,6 +9,8 @@
     android:orientation="vertical"
     android:background="#7AA93C"
     tools:context=".pages.Home">
+
+
     <include
         android:id="@+id/navbarContainer"
         layout="@layout/fragment_navbar"
@@ -141,6 +143,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
+                    android:gravity="center"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/rounded_button_latest"
                     android:fontFamily="sans-serif"
@@ -153,7 +156,7 @@
         <!-- Marketplace, My Orders, My Shop Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="354dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_background_latest_white"
             android:orientation="vertical"
@@ -210,6 +213,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+
                         android:layout_width="120dp"
                         android:layout_height="120dp"
                         android:background="@drawable/round_green_background_latest"
@@ -217,8 +221,9 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:layout_width="80dp"
+                            android:layout_width="83dp"
                             android:layout_height="80dp"
+                            android:layout_gravity="center"
                             android:src="@drawable/orders" />
                     </LinearLayout>
 
@@ -284,14 +289,14 @@
                     android:textStyle="bold" />
 
                 <!-- RecyclerView for News Items -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/newsRecyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        android:paddingBottom="16dp" />
-                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/newsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingBottom="16dp" />
             </LinearLayout>
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
