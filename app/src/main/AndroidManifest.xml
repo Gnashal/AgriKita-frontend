@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,6 +19,9 @@
         tools:targetApi="31">
         <activity
             android:name=".pages.Profile"
+            android:exported="false" />
+        <activity
+            android:name=".pages.CreateProduct"
             android:exported="false" />
         <activity
             android:name=".pages.CreateNewPassword"
@@ -41,13 +43,6 @@
             android:exported="false" />
         <activity
             android:name=".pages.InventoryManagement"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".pages.Home"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,5 +50,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".pages.Home"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
     </application>
+
 </manifest>

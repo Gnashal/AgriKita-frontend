@@ -1,9 +1,15 @@
 package mobdev.agrikita.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -39,6 +45,8 @@ public class InventoryManagement extends AppCompatActivity {
     TextView tabProducts;
     LinearLayout tabOrders;
 
+    Button createProduct;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +70,34 @@ public class InventoryManagement extends AppCompatActivity {
         recyclerProductView = findViewById(R.id.recycler_view_inventory);
         recyclerOrderView = findViewById(R.id.recycler_view_order);
 
+        createProduct = findViewById(R.id.addProductButton);
+
+        SearchView searchViewProduct = findViewById(R.id.searchProductView);
+        int searchTextId = searchViewProduct.getContext().getResources()
+                .getIdentifier("search_src_text", "id", "android");
+        int searchIconId = searchViewProduct.getContext().getResources()
+                .getIdentifier("search_mag_icon", "id", "android");
+        EditText searchEditTextProduct = searchViewProduct.findViewById(searchTextId);
+        ImageView searchIconProduct = searchViewProduct.findViewById(searchIconId);
+        if (searchEditTextProduct != null) {
+            searchEditTextProduct.setTextColor(Color.BLACK);
+            searchEditTextProduct.setHintTextColor(Color.GRAY);
+        }
+        if (searchIconProduct != null) {
+            searchIconProduct.setColorFilter(Color.GRAY);
+        }
+
+        SearchView searchViewOrders = findViewById(R.id.searchOrderView);
+        ImageView searchIconOrder = searchViewOrders.findViewById(searchIconId);
+        EditText searchEditTextOrder = searchViewOrders.findViewById(searchTextId);
+        if (searchEditTextOrder != null) {
+            searchEditTextOrder.setTextColor(Color.BLACK);
+            searchEditTextOrder.setHintTextColor(Color.GRAY);
+        }
+        if (searchIconOrder != null) {
+            searchIconOrder.setColorFilter(Color.GRAY);
+        }
+
         recyclerProductView.setLayoutManager(new LinearLayoutManager(this));
         recyclerOrderView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -75,7 +111,7 @@ public class InventoryManagement extends AppCompatActivity {
         ordersList = new ArrayList<>();
         ordersList.add(new Orders("sdqni231f", "0913djica", "Callen", 100, "09-30-2025"));
         ordersList.add(new Orders("fsf3254fw", "45edy7wwf", "Kyerie", 122, "05-10-2025"));
-        ordersList.add(new Orders("y5ty3wrgt", "dsfe35tgs", "Kyerie", 2, "01-05-2025"));
+        ordersList.add(new Orders("y5ty3wrgtfae3rrf4ew3q3rrf32w", "dsfe35tgs", "Kyerie", 2, "01-05-2025"));
 
         adapterOrders = new CustomerOrdersAdapter(ordersList);
         recyclerOrderView.setAdapter(adapterOrders);
@@ -83,8 +119,10 @@ public class InventoryManagement extends AppCompatActivity {
         tabProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutProducts.setVisibility(View.VISIBLE);
-                layoutOrders.setVisibility(View.GONE);
+                if (layoutProducts.getVisibility() != View.VISIBLE) {
+                    layoutProducts.setVisibility(View.VISIBLE);
+                    layoutOrders.setVisibility(View.GONE);
+                }
 
                 tabProducts.setSelected(true);
                 tabOrders.setSelected(false);
@@ -97,14 +135,52 @@ public class InventoryManagement extends AppCompatActivity {
         tabOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutProducts.setVisibility(View.GONE);
-                layoutOrders.setVisibility(View.VISIBLE);
+                if (layoutOrders.getVisibility() != View.VISIBLE) {
+                    layoutOrders.setVisibility(View.VISIBLE);
+                    layoutProducts.setVisibility(View.GONE);
+                }
 
                 tabOrders.setSelected(true);
                 tabProducts.setSelected(false);
 
                 tabOrders.setBackgroundResource(R.drawable.tab_selector);
                 tabProducts.setBackgroundResource(R.drawable.tab_selector);
+            }
+        });
+
+        searchViewProduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapterProducts.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapterProducts.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        searchViewOrders.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapterOrders.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapterOrders.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        createProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToCreateProduct = new Intent(InventoryManagement.this, CreateProduct.class);
+                startActivity(goToCreateProduct);
             }
         });
     }
