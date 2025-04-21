@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import com.google.android.material.button.MaterialButton;
 
 public class Profile extends AppCompatActivity {
     TextView userName, userEmail, memberSinceText;
+    EditText firstNameInput, lastNameInput, emailInput, phoneInput;
 
     LinearLayout profileLayout, securityLayout, preferencesLayout;
     MaterialButton btnProfile, btnSecurity, btnPreferences, btnLogout;
@@ -51,6 +53,11 @@ public class Profile extends AppCompatActivity {
         userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
         memberSinceText = findViewById(R.id.memeberSinceText);
+
+        firstNameInput = findViewById(R.id.firstNameField);
+        lastNameInput = findViewById(R.id.lastNameField);
+        emailInput = findViewById(R.id.emailField);
+        phoneInput = findViewById(R.id.phoneField);
 
         profileLayout = findViewById(R.id.profileLayout);
         securityLayout = findViewById(R.id.securityLayout);
@@ -148,7 +155,7 @@ public class Profile extends AppCompatActivity {
         finish();
     }
     private void userInformationSetup() {
-        userName.setText(CurrentUser.getInstance().getUserName());
-        userEmail.setText(CurrentUser.getInstance().getUserEmail());
+        userName.setText(CurrentUser.getInstance(this).getUserName());
+        userEmail.setText(CurrentUser.getInstance(this).getUserEmail());
     }
 }

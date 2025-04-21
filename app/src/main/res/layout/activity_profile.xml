@@ -339,6 +339,7 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/firstNameField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -359,6 +360,7 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/lastNameField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -378,6 +380,7 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/emailField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -398,6 +401,7 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/phoneField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
