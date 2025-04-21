@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -37,6 +38,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
+    private Button toWeather;
     private ImageButton profileButton;
     private UserServiceApi userServiceApi;
     private SearchView locationSearchView;
@@ -61,7 +63,9 @@ public class Home extends AppCompatActivity {
         /*IMPORTANT: This sets up the user in the app*/
         if (CurrentUser.getInstance().getUserData() == null) {setupUser();}
         profileButton = findViewById(R.id.profileButton);
+        toWeather = findViewById(R.id.toWeatherForcast);
         profileButton.setOnClickListener(v -> toProfile());
+        toWeather.setOnClickListener(v -> toWeather());
 
         // newsApiClient = new NewsApiClient("YOUR_API_KEY"); // ❌ Old library not used
 
@@ -164,6 +168,7 @@ public class Home extends AppCompatActivity {
     private void toProfile() {
         startActivity(new Intent(this, Profile.class));
     }
+    private void toWeather(){startActivity(new Intent(this, WeatherForecast.class));}
 
 
     public void setupUser() {

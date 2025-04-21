@@ -1,6 +1,7 @@
 package mobdev.agrikita.pages;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,8 @@ import okhttp3.Response;
 
 public class WeatherForecast extends AppCompatActivity {
 
-    private static final String apiKey = "YOUR_API_KEY_HERE";  // Replace with actual API key
+    private static final String TAG = "WeatherForecast";
+    private  final int apiKeyID = R.string.OPENWEATHER_API_KEY;  // Replace with actual API key
 
     private EditText location;
     private TextView conditionText, Temperature, maxTemp, minTemp, humidity,
@@ -30,7 +32,6 @@ public class WeatherForecast extends AppCompatActivity {
     private Button RefreshButton;
 
     private ImageView weatherIcon;
-    private TextView cityNameText, temperatureText, humidityText, windText, descriptionText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +51,26 @@ public class WeatherForecast extends AppCompatActivity {
         sunsetTime = findViewById(R.id.sunsetTime);
         sunsetDesc = findViewById(R.id.sunsetDesc);
         RefreshButton = findViewById(R.id.fetchWeatherButton);
-
         weatherIcon = findViewById(R.id.weatherIcon);
+
 
         RefreshButton.setOnClickListener(view -> {
             String cityName = location.getText().toString();
             if (!cityName.isEmpty()) {
+                Log.v(TAG, "Fetching weather for: " + cityName);
                 FetchWeatherData(cityName);
             } else {
+                Log.v(TAG, "City name is empty.");
                 location.setError("Please enter a city name");
             }
         });
     }
 
     private void FetchWeatherData(String location) {
+        String apiKey = getString(apiKeyID);
         String url = "https://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=" + apiKey + "&units=metric";
+        Log.v(TAG, "Request URL: " + url);
+
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             OkHttpClient client = new OkHttpClient();
@@ -72,10 +78,10 @@ public class WeatherForecast extends AppCompatActivity {
             try {
                 Response response = client.newCall(request).execute();
                 String result = response.body().string();
+                Log.v(TAG, "API Response: " + result);
                 runOnUiThread(() -> updateUI(result));
             } catch (IOException e) {
-                e.printStackTrace();
-                // Optionally, show an error message to the user
+                Log.v(TAG, "Error fetching weather data", e);
             }
         });
     }
@@ -84,25 +90,67 @@ public class WeatherForecast extends AppCompatActivity {
         if (result != null) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
+
                 JSONObject main = jsonObject.getJSONObject("main");
                 double temperature = main.getDouble("temp");
-                double humidity = main.getDouble("humidity");
-                double windSpeed = jsonObject.getJSONObject("wind").getDouble("speed");
+                double maxTemperature = main.getDouble("temp_max");
+                double minTemperature = main.getDouble("temp_min");
+                int humidityVal = main.getInt("humidity");
+                int pressureVal = main.getInt("pressure");
 
-                String description = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
-                String iconCode = jsonObject.getJSONArray("weather").getJSONObject(0).getString("icon");
+                JSONObject windObj = jsonObject.getJSONObject("wind");
+                double windSpeed = windObj.getDouble("speed");
+
+                String description = jsonObject.getJSONArray("weather")
+                        .getJSONObject(0).getString("description");
+                String iconCode = jsonObject.getJSONArray("weather")
+                        .getJSONObject(0).getString("icon");
+
+                JSONObject sys = jsonObject.getJSONObject("sys");
+                long sunrise = sys.getLong("sunrise");
+                long sunset = sys.getLong("sunset");
+
+                Log.v(TAG, "Parsed Weather Data: " +
+                        "\nTemp: " + temperature +
+                        "\nMax: " + maxTemperature +
+                        "\nMin: " + minTemperature +
+                        "\nHumidity: " + humidityVal +
+                        "\nPressure: " + pressureVal +
+                        "\nWind: " + windSpeed +
+                        "\nDescription: " + description +
+                        "\nIcon: " + iconCode +
+                        "\nSunrise: " + sunrise +
+                        "\nSunset: " + sunset);
+
+                // Set weather icon
                 String resourceName = "ic_" + iconCode;
                 int resId = getResources().getIdentifier(resourceName, "drawable", getPackageName());
-                weatherIcon.setImageResource(resId);
+                if (resId != 0) {
+                    weatherIcon.setImageResource(resId);
+                } else {
+                    Log.v(TAG, "Icon resource not found for: " + resourceName);
+                }
 
-                cityNameText.setText(jsonObject.getString("name"));
-                temperatureText.setText(String.format("%.0f°", temperature));
-                humidityText.setText(String.format("%.0f%%", humidity));
-                windText.setText(String.format("%.0f km/h", windSpeed));
-                descriptionText.setText(description);
+                // Update UI
+                conditionText.setText(description);
+                Temperature.setText(String.format("%.0f°", temperature));
+                maxTemp.setText(String.format("Max: %.0f°", maxTemperature));
+                minTemp.setText(String.format("Min: %.0f°", minTemperature));
+                humidity.setText(String.format("Humidity: %d%%", humidityVal));
+                pressure.setText(String.format("Pressure: %d hPa", pressureVal));
+                wind.setText(String.format("Wind: %.1f km/h", windSpeed));
+
+                sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
+                sunriseDesc.setText("Sunrise");
+
+                sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));
+                sunsetDesc.setText("Sunset");
+
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.v(TAG, "JSON parsing error", e);
             }
+        } else {
+            Log.v(TAG, "Result is null, cannot update UI.");
         }
     }
 }
