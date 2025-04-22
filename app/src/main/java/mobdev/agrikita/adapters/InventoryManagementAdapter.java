@@ -1,24 +1,30 @@
 package mobdev.agrikita.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.Products;
+import mobdev.agrikita.models.products.Products;
 
-public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryManagementAdapter.ProductViewHolder> {
+public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryManagementAdapter.ProductViewHolder> implements Filterable {
     private List<Products> productList;
+    private List<Products> productListFull;
 
     public InventoryManagementAdapter(List<Products> productList) {
         this.productList = productList;
+        this.productListFull = new ArrayList<>(productList);
     }
 
     @NonNull
@@ -28,12 +34,13 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
         return new ProductViewHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Products product = productList.get(position);
         holder.textProductName.setText(product.getProductName());
         holder.textPrice.setText(String.format("%.2f", product.getPrice()));
-        holder.textProductStock.setText(String.valueOf(product.getQuantity()));
+        holder.textProductStock.setText(String.valueOf(product.getStockQuantity()));
 //        holder.imageProduct.setImageResource(product.getImageUrl());
     }
 
@@ -54,4 +61,37 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
 //            imageProduct = itemView.findViewById(R.id.productImage);
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return productFilter;
+    }
+
+    private Filter productFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Products> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(productListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Products item : productListFull) {
+                    if (item.getProductName().toLowerCase().contains(filterPattern) ||
+                            item.getCategory().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            productList.clear();
+            productList.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 }
