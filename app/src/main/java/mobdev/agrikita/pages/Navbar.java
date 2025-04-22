@@ -17,7 +17,7 @@ import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
-    ImageButton menuButton;
+    ImageButton menuButton, profileButton;
 
     public Navbar() {
         // Required empty public constructor
@@ -29,9 +29,16 @@ public class Navbar extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navbar, container, false);
 
         menuButton = view.findViewById(R.id.menuIcon);
+        profileButton = view.findViewById(R.id.profileButton);
+
+        profileButton.setOnClickListener(v -> toProfile());
        /* menuButton.setOnClickListener(v -> logout());*/
 
         return view;
+    }
+
+    private void toProfile() {
+        startActivity(new Intent(getContext(), Profile.class));
     }
 
     /*private void logout() {
