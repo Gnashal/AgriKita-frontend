@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/navbar_added"
-        layout="@layout/navbar"
+        layout="@layout/fragment_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
