@@ -1,21 +1,31 @@
 package mobdev.agrikita.models.user;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.Map;
+
+import mobdev.agrikita.pages.Home;
 
 public class CurrentUser {
     private static CurrentUser instance;
+
+    private UserService userService;
 
     private String uid;
     private Map<String, Object> userData;
     private Map<String, Object> shopData;
 
     // Private constructor to enforce singleton
-    private CurrentUser() {}
+    private CurrentUser(Context context) {
+        userService = new UserService(context);
+    }
 
     // Accessor to get the single instance
-    public static synchronized CurrentUser getInstance() {
+    public static synchronized CurrentUser getInstance(Context context) {
         if (instance == null) {
-            instance = new CurrentUser();
+            instance = new CurrentUser(context);
         }
         return instance;
     }
@@ -79,6 +89,25 @@ public class CurrentUser {
 
     public String getShopId() {
         return shopData != null ? (String) shopData.get("id") : null;
+    }
+
+    public void fetchUserData(String uid, final UserService.FetchUserCallback callback) {
+        userService.fetchUserData(uid, new UserService.FetchUserCallback() {
+            @Override
+            public void onSuccess(UserResponse userResponse) {
+                setUserData(userResponse.user);
+                setShopData(userResponse.shop);
+                setUid(uid);
+                Log.v("UserSetup", "User and shop data successfully set.");
+                if (callback != null) callback.onSuccess(userResponse);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e("UserSetup", errorMessage);
+                if (callback != null) callback.onFailure(errorMessage);
+            }
+        });
     }
 
 }

@@ -30,6 +30,7 @@ import mobdev.agrikita.api.UserServiceApi;
 import mobdev.agrikita.models.auth.NewsApiResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.models.user.UserService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -38,7 +39,6 @@ import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
     private ImageButton profileButton;
-    private UserServiceApi userServiceApi;
     private SearchView locationSearchView;
     private LinearLayout marketplaceLayout;
     private LinearLayout ordersLayout;
@@ -46,6 +46,8 @@ public class Home extends AppCompatActivity {
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
     // private NewsApiClient newsApiClient; //  No longer needed
+
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +59,9 @@ public class Home extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        userServiceApi = RetrofitClient.getClient(this).create(UserServiceApi.class);
+        userService = new UserService(this);
         /*IMPORTANT: This sets up the user in the app*/
-        if (CurrentUser.getInstance().getUserData() == null) {setupUser();}
+        if (CurrentUser.getInstance(this).getUserData() == null) {setupUser();}
         profileButton = findViewById(R.id.profileButton);
         profileButton.setOnClickListener(v -> toProfile());
 
@@ -170,48 +172,34 @@ public class Home extends AppCompatActivity {
         Toast.makeText(Home.this, "SetupUser Was Called", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String uid = prefs.getString("localId", "");
-        if (uid == null || uid.isEmpty()) {
+        if ( uid.isEmpty()) {
             Log.e("UserSetup", "UID is missing. Cannot fetch user data.");
             Toast.makeText(Home.this, "UID is missing. Cannot fetch user data", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        userServiceApi.getUserData(uid).enqueue(new retrofit2.Callback<UserResponse>() {
+        CurrentUser.getInstance(this).fetchUserData(uid, new UserService.FetchUserCallback() {
             @Override
-            public void onResponse(retrofit2.Call<UserResponse> call, retrofit2.Response<UserResponse> response) {
-                if (response.isSuccessful() ) {
-                    UserResponse data = response.body();
-                    if (response.body() != null) {
-                        assert data != null;
-                        CurrentUser.getInstance().setUserData(data.user);
-                        CurrentUser.getInstance().setShopData(data.shop);
-                        CurrentUser.getInstance().setUid(uid);
-                        Log.v("UserSetup", "User and shop data successfully set.");
-                        saveToPrefs();
-                    } else {
-                        Log.v("UserSetup", "User and shop data unsuccessful.");
-                    }
-                } else {
-                    Log.e("UserSetup", "Failed to fetch user data. Code: " + response.code());
-                    Toast.makeText(Home.this, "Failed to fetch user data. Please try again.", Toast.LENGTH_SHORT).show();
-                }
+            public void onSuccess(UserResponse userResponse) {
+                saveToPrefs();
             }
 
             @Override
-            public void onFailure(retrofit2.Call<UserResponse> call, Throwable t) {
-                Log.e("UserSetup", "Network error while fetching user data: " + t.getMessage());
-                call.cancel();
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Home.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     private void saveToPrefs() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("UserID", CurrentUser.getInstance().getUid());
-        editor.putBoolean("HasShop", CurrentUser.getInstance().hasShop());
-        if (CurrentUser.getInstance().hasShop()) {
-            editor.putString("ShopID", CurrentUser.getInstance().getShopId());
+        editor.putString("UserID", CurrentUser.getInstance(this).getUid());
+        editor.putBoolean("HasShop", CurrentUser.getInstance(this).hasShop());
+        if (CurrentUser.getInstance(this).hasShop()) {
+            editor.putString("ShopID", CurrentUser.getInstance(this).getShopId());
         }
         editor.apply();
     }
