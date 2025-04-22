@@ -40,13 +40,13 @@ public class Marketplace extends AppCompatActivity {
         productGridView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         // Sample data
-        productList.add(new Product("Tomatoes", "Fresh red tomatoes", "Produce", "Farmer Juan", 25.00, 4.5, 30, R.drawable.test_tomato));
-        productList.add(new Product("Bananas", "Sweet yellow bananas", "Fruits", "Farmer Maria", 15.00, 4.2, 50, R.drawable.test_banana));
-        productList.add(new Product("Carrots", "Fresh orange carrots", "Produce", "Farmer Alex", 20.00, 4.3, 40, R.drawable.test_carrot));
-        productList.add(new Product("Eggs", "Farm fresh eggs", "Poultry", "Poultry Bros", 10.00, 4.6, 60, R.drawable.test_eggs));
-        productList.add(new Product("Rice", "Premium quality rice", "Grains", "Golden Fields", 50.00, 4.4, 25, R.drawable.test_rice));
-        productList.add(new Product("Onions", "Fresh white onions", "Produce", "Onion King", 18.00, 4.1, 35, R.drawable.test_onion));
-        productList.add(new Product("Chicken", "Whole dressed chicken", "Meat", "Chicken House", 120.00, 4.7, 10, R.drawable.test_chicken));
+        productList.add(new Product("Tomatoes", "Fresh red tomatoes", "Produce", "Farmer Juan", 25.00, 4.5, 0, R.drawable.test_tomato));
+        productList.add(new Product("Bananas", "Sweet yellow bananas", "Fruits", "Farmer Maria", 15.00, 4.2, 0, R.drawable.test_banana));
+        productList.add(new Product("Carrots", "Fresh orange carrots", "Produce", "Farmer Alex", 20.00, 4.3, 0, R.drawable.test_carrot));
+        productList.add(new Product("Eggs", "Farm fresh eggs", "Poultry", "Poultry Bros", 10.00, 4.6, 0, R.drawable.test_eggs));
+        productList.add(new Product("Rice", "Premium quality rice", "Grains", "Golden Fields", 50.00, 4.4, 0, R.drawable.test_rice));
+        productList.add(new Product("Onions", "Fresh white onions", "Produce", "Onion King", 18.00, 4.1, 0, R.drawable.test_onion));
+        productList.add(new Product("Chicken", "Whole dressed chicken", "Meat", "Chicken House", 120.00, 4.7, 0, R.drawable.test_chicken));
 
         adapter = new ProductAdapter(this, productList);
         productGridView.setAdapter(adapter);

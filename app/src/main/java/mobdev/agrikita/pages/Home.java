@@ -145,10 +145,12 @@ public class Home extends AppCompatActivity {
     private void setupSectionClickListeners() {
         marketplaceLayout.setOnClickListener(v -> {
             Toast.makeText(this, "Marketplace clicked", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, Marketplace.class));
         });
 
         ordersLayout.setOnClickListener(v -> {
             Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ShoppingCartPage.class));
         });
 
         shopLayout.setOnClickListener(v -> {
