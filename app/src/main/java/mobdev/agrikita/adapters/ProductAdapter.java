@@ -18,7 +18,6 @@ import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.Product;
-import mobdev.agrikita.pages.Marketplace;
 import mobdev.agrikita.pages.ShoppingCartPage;
 import mobdev.agrikita.utils.ShoppingCartController;
 
@@ -26,6 +25,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private Context context;
     private List<Product> productList;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Product product);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public ProductAdapter(Context context, List<Product> productList) {
         this.context = context;
@@ -64,12 +72,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             ShoppingCartController.getInstance().addToCart(productItem);
             context.startActivity(new Intent(context, ShoppingCartPage.class));
         });
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(productItem);
+            }
+        });
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView name, description, category, price, rating;
         ImageView productImage;
-
         MaterialButton addToCart_btn, buyNow_btn;
 
         public ProductViewHolder(@NonNull View itemView) {

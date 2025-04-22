@@ -135,9 +135,9 @@
                     app:backgroundTint="@null" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/spice_button"
+                    android:id="@+id/herb_button"
                     style="@style/CategoryButton"
-                    android:text="Spice"
+                    android:text="Herbs"
                     app:backgroundTint="@null" />
             </LinearLayout>
         </HorizontalScrollView>
