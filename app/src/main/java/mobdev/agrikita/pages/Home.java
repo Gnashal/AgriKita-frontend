@@ -152,7 +152,12 @@ public class Home extends AppCompatActivity {
         });
 
         shopLayout.setOnClickListener(v -> {
-            Toast.makeText(this, "My Shop clicked", Toast.LENGTH_SHORT).show();
+            if(CurrentUser.getInstance(this).hasShop()){
+                Intent goToShop = new Intent(Home.this, InventoryManagement.class);
+                startActivity(goToShop);
+            }else{
+                Toast.makeText(this, "My Shop clicked but you got no shop", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

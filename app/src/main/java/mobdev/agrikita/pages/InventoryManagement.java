@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,6 +33,9 @@ import mobdev.agrikita.adapters.InventoryManagementAdapter;
 import mobdev.agrikita.models.Orders;
 import mobdev.agrikita.models.products.ProductService;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.models.user.UserService;
 
 public class InventoryManagement extends AppCompatActivity {
     private RecyclerView recyclerProductView;
@@ -85,7 +89,7 @@ public class InventoryManagement extends AppCompatActivity {
         EditText searchEditTextProduct = searchViewProduct.findViewById(searchTextId);
         ImageView searchIconProduct = searchViewProduct.findViewById(searchIconId);
         if (searchEditTextProduct != null) {
-            searchEditTextProduct.setTextColor(Color.BLACK);
+            searchEditTextProduct.setTextColor(ContextCompat.getColor(this, R.color.black));
             searchEditTextProduct.setHintTextColor(Color.GRAY);
         }
         if (searchIconProduct != null) {
@@ -110,17 +114,17 @@ public class InventoryManagement extends AppCompatActivity {
         adapterProducts = new InventoryManagementAdapter(productList);
         recyclerProductView.setAdapter(adapterProducts);
 
-        productService.getProductsByShopID("J8xOiOwISrVEz6g6OQys", new ProductService.ProductCallback() {
+        CurrentUser user = CurrentUser.getInstance(this);
+        user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
             @Override
-            public void onProductsFetched(List<Products> products) {
-                productList.clear();
-                productList.addAll(products);
-                adapterProducts.notifyDataSetChanged();
+            public void onSuccess(UserResponse response) {
+                String shopId = user.getShopId();
+                fetchProducts(shopId);
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(InventoryManagement.this, "Failed to fetch products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(String errorMessage) {
+                Toast.makeText(InventoryManagement.this, "Failed to load user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -207,4 +211,21 @@ public class InventoryManagement extends AppCompatActivity {
         transaction.replace(R.id.navbarContainer, navbarFragment);
         transaction.commit();
     }
+
+    private void fetchProducts(String shopId) {
+        productService.getProductsByShopID(shopId, new ProductService.ProductCallback() {
+            @Override
+            public void onProductsFetched(List<Products> products) {
+                productList.clear();
+                productList.addAll(products);
+                adapterProducts.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(InventoryManagement.this, "Failed to fetch products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

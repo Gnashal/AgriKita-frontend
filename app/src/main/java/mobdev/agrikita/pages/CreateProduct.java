@@ -26,6 +26,9 @@ import java.util.Objects;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.products.CreateProductRequest;
 import mobdev.agrikita.models.products.ProductService;
+import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.models.user.UserService;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;
@@ -138,48 +141,52 @@ public class CreateProduct extends AppCompatActivity {
 
         btnSubmit.setOnClickListener(v -> {
             if (validateInputs()) {
-//                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-//                String shopID = sharedPreferences.getString("ShopID", null);
-//
-//                if (shopID == null) {
-//                    Toast.makeText(this, "No Shop ID found. Are you even a shop owner?", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
+                CurrentUser user = CurrentUser.getInstance(this);
+                user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
+                    @Override
+                    public void onSuccess(UserResponse response) {
+                        String shopId = user.getShopId();
+                        String name = editName.getText().toString().trim();
+                        String unit = unitDropdown.getText().toString().trim();
+                        String category = categoryDropdown.getText().toString().trim();
+                        String freshness = freshnessDropdown.getText().toString().trim();
+                        int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
+                        float price = Float.parseFloat(editPrice.getText().toString().trim());
+                        String origin = Objects.requireNonNull(productOriginField.getText()).toString().trim();
+                        String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
+                        String description = Objects.requireNonNull(productDescField.getText()).toString().trim();
+                        boolean isOrganic = switchOrganic.isChecked();
+                        boolean isFeatured = switchFeature.isChecked();
 
-                String shopID = "J8xOiOwISrVEz6g6OQys";
+                        // 🔜 You can now store this in Firebase
+                        Log.d("VALID_INPUT", "Shop ID: " + shopId);
+                        Log.d("VALID_INPUT", "Product Name: " + name);
+                        Log.d("VALID_INPUT", "Unit: " + unit);
+                        Log.d("VALID_INPUT", "Category: " + category);
+                        Log.d("VALID_INPUT", "Freshness: " + freshness);
+                        Log.d("VALID_INPUT", "Quantity: " + quantity);
+                        Log.d("VALID_INPUT", "Price: " + price);
+                        Log.d("VALID_INPUT", "Origin Location: " + origin);
+                        Log.d("VALID_INPUT", "Storage Info: " + storage);
+                        Log.d("VALID_INPUT", "Description: " + description);
+                        Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
+                        Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
 
-                String name = editName.getText().toString().trim();
-                String unit = unitDropdown.getText().toString().trim();
-                String category = categoryDropdown.getText().toString().trim();
-                String freshness = freshnessDropdown.getText().toString().trim();
-                int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
-                float price = Float.parseFloat(editPrice.getText().toString().trim());
-                String origin = Objects.requireNonNull(productOriginField.getText()).toString().trim();
-                String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
-                String description = Objects.requireNonNull(productDescField.getText()).toString().trim();
-                boolean isOrganic = switchOrganic.isChecked();
-                boolean isFeatured = switchFeature.isChecked();
+                        prodRequest = new CreateProductRequest(shopId, "https://here.com",
+                                name, price, unit, category, quantity, origin, freshness,
+                                storage, description, isOrganic, isFeatured, "available"
+                        );
 
-                // 🔜 You can now store this in Firebase
-                Log.d("VALID_INPUT", "Shop ID: " + shopID);
-                Log.d("VALID_INPUT", "Product Name: " + name);
-                Log.d("VALID_INPUT", "Unit: " + unit);
-                Log.d("VALID_INPUT", "Category: " + category);
-                Log.d("VALID_INPUT", "Freshness: " + freshness);
-                Log.d("VALID_INPUT", "Quantity: " + quantity);
-                Log.d("VALID_INPUT", "Price: " + price);
-                Log.d("VALID_INPUT", "Origin Location: " + origin);
-                Log.d("VALID_INPUT", "Storage Info: " + storage);
-                Log.d("VALID_INPUT", "Description: " + description);
-                Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
-                Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+                        productService.createProduct(prodRequest);
 
-                prodRequest = new CreateProductRequest(shopID, "https://here.com",
-                        name, price, unit, category, quantity, origin, freshness,
-                        storage, description, isOrganic, isFeatured, "available"
-                );
+                        finish();
+                    }
 
-                productService.createProduct(prodRequest);
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        Toast.makeText(CreateProduct.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
