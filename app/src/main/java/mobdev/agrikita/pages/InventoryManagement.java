@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,8 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.CustomerOrdersAdapter;
 import mobdev.agrikita.adapters.InventoryManagementAdapter;
 import mobdev.agrikita.models.Orders;
-import mobdev.agrikita.models.Products;
+import mobdev.agrikita.models.products.ProductService;
+import mobdev.agrikita.models.products.Products;
 
 public class InventoryManagement extends AppCompatActivity {
     private RecyclerView recyclerProductView;
@@ -44,13 +46,14 @@ public class InventoryManagement extends AppCompatActivity {
 
     TextView tabProducts;
     LinearLayout tabOrders;
-
     Button createProduct;
+    ProductService productService;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_inventory_management);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -58,6 +61,8 @@ public class InventoryManagement extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        productService = new ProductService(this);
 
         setupNavbar();
 
@@ -102,11 +107,22 @@ public class InventoryManagement extends AppCompatActivity {
         recyclerOrderView.setLayoutManager(new LinearLayoutManager(this));
 
         productList = new ArrayList<>();
-        productList.add(new Products("⭐ 4.8", 26, "Per kilo", "Produce", "Fresh Tomatoes", "Locally sourced, high-quality fresh tomatoes, hand-picked.", "Available", "dwo24ndw ", 100, "A+", "http://ThisisImage", "04, 12, 2025"));
-        productList.add(new Products( "⭐ 4.6", 40, "Per kilo", "Produce", "Fresh Potatoes", "High quality, organically grown potatoes.", "Available", "dwo24ndw ", 100, "A+", "http://ThisisImage", "07, 26, 2025"));
-
         adapterProducts = new InventoryManagementAdapter(productList);
         recyclerProductView.setAdapter(adapterProducts);
+
+        productService.getProductsByShopID("J8xOiOwISrVEz6g6OQys", new ProductService.ProductCallback() {
+            @Override
+            public void onProductsFetched(List<Products> products) {
+                productList.clear();
+                productList.addAll(products);
+                adapterProducts.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(InventoryManagement.this, "Failed to fetch products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         ordersList = new ArrayList<>();
         ordersList.add(new Orders("sdqni231f", "0913djica", "Callen", 100, "09-30-2025"));

@@ -20,8 +20,8 @@ public class RetrofitClient {
     * emulating use wirelessIP
     * */
     private static  final String localIP = "10.0.2.2:4040";
-    private static final String wirelessIP = "192.168.254.104:4040"; /*Replace with local ip*/
-    private static final String BASE_URL = "http://"+ wirelessIP+ "/api/";
+    private static final String wirelessIP = "192.168.121.240:4040"; /*Replace with local ip*/
+    private static final String BASE_URL = "http://"+ localIP + "/api/";
     private static Retrofit retrofit = null;
     
     public static Retrofit getClient(Context context) {

@@ -1,6 +1,8 @@
 package mobdev.agrikita.pages;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -22,6 +24,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.Objects;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.models.products.CreateProductRequest;
+import mobdev.agrikita.models.products.ProductService;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;
@@ -29,6 +33,8 @@ public class CreateProduct extends AppCompatActivity {
     EditText editName, editQuantity, editPrice;
     TextInputEditText productOriginField, productStorageField, productDescField;
     SwitchCompat switchOrganic, switchFeature;
+    ProductService productService;
+    CreateProductRequest prodRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +46,8 @@ public class CreateProduct extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        productService = new ProductService(this);
 
         unitDropdown = findViewById(R.id.unitDropdown);
         categoryDropdown = findViewById(R.id.categoryDropdown);
@@ -130,6 +138,16 @@ public class CreateProduct extends AppCompatActivity {
 
         btnSubmit.setOnClickListener(v -> {
             if (validateInputs()) {
+//                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+//                String shopID = sharedPreferences.getString("ShopID", null);
+//
+//                if (shopID == null) {
+//                    Toast.makeText(this, "No Shop ID found. Are you even a shop owner?", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+
+                String shopID = "J8xOiOwISrVEz6g6OQys";
+
                 String name = editName.getText().toString().trim();
                 String unit = unitDropdown.getText().toString().trim();
                 String category = categoryDropdown.getText().toString().trim();
@@ -143,6 +161,7 @@ public class CreateProduct extends AppCompatActivity {
                 boolean isFeatured = switchFeature.isChecked();
 
                 // 🔜 You can now store this in Firebase
+                Log.d("VALID_INPUT", "Shop ID: " + shopID);
                 Log.d("VALID_INPUT", "Product Name: " + name);
                 Log.d("VALID_INPUT", "Unit: " + unit);
                 Log.d("VALID_INPUT", "Category: " + category);
@@ -154,6 +173,13 @@ public class CreateProduct extends AppCompatActivity {
                 Log.d("VALID_INPUT", "Description: " + description);
                 Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
                 Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+
+                prodRequest = new CreateProductRequest(shopID, "https://here.com",
+                        name, price, unit, category, quantity, origin, freshness,
+                        storage, description, isOrganic, isFeatured, "available"
+                );
+
+                productService.createProduct(prodRequest);
             }
         });
 

@@ -72,7 +72,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="220dp"
                 android:background="@drawable/img_upload_dotted_border"
                 android:gravity="center"
                 android:orientation="vertical"

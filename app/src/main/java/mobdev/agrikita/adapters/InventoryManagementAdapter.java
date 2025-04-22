@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.Products;
+import mobdev.agrikita.models.products.Products;
 
 public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryManagementAdapter.ProductViewHolder> implements Filterable {
     private List<Products> productList;
@@ -40,7 +40,7 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
         Products product = productList.get(position);
         holder.textProductName.setText(product.getProductName());
         holder.textPrice.setText(String.format("%.2f", product.getPrice()));
-        holder.textProductStock.setText(String.valueOf(product.getQuantity()));
+        holder.textProductStock.setText(String.valueOf(product.getStockQuantity()));
 //        holder.imageProduct.setImageResource(product.getImageUrl());
     }
 
