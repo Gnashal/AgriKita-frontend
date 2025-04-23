@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -39,13 +43,12 @@ import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
     private ImageButton profileButton;
-    private SearchView locationSearchView;
+    private Spinner locationSpinner;
     private LinearLayout marketplaceLayout;
     private LinearLayout ordersLayout;
     private LinearLayout shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
-    // private NewsApiClient newsApiClient; //  No longer needed
 
     private UserService userService;
 
@@ -59,16 +62,16 @@ public class Home extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         userService = new UserService(this);
         /*IMPORTANT: This sets up the user in the app*/
-        if (CurrentUser.getInstance(this).getUserData() == null) {setupUser();}
+      if (CurrentUser.getInstance(this).getUserData() == null) { setupUser(); }
+
         profileButton = findViewById(R.id.profileButton);
         profileButton.setOnClickListener(v -> toProfile());
 
-        // newsApiClient = new NewsApiClient("YOUR_API_KEY"); // ❌ Old library not used
-
         // Initialize views
-        locationSearchView = findViewById(R.id.searchView);
+        locationSpinner = findViewById(R.id.spinner_loc);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
         ordersLayout = findViewById(R.id.ordersLayout);
         shopLayout = findViewById(R.id.shopLayout);
@@ -77,14 +80,14 @@ public class Home extends AppCompatActivity {
         // Setup RecyclerView
         setupRecyclerView();
 
-        // Setup search functionality
-        setupSearch();
+
+        setupLocationSpinner();
 
         // Set click listeners for the three sections
         setupSectionClickListeners();
 
         // Optional: fetch news on load
-        fetchEverythingNews("trees OR food OR farming OR nature OR agribusiness");
+        fetchEverythingNews("agriculture");
     }
 
     private void setupRecyclerView() {
@@ -93,17 +96,21 @@ public class Home extends AppCompatActivity {
         newsRecyclerView.setAdapter(newsAdapter);
     }
 
-    private void setupSearch() {
-        locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    private void setupLocationSpinner() {
+        String[] locations = {"Philippines", "China", "United States", "Russia"}; // Sample locations
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(adapter);
+
+        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                fetchEverythingNews(query);
-                return true;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLocation = parent.getItemAtPosition(position).toString();
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                return false; // Real-time search not implemented
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
@@ -161,13 +168,6 @@ public class Home extends AppCompatActivity {
         });
     }
 
-    /*private void setupNavbar() {
-        Navbar navbarFragment = new Navbar();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.navbarContainer, navbarFragment);
-        transaction.commit();
-    }*/
-
     private void toProfile() {
         startActivity(new Intent(this, Profile.class));
     }
@@ -194,8 +194,6 @@ public class Home extends AppCompatActivity {
                 Toast.makeText(Home.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     private void saveToPrefs() {
