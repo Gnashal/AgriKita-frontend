@@ -3,69 +3,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="?attr/actionBarSize"
     tools:context=".pages.Navbar">
+
     <RelativeLayout
         android:id="@+id/navbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:padding="12dp"
+        android:paddingVertical="12dp"
         android:elevation="4dp">
 
-        <!-- Profile Picture -->
+        <!-- Profile Picture - Left aligned -->
         <ImageButton
-            android:id="@+id/profileButton"
+            android:id="@+id/profileIcon"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/ic_profile"
             android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_profile"
             android:scaleType="centerCrop"
             android:background="@drawable/circle_bg"
-            android:padding="4dp" />
+            android:padding="3dp"
+            android:focusable="true"
+            android:clickable="true"/>
 
-        <!-- App Logo -->
+        <!-- App Logo - Perfectly Centered -->
         <ImageView
             android:id="@+id/logo"
             android:layout_width="120dp"
             android:layout_height="30dp"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:src="@drawable/agrikita_header_text_g1"
             android:contentDescription="Logo" />
 
-        <!-- Notification Icon -->
-        <ImageButton
-            android:id="@+id/notificationIcon"
+        <!-- Action Icons Container - Right aligned -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="84dp"
-            android:src="@drawable/ic_notification"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:clickable="true"/>
-
-        <!-- Cart Icon -->
-        <ImageButton
-            android:id="@+id/cartIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_cart"
-            android:layout_toStartOf="@id/menuIcon"
+            android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:clickable="true"/>
+            android:orientation="horizontal">
 
-        <!-- Menu Icon -->
-        <ImageButton
-            android:id="@+id/menuIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_menu"
-            android:layout_alignParentEnd="true"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:focusable="true"
-            android:clickable="true"/>
+            <!-- Notification Icon -->
+            <ImageButton
+                android:id="@+id/notificationIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_notification"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginEnd="16dp"/>
+
+            <!-- Cart Icon -->
+            <ImageButton
+                android:id="@+id/cartIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_cart"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginEnd="16dp"/>
+
+            <!-- Menu Icon -->
+            <ImageButton
+                android:id="@+id/menuIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_menu"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:clickable="true"/>
+        </LinearLayout>
     </RelativeLayout>
-
 </FrameLayout>
