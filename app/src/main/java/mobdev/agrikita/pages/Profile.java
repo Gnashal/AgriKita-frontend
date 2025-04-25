@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.models.user.UserService;
 
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -155,7 +158,22 @@ public class Profile extends AppCompatActivity {
         finish();
     }
     private void userInformationSetup() {
-        userName.setText(CurrentUser.getInstance(this).getUserName());
-        userEmail.setText(CurrentUser.getInstance(this).getUserEmail());
+        String name = CurrentUser.getInstance(this).getUserName();
+        String email = CurrentUser.getInstance(this).getUserEmail();
+        if (name.isEmpty() && email.isEmpty()) {
+            CurrentUser.getInstance(this).fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
+                @Override
+                public void onSuccess(UserResponse userResponse) {
+                    Toast.makeText(Profile.this, "Fetch OK", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    Toast.makeText(Profile.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        userName.setText(name);
+        userEmail.setText(email);
     }
 }

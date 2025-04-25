@@ -68,8 +68,6 @@ public class InventoryManagement extends AppCompatActivity {
 
         productService = new ProductService(this);
 
-        setupNavbar();
-
         layoutProducts = findViewById(R.id.containerProduct);
         layoutOrders = findViewById(R.id.containerOrder);
 
@@ -205,12 +203,7 @@ public class InventoryManagement extends AppCompatActivity {
         });
     }
 
-    private void setupNavbar() {
-        Navbar navbarFragment = new Navbar();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.navbarContainer, navbarFragment);
-        transaction.commit();
-    }
+
 
     private void fetchProducts(String shopId) {
         productService.getProductsByShopID(shopId, new ProductService.ProductCallback() {

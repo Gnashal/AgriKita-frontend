@@ -29,8 +29,7 @@ public class Navbar extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navbar, container, false);
 
         menuButton = view.findViewById(R.id.menuIcon);
-        profileButton = view.findViewById(R.id.profileButton);
-        cartButton = view.findViewById(R.id.cartIcon);
+        profileButton = view.findViewById(R.id.profileIcon);
 
         profileButton.setOnClickListener(v -> toProfile());
         cartButton.setOnClickListener(v -> toShoppingCart());
