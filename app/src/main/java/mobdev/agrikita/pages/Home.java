@@ -186,6 +186,7 @@ public class Home extends AppCompatActivity {
         CurrentUser.getInstance(this).fetchUserData(uid, new UserService.FetchUserCallback() {
             @Override
             public void onSuccess(UserResponse userResponse) {
+                CurrentUser.getInstance(getBaseContext()).setUid(uid);
                 saveToPrefs();
             }
 
