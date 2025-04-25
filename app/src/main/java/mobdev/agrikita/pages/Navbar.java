@@ -17,7 +17,7 @@ import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
-    ImageButton menuButton, profileButton, cartButton;
+    ImageButton menuButton, profileButton, cartButton, logoButton;
 
     public Navbar() {
         // Required empty public constructor
@@ -30,10 +30,12 @@ public class Navbar extends Fragment {
 
         menuButton = view.findViewById(R.id.menuIcon);
         profileButton = view.findViewById(R.id.profileIcon);
+        cartButton = view.findViewById(R.id.cartIcon);
+        logoButton = view.findViewById(R.id.homeButton);
 
         profileButton.setOnClickListener(v -> toProfile());
         cartButton.setOnClickListener(v -> toShoppingCart());
-       /* menuButton.setOnClickListener(v -> logout());*/
+        logoButton.setOnClickListener(v -> toHome());
 
         return view;
     }
@@ -41,32 +43,9 @@ public class Navbar extends Fragment {
     private void toProfile() {
         startActivity(new Intent(getContext(), Profile.class));
     }
-
+    private void toHome() {
+        startActivity(new Intent(getContext(),Home.class ));
+    }
     private void toShoppingCart() { startActivity(new Intent(getContext(), ShoppingCartPage.class)); }
-
-    /*private void logout() {
-        SharedPreferences authPrefs = requireActivity().getSharedPreferences("AuthPrefs", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor authEditor = authPrefs.edit();
-        authEditor.remove("idToken");
-        authEditor.remove("refreshToken");
-        authEditor.remove("localId");
-        authEditor.putBoolean("isLoggedIn", false);
-        authEditor.apply();
-        SharedPreferences userPrefs = requireActivity().getSharedPreferences("UserPrefs", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor userEditor = userPrefs.edit();
-        userEditor.remove("UserID");
-        if (userPrefs.getBoolean("HasShop", false)) {
-            userEditor.remove("ShopID");
-        }
-        userEditor.remove("HasShop");
-        userEditor.apply();
-
-        CurrentUser.clear();
-        Intent intent = new Intent(requireActivity(), Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-
-        requireActivity().finish();
-    }*/
 
 }

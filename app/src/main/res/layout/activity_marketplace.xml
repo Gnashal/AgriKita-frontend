@@ -9,11 +9,13 @@
     tools:context=".pages.Marketplace"
     android:background="@color/agrikita_background">
 
-    <include layout="@layout/fragment_navbar"
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navbar_added"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:name="mobdev.agrikita.pages.Navbar"
+        tools:layout="@layout/fragment_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
 
     <LinearLayout
         android:layout_width="0dp"

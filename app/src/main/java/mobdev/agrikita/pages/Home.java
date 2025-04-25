@@ -151,13 +151,11 @@ public class Home extends AppCompatActivity {
 
     private void setupSectionClickListeners() {
         marketplaceLayout.setOnClickListener(v -> {
-            Toast.makeText(this, "Marketplace clicked", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, Marketplace.class));
         });
 
         ordersLayout.setOnClickListener(v -> {
             Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, ShoppingCartPage.class));
         });
 
         shopLayout.setOnClickListener(v -> {
@@ -166,6 +164,7 @@ public class Home extends AppCompatActivity {
                 startActivity(goToShop);
             }else{
                 Toast.makeText(this, "My Shop clicked but you got no shop", Toast.LENGTH_SHORT).show();
+                /*TODO: Add actual logic that if user has no shop, a module for the shop creation will appear*/
             }
         });
     }
