@@ -1,8 +1,5 @@
 package mobdev.agrikita.pages;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -28,7 +25,7 @@ import mobdev.agrikita.models.products.CreateProductRequest;
 import mobdev.agrikita.models.products.ProductService;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;

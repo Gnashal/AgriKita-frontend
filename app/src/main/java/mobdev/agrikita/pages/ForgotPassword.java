@@ -14,9 +14,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.auth.AuthService;
+import mobdev.agrikita.controllers.AuthService;
 import mobdev.agrikita.models.auth.ForgotPasswordResponse;
-import mobdev.agrikita.models.auth.SignupResponse;
 
 public class ForgotPassword extends AppCompatActivity {
     EditText emailInput;

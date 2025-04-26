@@ -2,11 +2,10 @@ package mobdev.agrikita.models.user;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Map;
 
-import mobdev.agrikita.pages.Home;
+import mobdev.agrikita.controllers.UserService;
 
 public class CurrentUser {
     private static CurrentUser instance;

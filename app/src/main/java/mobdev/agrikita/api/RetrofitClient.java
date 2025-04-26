@@ -24,7 +24,7 @@ public class RetrofitClient {
     * */
     private static  final String localIP = "10.0.2.2:4040";
     private static final String wirelessIP = "192.168.68.115:4040"; /*Replace with local ip*/
-    private static final String BASE_URL = "http://"+ localIP + "/api/";
+    private static final String BASE_URL = "http://"+ wirelessIP + "/api/";
     private static Retrofit retrofit = null;
     
     public static Retrofit getClient(Context context) {
@@ -32,6 +32,7 @@ public class RetrofitClient {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
                         SharedPreferences prefs = context.getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences userPrefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                         String idToken = prefs.getString("idToken", null);
 
                         Request originalRequest = chain.request();
@@ -50,6 +51,7 @@ public class RetrofitClient {
 
                             // Clear stored token
                             prefs.edit().clear().apply();
+                            userPrefs.edit().clear().apply();
                             Intent intent = new Intent(context, Login.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             context.startActivity(intent);
