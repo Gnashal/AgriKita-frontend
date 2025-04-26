@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.gson.Gson;
 
@@ -49,6 +50,7 @@ public class Home extends AppCompatActivity {
     private LinearLayout shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
+    private SwipeRefreshLayout refresh;
 
     private UserService userService;
 
@@ -64,22 +66,27 @@ public class Home extends AppCompatActivity {
         });
 
         userService = new UserService(this);
-        /*IMPORTANT: This sets up the user in the app*/
-      if (CurrentUser.getInstance(this).getUserData() == null) { setupUser(); }
-
-        profileButton = findViewById(R.id.profileButton);
-        profileButton.setOnClickListener(v -> toProfile());
-
-        // Initialize views
+        // Initialize views\
+        refresh = findViewById(R.id.swipeRefreshLayout);
         locationSpinner = findViewById(R.id.spinner_loc);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
         ordersLayout = findViewById(R.id.ordersLayout);
         shopLayout = findViewById(R.id.shopLayout);
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
+        profileButton = findViewById(R.id.profileButton);
+
+        /*This sets up initial user data if it is null */
+      if (CurrentUser.getInstance(this).getUserData() == null) { fetchUserData(); }
+        /*Swipe down to refresh*/
+      refresh.setOnRefreshListener(() -> {
+          fetchUserData();
+          refresh.setRefreshing(false);
+      });
+
+        profileButton.setOnClickListener(v -> toProfile());
 
         // Setup RecyclerView
         setupRecyclerView();
-
 
         setupLocationSpinner();
 
@@ -174,7 +181,7 @@ public class Home extends AppCompatActivity {
     }
 
 
-    public void setupUser() {
+    public void fetchUserData() {
         Toast.makeText(Home.this, "SetupUser Was Called", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String uid = prefs.getString("localId", "");

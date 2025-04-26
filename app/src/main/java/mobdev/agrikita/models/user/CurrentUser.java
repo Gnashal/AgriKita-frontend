@@ -81,6 +81,9 @@ public class CurrentUser {
     public String getUserPhone() {
         return userData != null ? (String) userData.get("phone") : null;
     }
+    public String getImageUrl() {
+        return userData != null ? (String) userData.get("ImageURL") : null;
+    }
 
     /*SHOP getters*/
     public String getShopName() {
