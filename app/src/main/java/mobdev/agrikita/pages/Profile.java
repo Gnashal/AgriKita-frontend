@@ -11,11 +11,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.user.CurrentUser;
@@ -39,9 +42,11 @@ import com.google.android.material.button.MaterialButton;
 public class Profile extends AppCompatActivity {
     TextView userName, userEmail, memberSinceText;
     EditText firstNameInput, lastNameInput, emailInput, phoneInput;
+    ImageView userProfilePicture;
 
     LinearLayout profileLayout, securityLayout, preferencesLayout;
     MaterialButton btnProfile, btnSecurity, btnPreferences, btnLogout;
+    CurrentUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,8 @@ public class Profile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        currentUser = CurrentUser.getInstance(this);
+
         userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
         memberSinceText = findViewById(R.id.memeberSinceText);
@@ -61,6 +68,8 @@ public class Profile extends AppCompatActivity {
         lastNameInput = findViewById(R.id.lastNameField);
         emailInput = findViewById(R.id.emailField);
         phoneInput = findViewById(R.id.phoneField);
+        userProfilePicture = findViewById(R.id.userProfilePicture);
+
 
         profileLayout = findViewById(R.id.profileLayout);
         securityLayout = findViewById(R.id.securityLayout);
@@ -158,9 +167,9 @@ public class Profile extends AppCompatActivity {
         finish();
     }
     private void userInformationSetup() {
-        String name = CurrentUser.getInstance(this).getUserName();
-        String email = CurrentUser.getInstance(this).getUserEmail();
-        if (name.isEmpty() && email.isEmpty()) {
+        String name = currentUser.getUserName();
+        String email = currentUser.getUserEmail();
+        if (name.isEmpty() && email.isEmpty() || currentUser.getImageUrl() != null) {
             CurrentUser.getInstance(this).fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
                 @Override
                 public void onSuccess(UserResponse userResponse) {
@@ -172,8 +181,22 @@ public class Profile extends AppCompatActivity {
                     Toast.makeText(Profile.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
+        } else {
+            userName.setText(name);
+            userEmail.setText(email);
+            setProfilePic();
         }
-        userName.setText(name);
-        userEmail.setText(email);
     }
+
+    private void setProfilePic() {
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Log.v("UserProfile", "User Profile URl: "+ currentUser.getImageUrl());
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(userProfilePicture);
+
+        }
+    }
+
 }
