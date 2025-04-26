@@ -3,11 +3,11 @@ package mobdev.agrikita.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import mobdev.agrikita.models.Product;
+import mobdev.agrikita.models.products.Products;
 
 public class ShoppingCartController {
     private static ShoppingCartController thisInstance;
-    private List<Product> cart;
+    private List<Products> cart;
 
     private ShoppingCartController() {
         cart = new ArrayList<>();
@@ -20,11 +20,11 @@ public class ShoppingCartController {
         return thisInstance;
     }
 
-    public void addToCart(Product item) {
+    public void addToCart(Products item) {
         cart.add(item);
     }
 
-    public List<Product> getCartItems() {
+    public List<Products> getCartItems() {
         return new ArrayList<>(cart);
     }
 

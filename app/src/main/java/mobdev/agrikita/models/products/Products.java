@@ -2,7 +2,9 @@ package mobdev.agrikita.models.products;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Products {
+import java.io.Serializable;
+
+public class Products implements Serializable {
 
     @SerializedName("id")
     private String productID;
@@ -54,6 +56,8 @@ public class Products {
 
     @SerializedName("createdAt")
     private String createdAt;
+
+    private int quantityToBuy = 1;
 
     // Constructor
     public Products(String productID, String shopID, String imageUrl, String productName, double price,
@@ -146,5 +150,14 @@ public class Products {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    // The amount of product/s user want to buy!
+    public int getQuantityToBuy() {
+        return this.quantityToBuy;
+    }
+
+    public void setQuantityToBuy(int quantity) {
+        this.quantityToBuy = quantity;
     }
 }

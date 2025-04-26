@@ -4,16 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.models.Product;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class ProductService {
     private final ProductServiceApi serviceProductsApi;
@@ -74,6 +72,30 @@ public class ProductService {
             public void onFailure(Call<GetProductsByShopIDResponse> call, Throwable t) {
                 Log.e("ProductService", "Error fetching products: ", t);
                 Toast.makeText(context, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getAllProducts(ProductCallback callback) {
+        Call<GetAllProductsResponse> call = serviceProductsApi.getAllProducts();
+
+        call.enqueue(new Callback<GetAllProductsResponse>() {
+            @Override
+            public void onResponse(Call<GetAllProductsResponse> call, Response<GetAllProductsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Products> productsList = response.body().getProducts();
+                    Log.d("Product_Service", "Success: "+ response.body().getMessage());
+                    callback.onProductsFetched(productsList);
+                } else {
+                    Log.e("Product_Service", "Failed to Fetch all products");
+                    callback.onFailure(new Exception("Failed to fetch products"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetAllProductsResponse> call, Throwable t) {
+                Log.e("Product_Service", "Failed to Fetch all products", t);
+                callback.onFailure(t);
             }
         });
     }

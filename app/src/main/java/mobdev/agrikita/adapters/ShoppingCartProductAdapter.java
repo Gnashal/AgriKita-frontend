@@ -14,13 +14,13 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.Product;
+import mobdev.agrikita.models.products.Products;
 
 public class ShoppingCartProductAdapter extends BaseAdapter {
     private Context context;
-    private List<Product> productList;
+    private List<Products> productList;
 
-    public ShoppingCartProductAdapter(Context context, List<Product> productList) {
+    public ShoppingCartProductAdapter(Context context, List<Products> productList) {
         this.context = context;
         this.productList = productList;
     }
@@ -31,7 +31,7 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
     }
 
     @Override
-    public Product getItem(int position) {
+    public Products getItem(int position) {
         return productList.get(position);
     }
 
@@ -70,23 +70,23 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Product singleProd = getItem(position);
+        Products singleProd = getItem(position);
 
-        holder.coutprod_imgv.setImageResource(singleProd.getImageResId());
-        holder.coutprod_name.setText(singleProd.getName());
-        holder.coutprod_price.setText("₱"+String.format("%.2f", singleProd.getPrice()));
-        holder.coutprod_perprice.setText("₱"+String.format("%.2f / Sack", singleProd.getPrice()));
-        holder.coutprod_seller.setText(singleProd.getSeller());
-        holder.coutprod_quantity.setText(String.valueOf(singleProd.getQuantity()));
+//        holder.coutprod_imgv.setImageResource(singleProd.getImageUrl());
+        holder.coutprod_name.setText(singleProd.getProductName());
+        holder.coutprod_price.setText("₱ "+String.format("%.2f", singleProd.getPrice() * singleProd.getQuantityToBuy()));
+        holder.coutprod_perprice.setText("₱ "+String.format("%.2f", singleProd.getPrice()));
+        holder.coutprod_seller.setText(singleProd.getShopID());
+        holder.coutprod_quantity.setText(String.valueOf(singleProd.getQuantityToBuy()));
 
         holder.add_btn.setOnClickListener(v -> {
-            singleProd.setQuantity(singleProd.getQuantity() + 1);
+            singleProd.setQuantityToBuy(singleProd.getQuantityToBuy() + 1);
             notifyDataSetChanged();
         });
 
         holder.sub_btn.setOnClickListener(v -> {
-            if (singleProd.getQuantity() > 1) {
-                singleProd.setQuantity(singleProd.getQuantity() - 1);
+            if (singleProd.getQuantityToBuy() > 1) {
+                singleProd.setQuantityToBuy(singleProd.getQuantityToBuy() - 1);
                 notifyDataSetChanged();
             }
         });
