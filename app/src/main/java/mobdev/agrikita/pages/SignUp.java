@@ -1,8 +1,6 @@
 package mobdev.agrikita.pages;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,7 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.auth.AuthService;
+import mobdev.agrikita.controllers.AuthService;
 import mobdev.agrikita.models.auth.SignupResponse;
 
 public class SignUp extends AppCompatActivity {

@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,23 +19,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
-import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.api.UserServiceApi;
 import mobdev.agrikita.models.auth.NewsApiResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -43,7 +41,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
-    private ImageButton profileButton;
+    private ImageView profileButton;
     private Spinner locationSpinner;
     private LinearLayout marketplaceLayout;
     private LinearLayout ordersLayout;
@@ -95,6 +93,17 @@ public class Home extends AppCompatActivity {
 
         // Optional: fetch news on load
         fetchEverythingNews("agriculture");
+    }
+
+    private void setProfilePic() {
+        CurrentUser currentUser = CurrentUser.getInstance(this);
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(profileButton);
+
+        }
     }
 
     private void setupRecyclerView() {
@@ -196,6 +205,7 @@ public class Home extends AppCompatActivity {
             public void onSuccess(UserResponse userResponse) {
                 CurrentUser.getInstance(getBaseContext()).setUid(uid);
                 saveToPrefs();
+                setProfilePic();
             }
 
             @Override

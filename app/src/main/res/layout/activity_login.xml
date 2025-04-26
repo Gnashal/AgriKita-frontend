@@ -67,6 +67,7 @@
             android:id="@+id/emailField"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:textColor="@color/black"
             android:hint="Enter your email address"
             android:inputType="textEmailAddress"
             android:padding="12dp"
@@ -107,43 +108,12 @@
             android:id="@+id/passwordField"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:textColor="@color/black"
             android:hint="Enter your password"
             android:inputType="textPassword"
             android:padding="12dp"
             android:textColorHint="#777777" />
     </com.google.android.material.textfield.TextInputLayout>
-
-        <!--&lt;!&ndash; Password Label &ndash;&gt;
-        <TextView
-            android:id="@+id/passwordLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            android:text="Password"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailField" />
-
-        &lt;!&ndash; Password Field &ndash;&gt;
-        <EditText
-            android:id="@+id/passwordField"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/input_field_01"
-            android:backgroundTint="#D3D3D3"
-            android:hint="Enter your password"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:textColorHint="#777777"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordLabel" />-->
 
         <!-- Forgot Password -->
         <LinearLayout

@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import mobdev.agrikita.MainActivity;
 import mobdev.agrikita.R;
@@ -17,7 +20,8 @@ import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
-    ImageButton menuButton, profileButton, cartButton, logoButton;
+    ImageView profileButton;
+    ImageButton menuButton, cartButton, logoButton;
 
     public Navbar() {
         // Required empty public constructor
@@ -27,7 +31,6 @@ public class Navbar extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navbar, container, false);
-
         menuButton = view.findViewById(R.id.menuIcon);
         profileButton = view.findViewById(R.id.profileIcon);
         cartButton = view.findViewById(R.id.cartIcon);
@@ -47,5 +50,16 @@ public class Navbar extends Fragment {
         startActivity(new Intent(getContext(),Home.class ));
     }
     private void toShoppingCart() { startActivity(new Intent(getContext(), ShoppingCartPage.class)); }
+    /*TODO: Fix this*/
+    /*private void setProfilePic() {
+        CurrentUser currentUser = CurrentUser.getInstance(getContext());
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(profileButton);
+
+        }
+    }*/
 
 }

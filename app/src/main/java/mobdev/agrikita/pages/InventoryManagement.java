@@ -20,7 +20,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,7 +34,7 @@ import mobdev.agrikita.models.products.ProductService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 
 public class InventoryManagement extends AppCompatActivity {
     private RecyclerView recyclerProductView;
