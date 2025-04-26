@@ -17,7 +17,7 @@ import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
-    ImageButton menuButton, profileButton, cartButton, logoButton;
+    ImageButton menuButton, profileButton, cartButton, logoButton, notificationButton;
 
     public Navbar() {
         // Required empty public constructor
@@ -32,10 +32,12 @@ public class Navbar extends Fragment {
         profileButton = view.findViewById(R.id.profileIcon);
         cartButton = view.findViewById(R.id.cartIcon);
         logoButton = view.findViewById(R.id.homeButton);
+        notificationButton = view.findViewById(R.id.notificationIcon);
 
         profileButton.setOnClickListener(v -> toProfile());
         cartButton.setOnClickListener(v -> toShoppingCart());
         logoButton.setOnClickListener(v -> toHome());
+        notificationButton.setOnClickListener(v -> toNotification());
 
         return view;
     }
@@ -47,5 +49,7 @@ public class Navbar extends Fragment {
         startActivity(new Intent(getContext(),Home.class ));
     }
     private void toShoppingCart() { startActivity(new Intent(getContext(), ShoppingCartPage.class)); }
+
+    private void toNotification() { startActivity(new Intent(getContext(), Notifications.class));}
 
 }
