@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UpdatePasswordResponse;
 import mobdev.agrikita.models.user.UpdateProfileImageResponse;
 import mobdev.agrikita.models.user.UpdateUserResponse;
 import mobdev.agrikita.models.user.UserResponse;
@@ -55,7 +56,8 @@ import java.io.File;
 
 public class Profile extends AppCompatActivity {
     private TextView userName, userEmail, memberSinceText;
-    private EditText firstNameInput, lastNameInput, emailInput, phoneInput;
+    private EditText firstNameInput, lastNameInput, emailInput, phoneInput ,
+            currPasswordInput, newPasswordInput, confirmPasswordInput;
     private ImageView userProfilePicture;
     private SwipeRefreshLayout refresh;
     private LinearLayout profileLayout, securityLayout, preferencesLayout;
@@ -114,6 +116,9 @@ public class Profile extends AppCompatActivity {
         lastNameInput = findViewById(R.id.lastNameField);
         emailInput = findViewById(R.id.emailField);
         phoneInput = findViewById(R.id.phoneField);
+        currPasswordInput = findViewById(R.id.currPassField);
+        newPasswordInput = findViewById(R.id.newPassField);
+        confirmPasswordInput = findViewById(R.id.confirmPasswordField);
 
         profileLayout = findViewById(R.id.profileLayout);
         securityLayout = findViewById(R.id.securityLayout);
@@ -153,7 +158,7 @@ public class Profile extends AppCompatActivity {
             preferencesLayout.setVisibility(VISIBLE);
             updateButtonColors(btnPreferences);
         });
-        btnSaveChanges.setOnClickListener(v -> updateUserDetails());
+        btnSaveChanges.setOnClickListener(v -> updateUser());
 
         refresh.setOnRefreshListener(() -> {
             fetchUserData();
@@ -287,8 +292,17 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-    private void updateUserDetails() {
+    private void updateUser() {
         String uid = CurrentUser.getInstance(this).getUid();
+        if (profileLayout.getVisibility() == VISIBLE && securityLayout.getVisibility() == GONE) {
+            updateUserDetails(uid);
+        } else if(profileLayout.getVisibility() == GONE && securityLayout.getVisibility() == VISIBLE){
+            updateUserPassword(uid);
+        } else {
+            Toast.makeText(Profile.this, "Update Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void updateUserDetails(String uid) {
         String fullName = currentUser.getUserName() != null ? currentUser.getUserName().trim() : "";
         String firstNameCurrent = "";
         String lastNameCurrent = "";
@@ -306,29 +320,55 @@ public class Profile extends AppCompatActivity {
             Toast.makeText(Profile.this, "All fields are empty", Toast.LENGTH_SHORT).show();
             return;
         }
+        userService.updateUserData(uid, firstName, lastName, email, phone, new UserService.UpdateUserCallback() {
+            @Override
+            public void onSuccess(UpdateUserResponse updateUserResponse) {
+                Toast.makeText(Profile.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                firstNameInput.setText("");
+                lastNameInput.setText("");
+                emailInput.setText("");
+                phoneInput.setText("");
 
-        if (profileLayout.getVisibility() == VISIBLE && securityLayout.getVisibility() == GONE) {
-            userService.updateUserData(uid, firstName, lastName, email, phone, new UserService.UpdateUserCallback() {
-                @Override
-                public void onSuccess(UpdateUserResponse updateUserResponse) {
-                    Toast.makeText(Profile.this, "Update Successful", Toast.LENGTH_SHORT).show();
-                    firstNameInput.setText("");
-                    lastNameInput.setText("");
-                    emailInput.setText("");
-                    phoneInput.setText("");
+                startActivity(new Intent(Profile.this, Profile.class));
+                finish();
+            }
 
-                    startActivity(new Intent(Profile.this, Profile.class));
-                    finish();
-                }
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Profile.this, "Update Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-                @Override
-                public void onFailure(String errorMessage) {
-                    Toast.makeText(Profile.this, "Update Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            Toast.makeText(Profile.this, "Update Failed", Toast.LENGTH_SHORT).show();
+    private void updateUserPassword(String uid) {
+        String currPass = currPasswordInput.getText().toString();
+        String newPass = newPasswordInput.getText().toString();
+        String confirmPass = confirmPasswordInput.getText().toString();
+
+        if (currPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
+            Toast.makeText(Profile.this, "Empty fields are not allowed", Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (!newPass.equals(confirmPass)) {
+            Toast.makeText(Profile.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        userService.updatePassword(uid, newPass, new UserService.UpdatePasswordCallback() {
+            @Override
+            public void onSuccess(UpdatePasswordResponse updatePasswordResponse) {
+                Toast.makeText(Profile.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                currPasswordInput.setText("");
+                newPasswordInput.setText("");
+                confirmPasswordInput.setText("");
+                startActivity(new Intent(Profile.this, Profile.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Profile.this, "Update Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     private void checkPermissionsAndOpenGallery() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
@@ -345,6 +385,7 @@ public class Profile extends AppCompatActivity {
         }
     }
     private void openGallery() {
+        /*TODO: Find a better way for this, this can cause crashes */
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         pickImageLauncher.launch(intent);  // Start the gallery activity
