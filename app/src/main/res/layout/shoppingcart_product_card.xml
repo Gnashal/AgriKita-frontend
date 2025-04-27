@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="400sp"
+    android:layout_height="310dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/sc_prodimg_display"
             android:layout_width="match_parent"
-            android:layout_height="250sp"
+            android:layout_height="200dp"
             app:srcCompat="@drawable/agrikita_logo" />
 
         <LinearLayout
@@ -50,13 +50,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"
+                android:layout_marginRight="10dp"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
                 android:text="Seller:" />
 
             <TextView
                 android:id="@+id/sc_prodsellername_display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
                 android:text="TextView" />
         </LinearLayout>
 
@@ -68,13 +72,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10sp"
+                android:layout_marginRight="10dp"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
                 android:text="Price:" />
 
             <TextView
                 android:id="@+id/sc_prodper_display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
                 android:text="TextView" />
         </LinearLayout>
 
@@ -99,8 +107,10 @@
                     android:id="@+id/sc_prodquantity_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="20sp"
-                    android:paddingRight="20sp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray"
                     android:text="0" />
 
                 <com.google.android.material.button.MaterialButton
@@ -112,7 +122,7 @@
             </LinearLayout>
 
             <FrameLayout
-                android:layout_width="140sp"
+                android:layout_width="100dp"
                 android:layout_height="match_parent">
 
             </FrameLayout>

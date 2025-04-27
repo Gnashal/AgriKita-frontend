@@ -17,9 +17,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.auth.AuthService;
+import mobdev.agrikita.controllers.AuthService;
 import mobdev.agrikita.models.auth.LoginResponse;
-import mobdev.agrikita.models.auth.LoginResponseWrapper;
 
 public class Login extends AppCompatActivity {
     EditText emailField, passwordField;

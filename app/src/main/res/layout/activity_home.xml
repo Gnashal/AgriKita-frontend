@@ -18,6 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -49,7 +54,7 @@
                 android:background="@drawable/rounded_searchview"
                 android:iconifiedByDefault="false" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/profileButton"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
@@ -57,6 +62,7 @@
                 android:background="@drawable/circle_background_latest_news"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
+                android:clickable="true"
                 android:src="@drawable/profile" />
         </LinearLayout>
 
@@ -303,4 +309,5 @@
         </LinearLayout>
         </LinearLayout>
     </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

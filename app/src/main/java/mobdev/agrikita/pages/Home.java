@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,22 +19,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
-import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.api.UserServiceApi;
 import mobdev.agrikita.models.auth.NewsApiResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -42,13 +41,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
-    private ImageButton profileButton;
+    private ImageView profileButton;
     private Spinner locationSpinner;
     private LinearLayout marketplaceLayout;
     private LinearLayout ordersLayout;
     private LinearLayout shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
+    private SwipeRefreshLayout refresh;
 
     private UserService userService;
 
@@ -64,22 +64,27 @@ public class Home extends AppCompatActivity {
         });
 
         userService = new UserService(this);
-        /*IMPORTANT: This sets up the user in the app*/
-      if (CurrentUser.getInstance(this).getUserData() == null) { setupUser(); }
-
-        profileButton = findViewById(R.id.profileButton);
-        profileButton.setOnClickListener(v -> toProfile());
-
-        // Initialize views
+        // Initialize views\
+        refresh = findViewById(R.id.swipeRefreshLayout);
         locationSpinner = findViewById(R.id.spinner_loc);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
         ordersLayout = findViewById(R.id.ordersLayout);
         shopLayout = findViewById(R.id.shopLayout);
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
+        profileButton = findViewById(R.id.profileButton);
+
+        /*This sets up initial user data if it is null */
+      if (CurrentUser.getInstance(this).getUserData() == null) { fetchUserData(); }
+        /*Swipe down to refresh*/
+      refresh.setOnRefreshListener(() -> {
+          fetchUserData();
+          refresh.setRefreshing(false);
+      });
+
+        profileButton.setOnClickListener(v -> toProfile());
 
         // Setup RecyclerView
         setupRecyclerView();
-
 
         setupLocationSpinner();
 
@@ -88,6 +93,17 @@ public class Home extends AppCompatActivity {
 
         // Optional: fetch news on load
         fetchEverythingNews("agriculture");
+    }
+
+    private void setProfilePic() {
+        CurrentUser currentUser = CurrentUser.getInstance(this);
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(profileButton);
+
+        }
     }
 
     private void setupRecyclerView() {
@@ -175,7 +191,7 @@ public class Home extends AppCompatActivity {
     }
 
 
-    public void setupUser() {
+    public void fetchUserData() {
         Toast.makeText(Home.this, "SetupUser Was Called", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String uid = prefs.getString("localId", "");
@@ -190,6 +206,7 @@ public class Home extends AppCompatActivity {
             public void onSuccess(UserResponse userResponse) {
                 CurrentUser.getInstance(getBaseContext()).setUid(uid);
                 saveToPrefs();
+                setProfilePic();
             }
 
             @Override

@@ -1,7 +1,10 @@
 package mobdev.agrikita.api;
 
+import java.util.List;
+
 import mobdev.agrikita.models.products.CreateProductRequest;
 import mobdev.agrikita.models.products.CreateProductResponse;
+import mobdev.agrikita.models.products.GetAllProductsResponse;
 import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
 import mobdev.agrikita.models.products.UploadProductImageResponse;
 import okhttp3.MultipartBody;
@@ -25,4 +28,8 @@ public interface ProductServiceApi {
 
     @GET("service/product/get-products-by-shopID")
     Call<GetProductsByShopIDResponse> getProductsByShopID(@Query("shopID") String shopID);
+
+    @GET("service/product/get-all-products")
+    Call<GetAllProductsResponse> getAllProducts();
+
 }

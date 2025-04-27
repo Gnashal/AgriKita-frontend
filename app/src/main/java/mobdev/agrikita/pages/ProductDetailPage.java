@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.button.MaterialButton;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ProductDetailPage extends AppCompatActivity {
 
@@ -68,23 +71,53 @@ public class ProductDetailPage extends AppCompatActivity {
         prod_heart_btn = findViewById(R.id.pdp_heart_btn);
         prod_share_btn = findViewById(R.id.pdp_share_btn);
 
+        Products selectedProd = (Products) getIntent().getSerializableExtra("product_data");
+
         back_to_marketplace.setOnClickListener(v -> goToMarketPlace());
 
-        // images here!
-        prod_display1.setImageResource(getIntent().getIntExtra("prod_imageID", 0));
+        prod_addMore_btn.setOnClickListener(v -> buyMore_prod(selectedProd));
+        prod_subMore_btn.setOnClickListener(v -> subMore_prod(selectedProd));
+        prod_addToCart_btn.setOnClickListener(v -> goToShoppingCart(selectedProd));
 
-        // images end here!
+        if (selectedProd == null) {
+            Toast.makeText(this, "Error: Product data missing!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
-        // Seller details
-        seller_name.setText(getIntent().getStringExtra("prod_seller"));
+        // About Product
+        prod_name.setText(selectedProd.getProductName());
+        prod_description.setText(selectedProd.getDescription());
+        prod_category.setText(selectedProd.getCategory());
+        prod_price.setText("₱ "+String.format("%.2f", selectedProd.getPrice()));
+        prod_rating.setText(selectedProd.getRating());
+        prod_origin.setText(selectedProd.getOriginLocation());
+        prod_freshness.setText(selectedProd.getFreshnessRate());
+        prod_storage.setText(selectedProd.getStorage());
 
-        // Product details
-        prod_name.setText(getIntent().getStringExtra("prod_name"));
-        prod_rating.setText(String.valueOf(getIntent().getDoubleExtra("prod_rating", 0.00)));
-        prod_price.setText(String.valueOf(getIntent().getDoubleExtra("prod_price", 0.00)));
-        prod_description.setText(getIntent().getStringExtra("prod_description"));
-        prod_category.setText(getIntent().getStringExtra("prod_category"));
+
+        // About Seller
+        seller_name.setText(selectedProd.getShopID());
     }
 
     private void goToMarketPlace() { startActivity(new Intent(this, Marketplace.class)); }
+    private void buyMore_prod(Products product) {
+        product.setQuantityToBuy(product.getQuantityToBuy() + 1);
+        prod_quantit_to_buy.setText(String.valueOf(product.getQuantityToBuy()));  // ✨ Update UI
+        Toast.makeText(this, product.getProductName() + " Added", Toast.LENGTH_SHORT).show();
+    }
+
+    private void subMore_prod(Products product) {
+        if (product.getQuantityToBuy() > 1) {  // prevent 0
+            product.setQuantityToBuy(product.getQuantityToBuy() - 1);
+            prod_quantit_to_buy.setText(String.valueOf(product.getQuantityToBuy()));  // ✨ Update UI
+            Toast.makeText(this, product.getProductName() + " Subtracted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void goToShoppingCart(Products product) {
+        ShoppingCartController.getInstance().addToCart(product);
+        startActivity(new Intent(ProductDetailPage.this, ShoppingCartPage.class));
+    }
+
 }

@@ -17,25 +17,25 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.Product;
+import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.pages.ShoppingCartPage;
-import mobdev.agrikita.utils.ShoppingCartController;
+import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private Context context;
-    private List<Product> productList;
+    private List<Products> productList;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(Product product);
+        void onItemClick(Products product);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public ProductAdapter(Context context, List<Product> productList) {
+    public ProductAdapter(Context context, List<Products> productList) {
         this.context = context;
         this.productList = productList;
     }
@@ -54,14 +54,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product productItem = productList.get(position);
+        Products productItem = productList.get(position);
 
-        holder.name.setText(productItem.getName());
+        holder.name.setText(productItem.getProductName());
         holder.description.setText(productItem.getDescription());
         holder.category.setText(productItem.getCategory());
-        holder.price.setText("P " + productItem.getPrice());
+        holder.price.setText("₱ "+String.format("%.2f", productItem.getPrice()));
         holder.rating.setText(String.valueOf(productItem.getRating()));
-        holder.productImage.setImageResource(productItem.getImageResId());
+        holder.seller_name.setText(productItem.getShopID());
 
         holder.addToCart_btn.setOnClickListener(v -> {
             ShoppingCartController.getInstance().addToCart(productItem);
@@ -81,7 +81,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView name, description, category, price, rating;
+        TextView name, description, category, price, rating, seller_name;
         ImageView productImage;
         MaterialButton addToCart_btn, buyNow_btn;
 
@@ -92,6 +92,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             category = itemView.findViewById(R.id.productcard_product_category);
             price = itemView.findViewById(R.id.productcard_product_price);
             rating = itemView.findViewById(R.id.productcard_product_rating);
+            seller_name = itemView.findViewById(R.id.productcard_seller_name);
             productImage = itemView.findViewById(R.id.productcard_product_image);
             addToCart_btn = itemView.findViewById(R.id.productcard_addtocart);
             buyNow_btn = itemView.findViewById(R.id.productcard_buynow);

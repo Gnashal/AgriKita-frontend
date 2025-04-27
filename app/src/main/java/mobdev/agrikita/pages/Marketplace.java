@@ -2,6 +2,7 @@ package mobdev.agrikita.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,14 +19,17 @@ import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.ProductAdapter;
-import mobdev.agrikita.models.Product;
+import mobdev.agrikita.controllers.ProductService;
+import mobdev.agrikita.models.products.Products;
 
 public class Marketplace extends AppCompatActivity {
 
     RecyclerView productGridView;
-    List<Product> productList = new ArrayList<>();
+    List<Products> productList = new ArrayList<>();
     ProductAdapter adapter;
     MaterialButton all_btn, fruits_btn, grains_btn, meat_btn, poultry_btn, produce_btn, herbs_btn;
+
+    ProductService productService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,30 +56,29 @@ public class Marketplace extends AppCompatActivity {
         productGridView = findViewById(R.id.product_grid_view);
         productGridView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
-        // Sample data replace this for the back logics
-        productList.add(new Product("Tomatoes", "Fresh red tomatoes", "Produce", "Farmer Juan", 25.00, 4.5, 0, R.drawable.test_tomato));
-        productList.add(new Product("Bananas", "Sweet yellow bananas", "Fruits", "Farmer Maria", 15.00, 4.2, 0, R.drawable.test_banana));
-        productList.add(new Product("Carrots", "Fresh orange carrots", "Produce", "Farmer Alex", 20.00, 4.3, 0, R.drawable.test_carrot));
-        productList.add(new Product("Eggs", "Farm fresh eggs", "Poultry", "Poultry Bros", 10.00, 4.6, 0, R.drawable.test_eggs));
-        productList.add(new Product("Rice", "Premium quality rice", "Grains", "Golden Fields", 50.00, 4.4, 0, R.drawable.test_rice));
-        productList.add(new Product("Onions", "Fresh white onions", "Produce", "Onion King", 18.00, 4.1, 0, R.drawable.test_onion));
-        productList.add(new Product("Chicken", "Whole dressed chicken", "Meat", "Chicken House", 120.00, 4.7, 0, R.drawable.test_chicken));
+        productService = new ProductService(this);
 
-        adapter = new ProductAdapter(this, productList);
-        productGridView.setAdapter(adapter);
+        productService.getAllProducts(new ProductService.ProductCallback(){
+            @Override
+            public void onProductsFetched(List<Products> products) {
+                productList = products;
 
-        adapter.setOnItemClickListener(product -> {
-            Intent go_to_product_detail = new Intent(this, ProductDetailPage.class);
+                adapter = new ProductAdapter(Marketplace.this, productList);
+                productGridView.setAdapter(adapter);
 
-            go_to_product_detail.putExtra("prod_name", product.getName());
-            go_to_product_detail.putExtra("prod_description", product.getDescription());
-            go_to_product_detail.putExtra("prod_category", product.getCategory());
-            go_to_product_detail.putExtra("prod_seller", product.getSeller());
-            go_to_product_detail.putExtra("prod_price", product.getPrice());
-            go_to_product_detail.putExtra("prod_quantity", product.getQuantity());
-            go_to_product_detail.putExtra("prod_imageID", product.getImageResId());
+                adapter.setOnItemClickListener(product -> {
+                    Intent go_to_product_detail = new Intent(Marketplace.this, ProductDetailPage.class);
 
-            startActivity(go_to_product_detail);
+                    go_to_product_detail.putExtra("product_data", product);
+
+                    startActivity(go_to_product_detail);
+                });
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(Marketplace.this, "Failed fetching data", Toast.LENGTH_LONG);
+            }
         });
     }
 }

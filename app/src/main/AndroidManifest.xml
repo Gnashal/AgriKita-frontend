@@ -22,6 +22,9 @@
             android:name=".pages.CreateShop"
             android:exported="false" />
         <activity
+            android:name=".pages.Notifications"
+            android:exported="false" />
+        <activity
             android:name=".pages.ProductDetailPage"
             android:exported="false"/>
         <activity

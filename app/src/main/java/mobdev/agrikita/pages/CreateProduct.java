@@ -37,10 +37,10 @@ import java.util.concurrent.CompletableFuture;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.products.CreateProductRequest;
-import mobdev.agrikita.models.products.ProductService;
+import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
