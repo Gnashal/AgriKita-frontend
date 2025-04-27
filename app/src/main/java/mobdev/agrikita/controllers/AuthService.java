@@ -1,9 +1,16 @@
-package mobdev.agrikita.models.auth;
+package mobdev.agrikita.controllers;
 
 import android.content.Context;
 
 import mobdev.agrikita.api.AuthServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.models.auth.ForgotPasswordRequest;
+import mobdev.agrikita.models.auth.ForgotPasswordResponse;
+import mobdev.agrikita.models.auth.LoginRequest;
+import mobdev.agrikita.models.auth.LoginResponse;
+import mobdev.agrikita.models.auth.LoginResponseWrapper;
+import mobdev.agrikita.models.auth.SignupRequest;
+import mobdev.agrikita.models.auth.SignupResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

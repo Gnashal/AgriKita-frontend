@@ -3,13 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F9F2E5"
+    tools:context=".pages.Profile"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F9F2E5"
-    tools:context=".pages.Profile">
-
-    <!--PROPER Navbar integration-->
+    android:layout_height="match_parent">
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navbar"
         tools:layout="@layout/fragment_navbar"
@@ -17,6 +15,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+    app:layout_constraintTop_toBottomOf="@id/navbar"
+    app:layout_constraintBottom_toBottomOf="parent">
 
     <!-- Scrollable content -->
     <ScrollView
@@ -344,9 +349,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:background="@drawable/edittext_background"
+                            android:textColor="@color/black"
                             android:hint="First Name"
-                            android:padding="13dp"
-                            android:text="Juan" />
+                            android:padding="13dp" />
 
 
                         <TextView
@@ -366,8 +371,8 @@
                             android:layout_marginTop="8dp"
                             android:background="@drawable/edittext_background"
                             android:hint="Last Name"
-                            android:padding="13dp"
-                            android:text="Dela Cruz" />
+                            android:textColor="@color/black"
+                            android:padding="13dp" />
 
                         <TextView
                             android:id="@+id/emailTxt"
@@ -387,8 +392,8 @@
                             android:background="@drawable/edittext_background"
                             android:hint="Email"
                             android:inputType="textEmailAddress"
-                            android:padding="13dp"
-                            android:text="juan.delacruz@example.com" />
+                            android:textColor="@color/black"
+                            android:padding="13dp" />
 
                         <TextView
                             android:id="@+id/phoneTtx"
@@ -407,9 +412,9 @@
                             android:layout_marginTop="8dp"
                             android:background="@drawable/edittext_background"
                             android:hint="Phone Number"
+                            android:textColor="@color/black"
                             android:inputType="phone"
-                            android:padding="13dp"
-                            android:text="09123456789" />
+                            android:padding="13dp" />
                     </LinearLayout>
 
                     <!-- Security Section -->
@@ -432,9 +437,12 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/currPassField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:textColor="@color/black"
+                            android:inputType="textPassword"
                             android:background="@drawable/edittext_background"
                             android:padding="13dp" />
 
@@ -449,9 +457,12 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/newPassField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:textColor="@color/black"
+                            android:inputType="textPassword"
                             android:background="@drawable/edittext_background"
                             android:padding="13dp" />
 
@@ -466,9 +477,12 @@
                             android:textStyle="bold" />
 
                         <EditText
+                            android:id="@+id/confirmPasswordField"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:textColor="@color/black"
+                            android:inputType="textPassword"
                             android:background="@drawable/edittext_background"
                             android:padding="13dp" />
                     </LinearLayout>
@@ -544,6 +558,7 @@
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saveChangesBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -554,4 +569,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

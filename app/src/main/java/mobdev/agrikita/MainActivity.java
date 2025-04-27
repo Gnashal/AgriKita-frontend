@@ -27,9 +27,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String tokenID = prefs.getString("idToken", "");
 
-        if (tokenID.isEmpty()) {
+        if (tokenID.isEmpty() || tokenID.isBlank()) {
             toLogin();
-        } else toHome();
+        } else {
+            toHome();
+        }
 
     }
     private void toLogin() {

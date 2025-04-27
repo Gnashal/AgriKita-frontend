@@ -1,52 +1,94 @@
 package mobdev.agrikita.pages;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.IntentSanitizer;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.os.Bundle;
+
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
-import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UpdatePasswordResponse;
+import mobdev.agrikita.models.user.UpdateProfileImageResponse;
+import mobdev.agrikita.models.user.UpdateUserResponse;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.app.Dialog;
 import android.widget.Button;
-import android.view.View;
-import android.os.Bundle;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.button.MaterialButton;
-
+import java.io.File;
 
 
 public class Profile extends AppCompatActivity {
-    TextView userName, userEmail, memberSinceText;
-    EditText firstNameInput, lastNameInput, emailInput, phoneInput;
-    ImageView userProfilePicture;
+    private TextView userName, userEmail, memberSinceText;
+    private EditText firstNameInput, lastNameInput, emailInput, phoneInput ,
+            currPasswordInput, newPasswordInput, confirmPasswordInput;
+    private ImageView userProfilePicture;
+    private SwipeRefreshLayout refresh;
+    private LinearLayout profileLayout, securityLayout, preferencesLayout;
+    private MaterialButton btnProfile, btnSecurity, btnPreferences, btnLogout, btnSaveChanges;
+    private CurrentUser currentUser;
 
-    LinearLayout profileLayout, securityLayout, preferencesLayout;
-    MaterialButton btnProfile, btnSecurity, btnPreferences, btnLogout;
-    CurrentUser currentUser;
+    private UserService userService;
+    /*Permissions and Image handling*/
+    private Uri imageUri;
+    private ImageView profileImageView;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission granted, proceed to open the gallery
+                    openGallery();
+                } else {
+                    Toast.makeText(Profile.this, "Permission denied to access media images", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    // Register ActivityResultLauncher for image picking
+    private final ActivityResultLauncher<Intent> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    imageUri = result.getData().getData();
+                    profileImageView.setImageURI(imageUri);
+                } else {
+                    Toast.makeText(Profile.this, "No image selected", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +101,24 @@ public class Profile extends AppCompatActivity {
             return insets;
         });
         currentUser = CurrentUser.getInstance(this);
+        userService = new UserService(this);
 
         userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
         memberSinceText = findViewById(R.id.memeberSinceText);
-
+        refresh = findViewById(R.id.swipeRefreshLayout);
         firstNameInput = findViewById(R.id.firstNameField);
         lastNameInput = findViewById(R.id.lastNameField);
         emailInput = findViewById(R.id.emailField);
         phoneInput = findViewById(R.id.phoneField);
         userProfilePicture = findViewById(R.id.userProfilePicture);
-
+        firstNameInput = findViewById(R.id.firstNameField);
+        lastNameInput = findViewById(R.id.lastNameField);
+        emailInput = findViewById(R.id.emailField);
+        phoneInput = findViewById(R.id.phoneField);
+        currPasswordInput = findViewById(R.id.currPassField);
+        newPasswordInput = findViewById(R.id.newPassField);
+        confirmPasswordInput = findViewById(R.id.confirmPasswordField);
 
         profileLayout = findViewById(R.id.profileLayout);
         securityLayout = findViewById(R.id.securityLayout);
@@ -79,7 +128,7 @@ public class Profile extends AppCompatActivity {
         btnProfile = findViewById(R.id.btnProfile);
         btnSecurity = findViewById(R.id.btnSecurity);
         btnPreferences = findViewById(R.id.btnPreferences);
-
+        btnSaveChanges = findViewById(R.id.saveChangesBtn);
         Spinner languageSpinner = findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.languages_array, android.R.layout.simple_spinner_item);
@@ -90,24 +139,30 @@ public class Profile extends AppCompatActivity {
         btnLogout.setOnClickListener(v -> logout());
 
         btnProfile.setOnClickListener(v -> {
-            profileLayout.setVisibility(View.VISIBLE);
-            securityLayout.setVisibility(View.GONE);
-            preferencesLayout.setVisibility(View.GONE);
+            profileLayout.setVisibility(VISIBLE);
+            securityLayout.setVisibility(GONE);
+            preferencesLayout.setVisibility(GONE);
             updateButtonColors(btnProfile);
         });
 
         btnSecurity.setOnClickListener(v -> {
-            profileLayout.setVisibility(View.GONE);
-            securityLayout.setVisibility(View.VISIBLE);
-            preferencesLayout.setVisibility(View.GONE);
+            profileLayout.setVisibility(GONE);
+            securityLayout.setVisibility(VISIBLE);
+            preferencesLayout.setVisibility(GONE);
             updateButtonColors(btnSecurity);
         });
 
         btnPreferences.setOnClickListener(v -> {
-            profileLayout.setVisibility(View.GONE);
-            securityLayout.setVisibility(View.GONE);
-            preferencesLayout.setVisibility(View.VISIBLE);
+            profileLayout.setVisibility(GONE);
+            securityLayout.setVisibility(GONE);
+            preferencesLayout.setVisibility(VISIBLE);
             updateButtonColors(btnPreferences);
+        });
+        btnSaveChanges.setOnClickListener(v -> updateUser());
+
+        refresh.setOnRefreshListener(() -> {
+            fetchUserData();
+            refresh.setRefreshing(false);
         });
 
         ImageView btnEditProfilePic = findViewById(R.id.btnEditProfilePic);
@@ -117,20 +172,55 @@ public class Profile extends AppCompatActivity {
     private void showEditProfileDialog() {
         Dialog dialog = new Dialog(Profile.this);
         dialog.setContentView(R.layout.dialog_edit_profile_picture);
-
+        profileImageView = dialog.findViewById(R.id.profileImageView);
+        LinearLayout selectPictureLayout = dialog.findViewById(R.id.selectPictureLayout);
         Button btnSave = dialog.findViewById(R.id.btnSave);
         Button btnCancel = dialog.findViewById(R.id.btnCancel);
+        selectPictureLayout.setOnClickListener(v -> checkPermissionsAndOpenGallery());
 
         btnSave.setOnClickListener(v -> {
-            // TODO: Save profile picture logic
+            handleImageUpdate();
             dialog.dismiss();
         });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
-
         dialog.show();
     }
 
+    private void handleImageUpdate() {
+        if (imageUri == null) {
+            Toast.makeText(Profile.this, "No image selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (imageUri != null) {
+            File imageFile = new File(getRealPathFromURI(imageUri));
+            userService.updateProfileImage(currentUser.getUid(), imageFile, new UserService.UpdateProfileImageCallback() {
+                @Override
+                public void onSuccess(UpdateProfileImageResponse updateProfileImageResponse) {
+                    Log.v("UploadImage", "Upload Image Success");
+                    Toast.makeText(Profile.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                    fetchUserData();
+                }
+                @Override
+                public void onFailure(String errorMessage) {
+                    Toast.makeText(Profile.this, "Update Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+    // Helper method to get the real file path from a URI
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+            return filePath;
+        }
+        return null;
+    }
 
 
     // Helper method to update button colors
@@ -169,18 +259,8 @@ public class Profile extends AppCompatActivity {
     private void userInformationSetup() {
         String name = currentUser.getUserName();
         String email = currentUser.getUserEmail();
-        if (name.isEmpty() && email.isEmpty() || currentUser.getImageUrl() != null) {
-            CurrentUser.getInstance(this).fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
-                @Override
-                public void onSuccess(UserResponse userResponse) {
-                    Toast.makeText(Profile.this, "Fetch OK", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(String errorMessage) {
-                    Toast.makeText(Profile.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
-                }
-            });
+        if (name.isEmpty() && email.isEmpty()) {
+            fetchUserData();
         } else {
             userName.setText(name);
             userEmail.setText(email);
@@ -190,13 +270,125 @@ public class Profile extends AppCompatActivity {
 
     private void setProfilePic() {
         if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
-            Log.v("UserProfile", "User Profile URl: "+ currentUser.getImageUrl());
             Glide.with(this)
                     .load(currentUser.getImageUrl())
                     .circleCrop()
                     .into(userProfilePicture);
 
         }
+    }
+    private void fetchUserData() {
+        CurrentUser.getInstance(this).fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
+            @Override
+            public void onSuccess(UserResponse userResponse) {
+                Toast.makeText(Profile.this, "Fetch OK", Toast.LENGTH_SHORT).show();
+                userInformationSetup();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Profile.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateUser() {
+        String uid = CurrentUser.getInstance(this).getUid();
+        if (profileLayout.getVisibility() == VISIBLE && securityLayout.getVisibility() == GONE) {
+            updateUserDetails(uid);
+        } else if(profileLayout.getVisibility() == GONE && securityLayout.getVisibility() == VISIBLE){
+            updateUserPassword(uid);
+        } else {
+            Toast.makeText(Profile.this, "Update Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void updateUserDetails(String uid) {
+        String fullName = currentUser.getUserName() != null ? currentUser.getUserName().trim() : "";
+        String firstNameCurrent = "";
+        String lastNameCurrent = "";
+
+        if (!fullName.isEmpty()) {
+            String[] nameParts = fullName.split("\\s+", 2);
+            firstNameCurrent = nameParts[0];
+            lastNameCurrent = nameParts.length > 1 ? nameParts[1] : "";
+        }
+        String firstName = firstNameInput.getText().toString().isEmpty() ? firstNameCurrent : firstNameInput.getText().toString();
+        String lastName = lastNameInput.getText().toString().isEmpty() ? lastNameCurrent : lastNameInput.getText().toString();
+        String email = emailInput.getText().toString().isEmpty() ? currentUser.getUserEmail() : emailInput.getText().toString();
+        String phone = phoneInput.getText().toString().isEmpty() ? currentUser.getUserPhone() : phoneInput.getText().toString();
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+            Toast.makeText(Profile.this, "All fields are empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        userService.updateUserData(uid, firstName, lastName, email, phone, new UserService.UpdateUserCallback() {
+            @Override
+            public void onSuccess(UpdateUserResponse updateUserResponse) {
+                Toast.makeText(Profile.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                firstNameInput.setText("");
+                lastNameInput.setText("");
+                emailInput.setText("");
+                phoneInput.setText("");
+
+                startActivity(new Intent(Profile.this, Profile.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Profile.this, "Update Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateUserPassword(String uid) {
+        String currPass = currPasswordInput.getText().toString();
+        String newPass = newPasswordInput.getText().toString();
+        String confirmPass = confirmPasswordInput.getText().toString();
+
+        if (currPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
+            Toast.makeText(Profile.this, "Empty fields are not allowed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!newPass.equals(confirmPass)) {
+            Toast.makeText(Profile.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        userService.updatePassword(uid, newPass, new UserService.UpdatePasswordCallback() {
+            @Override
+            public void onSuccess(UpdatePasswordResponse updatePasswordResponse) {
+                Toast.makeText(Profile.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                currPasswordInput.setText("");
+                newPasswordInput.setText("");
+                confirmPasswordInput.setText("");
+                startActivity(new Intent(Profile.this, Profile.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Profile.this, "Update Failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void checkPermissionsAndOpenGallery() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
+            if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                // Permission already granted, open the gallery
+                openGallery();
+            } else {
+                // Request the permission
+                requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
+            }
+        } else {
+            // For Android versions below 14, no need for permissions to open gallery
+            openGallery();
+        }
+    }
+    private void openGallery() {
+        /*TODO: Find a better way for this, this can cause crashes */
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        pickImageLauncher.launch(intent);  // Start the gallery activity
     }
 
 }
