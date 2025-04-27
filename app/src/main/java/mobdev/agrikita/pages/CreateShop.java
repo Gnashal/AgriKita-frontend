@@ -3,10 +3,8 @@ package mobdev.agrikita.pages;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -22,14 +20,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.ImagePickerUtil;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
 import mobdev.agrikita.controllers.UserService;
@@ -73,7 +70,7 @@ public class CreateShop extends AppCompatActivity {
 
         setupNavbar();
 
-        shopImageLayout.setOnClickListener(v -> openFileChooser());
+        shopImageLayout.setOnClickListener(v -> ImagePickerUtil.launchImagePicker(CreateShop.this, imagePickerLauncher));
 
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -161,10 +158,5 @@ public class CreateShop extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    private void openFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        imagePickerLauncher.launch(intent);
     }
 }

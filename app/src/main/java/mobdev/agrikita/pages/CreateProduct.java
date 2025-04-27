@@ -1,10 +1,11 @@
 package mobdev.agrikita.pages;
 
-import android.content.ContentResolver;
+import static mobdev.agrikita.controllers.ImagePickerUtil.prepareFilePart;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,9 +30,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -41,9 +39,8 @@ import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
 import mobdev.agrikita.controllers.UserService;
-import okhttp3.MediaType;
+import mobdev.agrikita.controllers.ImagePickerUtil;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;
@@ -62,6 +59,7 @@ public class CreateProduct extends AppCompatActivity {
     private ActivityResultLauncher<Intent> imagePickerLauncher;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,51 +202,54 @@ public class CreateProduct extends AppCompatActivity {
             user.fetchUserData(user.getUid(), new UserService.FetchUserCallback() {
                 @Override
                 public void onSuccess(UserResponse resp) {
-                    MultipartBody.Part imgPart = prepareFilePart("image", imageUri);
+                    MultipartBody.Part imgPart = prepareFilePart(CreateProduct.this , "image", imageUri);
 
                     if (imgPart == null) {
                         Toast.makeText(CreateProduct.this, "Failed to prepare image file. Please try again.", Toast.LENGTH_SHORT).show();
-                        btnSubmit.setText("Submit");
-                        btnSubmit.setEnabled(true);
+                        resetSubmitButton();
                         return;
                     }
 
+                    // Handling image upload using a background task
                     CompletableFuture<Void> uploadFuture = CompletableFuture.runAsync(() -> {
                         productService.uploadImage(imgPart, new ProductService.UploadCallback() {
                             @Override
                             public void onSuccess(String imageUrl) {
-                                handleCreateProduct(imageUrl);
-                                btnSubmit.setText("Submit");
-                                runOnUiThread(() -> btnSubmit.setEnabled(true));
+                                runOnUiThread(() -> {
+                                    handleCreateProduct(imageUrl);
+                                    resetSubmitButton();
+                                });
                             }
 
                             @Override
                             public void onError(String errorMessage) {
-                                runOnUiThread(() -> Toast.makeText(CreateProduct.this, "Image upload failed: " + errorMessage, Toast.LENGTH_SHORT).show());
-                                btnSubmit.setText("Submit");
-                                btnSubmit.setEnabled(true);
+                                runOnUiThread(() -> {
+                                    Toast.makeText(CreateProduct.this, "Image upload failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    resetSubmitButton();
+                                });
                             }
 
                             @Override
                             public void onFailure(String errorMessage) {
-                                runOnUiThread(() -> Toast.makeText(CreateProduct.this, "Failed to get imgPart: " + errorMessage, Toast.LENGTH_SHORT).show());
-                                btnSubmit.setText("Submit");
-                                btnSubmit.setEnabled(true);
+                                runOnUiThread(() -> {
+                                    Toast.makeText(CreateProduct.this, "Failed to get imgPart: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    resetSubmitButton();
+                                });
                             }
                         });
                     });
 
                     uploadFuture.thenRun(() -> {
                         Log.d("UPLOAD_COMPLETE", "Product creation will continue after the image upload is completed.");
-                        // This is where you can continue with UI updates or other tasks after the image upload is done
+                        // You can add any other logic that depends on the upload being finished here
                     });
+
                 }
 
                 @Override
                 public void onFailure(String errorMessage) {
                     Toast.makeText(CreateProduct.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    btnSubmit.setText("Submit");
-                    btnSubmit.setEnabled(true);
+                    resetSubmitButton();
                 }
             });
         });
@@ -269,7 +270,7 @@ public class CreateProduct extends AppCompatActivity {
             }
         });
 
-        chooseFileButton.setOnClickListener(v -> openFileChooser());
+        chooseFileButton.setOnClickListener(v -> ImagePickerUtil.launchImagePicker(CreateProduct.this, imagePickerLauncher));
 
     }
 
@@ -348,46 +349,6 @@ public class CreateProduct extends AppCompatActivity {
         return true;
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        imagePickerLauncher.launch(intent);
-    }
-
-    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
-        try {
-            ContentResolver contentResolver = getContentResolver();
-            InputStream inputStream = contentResolver.openInputStream(fileUri);
-            String mimeType = contentResolver.getType(fileUri);
-
-            if (inputStream == null || mimeType == null) {
-                throw new IOException("Cannot open input stream or get MIME type.");
-            }
-
-            byte[] bytes = readBytes(inputStream);
-            RequestBody requestBody = RequestBody.create(MediaType.parse(mimeType), bytes);
-
-            // Optional: Get filename (some URIs may not have real names)
-            String fileName = "upload_" + System.currentTimeMillis(); // fallback name
-
-            return MultipartBody.Part.createFormData(partName, fileName, requestBody);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    private byte[] readBytes(InputStream inputStream) throws IOException {
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-
-        int len;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-        return byteBuffer.toByteArray();
-    }
-
     private void handleCreateProduct(String imageUrl) {
         CurrentUser user = CurrentUser.getInstance(this);
         String shopId = user.getShopId();
@@ -426,5 +387,11 @@ public class CreateProduct extends AppCompatActivity {
 
         Intent goBack = new Intent(CreateProduct.this, InventoryManagement.class);
         startActivity(goBack);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void resetSubmitButton() {
+        btnSubmit.setText("Submit");
+        btnSubmit.setEnabled(true);
     }
 }
