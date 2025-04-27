@@ -3,13 +3,23 @@ package mobdev.agrikita.api;
 import mobdev.agrikita.models.products.CreateProductRequest;
 import mobdev.agrikita.models.products.CreateProductResponse;
 import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
+import mobdev.agrikita.models.products.UploadProductImageResponse;
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ProductServiceApi {
+    @Multipart
+    @POST("service/product/create-product-image")
+    Call<UploadProductImageResponse> uploadImage(
+            @Part MultipartBody.Part image
+    );
     @POST("service/product/create-products")
     Call<CreateProductResponse> createProduct(@Body CreateProductRequest request);
 

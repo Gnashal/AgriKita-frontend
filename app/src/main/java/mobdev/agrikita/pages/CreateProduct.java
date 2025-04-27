@@ -1,17 +1,22 @@
 package mobdev.agrikita.pages;
 
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
@@ -19,9 +24,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.products.CreateProductRequest;
@@ -29,6 +41,9 @@ import mobdev.agrikita.models.products.ProductService;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
 import mobdev.agrikita.models.user.UserService;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;
@@ -38,6 +53,14 @@ public class CreateProduct extends AppCompatActivity {
     SwitchCompat switchOrganic, switchFeature;
     ProductService productService;
     CreateProductRequest prodRequest;
+
+    ImageView imageView, uploadedImage;
+    Button chooseFileButton;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
+    View uploadIcon, uploadBox;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +95,11 @@ public class CreateProduct extends AppCompatActivity {
 //        switches
         switchOrganic = findViewById(R.id.switchOrganic);
         switchFeature = findViewById(R.id.switchFeature);
+
+        chooseFileButton = findViewById(R.id.addImgButton);
+        uploadIcon = findViewById(R.id.upload_icon);
+        uploadBox = findViewById(R.id.upload_box);
+        uploadedImage = findViewById(R.id.uploaded_image);
 
         String[] units = {
                 "Kg",       // Kilogram
@@ -139,55 +167,90 @@ public class CreateProduct extends AppCompatActivity {
 
         setupNavbar();
 
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedUri = result.getData().getData();
+
+                        assert selectedUri != null;
+                        String mimeType = getContentResolver().getType(selectedUri);
+                        if (mimeType == null || !mimeType.startsWith("image/")) {
+                            Toast.makeText(this, "Selected file is not a valid image.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        imageUri = selectedUri;
+
+                        Glide.with(this)
+                                .load(imageUri)
+                                .transform(new CenterCrop(), new RoundedCorners(30))
+                                .into(uploadedImage);
+
+                        uploadBox.setVisibility(View.GONE);
+                        uploadedImage.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+
+
         btnSubmit.setOnClickListener(v -> {
-            if (validateInputs()) {
-                CurrentUser user = CurrentUser.getInstance(this);
-                user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
-                    @Override
-                    public void onSuccess(UserResponse response) {
-                        String shopId = user.getShopId();
-                        String name = editName.getText().toString().trim();
-                        String unit = unitDropdown.getText().toString().trim();
-                        String category = categoryDropdown.getText().toString().trim();
-                        String freshness = freshnessDropdown.getText().toString().trim();
-                        int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
-                        float price = Float.parseFloat(editPrice.getText().toString().trim());
-                        String origin = Objects.requireNonNull(productOriginField.getText()).toString().trim();
-                        String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
-                        String description = Objects.requireNonNull(productDescField.getText()).toString().trim();
-                        boolean isOrganic = switchOrganic.isChecked();
-                        boolean isFeatured = switchFeature.isChecked();
+            if (!validateInputs()) return;
 
-                        // 🔜 You can now store this in Firebase
-                        Log.d("VALID_INPUT", "Shop ID: " + shopId);
-                        Log.d("VALID_INPUT", "Product Name: " + name);
-                        Log.d("VALID_INPUT", "Unit: " + unit);
-                        Log.d("VALID_INPUT", "Category: " + category);
-                        Log.d("VALID_INPUT", "Freshness: " + freshness);
-                        Log.d("VALID_INPUT", "Quantity: " + quantity);
-                        Log.d("VALID_INPUT", "Price: " + price);
-                        Log.d("VALID_INPUT", "Origin Location: " + origin);
-                        Log.d("VALID_INPUT", "Storage Info: " + storage);
-                        Log.d("VALID_INPUT", "Description: " + description);
-                        Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
-                        Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+            btnSubmit.setEnabled(false);
+            btnSubmit.setText("Loading...");
 
-                        prodRequest = new CreateProductRequest(shopId, "https://here.com",
-                                name, price, unit, category, quantity, origin, freshness,
-                                storage, description, isOrganic, isFeatured, "available"
-                        );
+            CurrentUser user = CurrentUser.getInstance(this);
+            user.fetchUserData(user.getUid(), new UserService.FetchUserCallback() {
+                @Override
+                public void onSuccess(UserResponse resp) {
+                    MultipartBody.Part imgPart = prepareFilePart("image", imageUri);
 
-                        productService.createProduct(prodRequest);
-
-                        finish();
+                    if (imgPart == null) {
+                        Toast.makeText(CreateProduct.this, "Failed to prepare image file. Please try again.", Toast.LENGTH_SHORT).show();
+                        btnSubmit.setText("Submit");
+                        btnSubmit.setEnabled(true);
+                        return;
                     }
 
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        Toast.makeText(CreateProduct.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                    CompletableFuture<Void> uploadFuture = CompletableFuture.runAsync(() -> {
+                        productService.uploadImage(imgPart, new ProductService.UploadCallback() {
+                            @Override
+                            public void onSuccess(String imageUrl) {
+                                handleCreateProduct(imageUrl);
+                                btnSubmit.setText("Submit");
+                                runOnUiThread(() -> btnSubmit.setEnabled(true));
+                            }
+
+                            @Override
+                            public void onError(String errorMessage) {
+                                runOnUiThread(() -> Toast.makeText(CreateProduct.this, "Image upload failed: " + errorMessage, Toast.LENGTH_SHORT).show());
+                                btnSubmit.setText("Submit");
+                                btnSubmit.setEnabled(true);
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                runOnUiThread(() -> Toast.makeText(CreateProduct.this, "Failed to get imgPart: " + errorMessage, Toast.LENGTH_SHORT).show());
+                                btnSubmit.setText("Submit");
+                                btnSubmit.setEnabled(true);
+                            }
+                        });
+                    });
+
+                    uploadFuture.thenRun(() -> {
+                        Log.d("UPLOAD_COMPLETE", "Product creation will continue after the image upload is completed.");
+                        // This is where you can continue with UI updates or other tasks after the image upload is done
+                    });
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    Toast.makeText(CreateProduct.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    btnSubmit.setText("Submit");
+                    btnSubmit.setEnabled(true);
+                }
+            });
         });
 
         btnCancel.setOnClickListener(v -> finish());
@@ -205,6 +268,8 @@ public class CreateProduct extends AppCompatActivity {
                 editQuantity.setText(String.valueOf(currentQty));
             }
         });
+
+        chooseFileButton.setOnClickListener(v -> openFileChooser());
 
     }
 
@@ -239,6 +304,18 @@ public class CreateProduct extends AppCompatActivity {
             editPrice.setError("Price is required");
             return false;
         }
+        float priceValue;
+        try {
+            priceValue = Float.parseFloat(editPrice.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            editPrice.setError("Invalid price format");
+            return false;
+        }
+
+        if (priceValue >= 10000000) {
+            editPrice.setError("Price can't be that high");
+            return false;
+        }
         if (unitDropdown.getText().toString().trim().isEmpty()) {
             unitDropdown.setError("Unit is required");
             return false;
@@ -269,5 +346,85 @@ public class CreateProduct extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imagePickerLauncher.launch(intent);
+    }
+
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
+        try {
+            ContentResolver contentResolver = getContentResolver();
+            InputStream inputStream = contentResolver.openInputStream(fileUri);
+            String mimeType = contentResolver.getType(fileUri);
+
+            if (inputStream == null || mimeType == null) {
+                throw new IOException("Cannot open input stream or get MIME type.");
+            }
+
+            byte[] bytes = readBytes(inputStream);
+            RequestBody requestBody = RequestBody.create(MediaType.parse(mimeType), bytes);
+
+            // Optional: Get filename (some URIs may not have real names)
+            String fileName = "upload_" + System.currentTimeMillis(); // fallback name
+
+            return MultipartBody.Part.createFormData(partName, fileName, requestBody);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private byte[] readBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+    private void handleCreateProduct(String imageUrl) {
+        CurrentUser user = CurrentUser.getInstance(this);
+        String shopId = user.getShopId();
+        String name = editName.getText().toString().trim();
+        String unit = unitDropdown.getText().toString().trim();
+        String category = categoryDropdown.getText().toString().trim();
+        String freshness = freshnessDropdown.getText().toString().trim();
+        int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
+        float price = Float.parseFloat(editPrice.getText().toString().trim());
+        String origin = Objects.requireNonNull(productOriginField.getText()).toString().trim();
+        String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
+        String description = Objects.requireNonNull(productDescField.getText()).toString().trim();
+        boolean isOrganic = switchOrganic.isChecked();
+        boolean isFeatured = switchFeature.isChecked();
+
+        // Log the product details
+        Log.d("VALID_INPUT", "Shop ID: " + shopId);
+        Log.d("VALID_INPUT", "Product Image Url: " + imageUrl);
+        Log.d("VALID_INPUT", "Product Name: " + name);
+        Log.d("VALID_INPUT", "Unit: " + unit);
+        Log.d("VALID_INPUT", "Category: " + category);
+        Log.d("VALID_INPUT", "Freshness: " + freshness);
+        Log.d("VALID_INPUT", "Quantity: " + quantity);
+        Log.d("VALID_INPUT", "Price: " + price);
+        Log.d("VALID_INPUT", "Origin Location: " + origin);
+        Log.d("VALID_INPUT", "Storage Info: " + storage);
+        Log.d("VALID_INPUT", "Description: " + description);
+        Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
+        Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+
+        CreateProductRequest prodRequest = new CreateProductRequest(shopId, imageUrl,
+                name, price, unit, category, quantity, origin, freshness,
+                storage, description, isOrganic, isFeatured, "available"
+        );
+        productService.createProduct(prodRequest);
+
+        Intent goBack = new Intent(CreateProduct.this, InventoryManagement.class);
+        startActivity(goBack);
     }
 }

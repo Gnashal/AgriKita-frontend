@@ -1,15 +1,20 @@
 package mobdev.agrikita.models.products;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,6 +24,13 @@ public class ProductService {
     private final ProductServiceApi serviceProductsApi;
     private final Context context;
 
+    public interface UploadCallback {
+        void onSuccess(String imageUrl);
+        void onError(String errorMsg);
+
+        void onFailure(String errorMessage);
+    }
+
     public interface ProductCallback {
         void onProductsFetched(List<Products> products);
         void onFailure(Throwable t);
@@ -27,6 +39,25 @@ public class ProductService {
     public ProductService(Context context) {
         this.context = context;
         serviceProductsApi = RetrofitClient.getClient(context).create(ProductServiceApi.class);
+    }
+
+    public void uploadImage(MultipartBody.Part imagePart, UploadCallback callback) {
+        serviceProductsApi.uploadImage(imagePart)
+                .enqueue(new Callback<UploadProductImageResponse>() {
+                    @Override
+                    public void onResponse(Call<UploadProductImageResponse> call,
+                                           Response<UploadProductImageResponse> resp) {
+                        if (resp.isSuccessful() && resp.body() != null) {
+                            callback.onSuccess(resp.body().getImageUrl());
+                        } else {
+                            callback.onError("Upload failed: " + resp.code());
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<UploadProductImageResponse> call, Throwable t) {
+                        callback.onError("Network error: " + t.getMessage());
+                    }
+                });
     }
 
     public void createProduct(CreateProductRequest request) {
