@@ -1,4 +1,4 @@
-package mobdev.agrikita.utils;
+package mobdev.agrikita.controllers;
 
 import java.util.ArrayList;
 import java.util.List;

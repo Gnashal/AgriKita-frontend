@@ -19,7 +19,7 @@ import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.ProductAdapter;
-import mobdev.agrikita.models.products.ProductService;
+import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.products.Products;
 
 public class Marketplace extends AppCompatActivity {

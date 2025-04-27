@@ -1,4 +1,4 @@
-package mobdev.agrikita.models.products;
+package mobdev.agrikita.controllers;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,7 +8,11 @@ import java.util.List;
 
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.models.Product;
+import mobdev.agrikita.models.products.CreateProductRequest;
+import mobdev.agrikita.models.products.CreateProductResponse;
+import mobdev.agrikita.models.products.GetAllProductsResponse;
+import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
+import mobdev.agrikita.models.products.Products;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

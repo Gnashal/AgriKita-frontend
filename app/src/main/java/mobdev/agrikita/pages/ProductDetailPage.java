@@ -2,7 +2,6 @@ package mobdev.agrikita.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +18,7 @@ import com.google.android.material.button.MaterialButton;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.products.Products;
-import mobdev.agrikita.utils.ShoppingCartController;
+import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ProductDetailPage extends AppCompatActivity {
 
