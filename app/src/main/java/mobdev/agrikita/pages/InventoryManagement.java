@@ -30,7 +30,7 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.CustomerOrdersAdapter;
 import mobdev.agrikita.adapters.InventoryManagementAdapter;
 import mobdev.agrikita.models.Orders;
-import mobdev.agrikita.models.products.ProductService;
+import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
