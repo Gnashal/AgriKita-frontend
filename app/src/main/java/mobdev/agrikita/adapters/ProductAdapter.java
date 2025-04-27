@@ -17,10 +17,9 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.Product;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.pages.ShoppingCartPage;
-import mobdev.agrikita.utils.ShoppingCartController;
+import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 

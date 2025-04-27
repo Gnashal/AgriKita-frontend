@@ -14,14 +14,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.ShoppingCartProductAdapter;
-import mobdev.agrikita.models.Product;
 import mobdev.agrikita.models.products.Products;
-import mobdev.agrikita.utils.ShoppingCartController;
+import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ShoppingCartPage extends AppCompatActivity {
 
