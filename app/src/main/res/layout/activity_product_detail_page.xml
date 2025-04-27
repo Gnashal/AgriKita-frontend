@@ -8,12 +8,6 @@
     tools:context=".pages.ProductDetailPage"
     android:background="@color/agrikita_background">
 
-    <include layout="@layout/fragment_navbar"
-        android:id="@+id/navbar_added"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,14 +15,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="20sp"
-        app:layout_constraintTop_toBottomOf="@id/navbar_added">
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="20sp"
+            android:padding="20dp"
             android:background="@drawable/product_detail_background">
 
             <LinearLayout
@@ -39,8 +33,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     app:srcCompat="@drawable/back_to_marketplace_arrow" />
 
                 <TextView
@@ -62,7 +56,7 @@
                 <ImageView
                     android:id="@+id/pdp_prod_image1"
                     android:layout_width="match_parent"
-                    android:layout_height="120sp"
+                    android:layout_height="120dp"
                     app:srcCompat="@drawable/test_tomato" />
 
                 <LinearLayout
@@ -73,22 +67,22 @@
 
                     <ImageView
                         android:id="@+id/pdp_prod_image2"
-                        android:layout_width="100sp"
-                        android:layout_height="100sp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         app:srcCompat="@drawable/test_tomato" />
 
                     <ImageView
                         android:id="@+id/pdp_prod_image3"
-                        android:layout_width="100sp"
-                        android:layout_height="100sp"
-                        android:layout_marginLeft="20sp"
-                        android:layout_marginRight="20sp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         app:srcCompat="@drawable/test_tomato" />
 
                     <ImageView
                         android:id="@+id/pdp_prod_image4"
-                        android:layout_width="100sp"
-                        android:layout_height="100sp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         app:srcCompat="@drawable/test_tomato" />
                 </LinearLayout>
             </LinearLayout>
@@ -113,8 +107,8 @@
 
                     <ImageView
                         android:id="@+id/pdp_seller_pfp"
-                        android:layout_width="80sp"
-                        android:layout_height="80sp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         app:srcCompat="@drawable/agrikita_logo" />
 
                     <LinearLayout
@@ -126,7 +120,7 @@
                             android:id="@+id/pdp_seller_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="10sp"
+                            android:paddingLeft="10dp"
                             android:text="TextView"
                             android:textColor="@color/black"
                             android:textSize="20sp" />
@@ -140,15 +134,15 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10sp"
-                                android:layout_marginRight="10sp"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
                                 app:srcCompat="@drawable/product_card_star" />
 
                             <TextView
                                 android:id="@+id/pdp_seller_rating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="20sp"
+                                android:layout_marginRight="20dp"
                                 android:text="TextView"
                                 android:textSize="12sp" />
 
@@ -210,8 +204,8 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10sp"
-                        android:layout_marginRight="10sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         app:srcCompat="@drawable/product_card_star" />
 
                     <!-- Follow this string format for the setText = "{rating} ({number of reviews} reviews)" -->
@@ -219,9 +213,10 @@
                         android:id="@+id/pdp_prod_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20sp"
+                        android:layout_marginRight="20dp"
                         android:text="TextView"
-                        android:textSize="12sp" />
+                        android:textColor="@color/gray"
+                        android:textSize="18sp" />
 
                     <!-- Follow this string format for the setText = "{number} in Stock" -->
                     <TextView
@@ -229,7 +224,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TextView"
-                        android:textSize="12sp" />
+                        android:textColor="@color/gray"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -243,16 +239,17 @@
                         android:id="@+id/pdp_prod_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5sp"
+                        android:layout_marginRight="5dp"
                         android:text="TextView"
                         android:textColor="@color/agrikita_green"
-                        android:textSize="20sp" />
+                        android:textSize="25sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/gray"
                         android:text="per kg"
-                        android:textSize="12sp" />
+                        android:textSize="15sp" />
                 </LinearLayout>
 
                 <TextView
@@ -266,14 +263,16 @@
                     android:id="@+id/pdp_prod_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque nec volutpat tortor. Maecenas molestie vulputate odio nec dictum. Fusce sagittis viverra porttitor. Phasellus eget massa sit amet velit semper ultrices et id augue. Donec vitae ultricies ipsum. Duis non ligula molestie, bibendum sem sit amet, convallis eros. Ut pretium metus nulla, ut maximus ante ornare ut. Aenean vulputate est vulputate auctor suscipit. Donec lectus arcu, fringilla ut mattis at, ultrices et mauris. Nulla arcu justo, volutpat at eleifend at, viverra aliquam nibh. Duis aliquet lorem vitae molestie elementum. Aliquam gravida bibendum nunc, eget facilisis enim rutrum eu. Nullam felis sem, euismod quis accumsan vitae," />
+                    android:textSize="18sp"
+                    android:textColor="@color/gray"
+                    android:text="Lorem ipsum dolor molestie vulputate odio nec dictum. Fusce sagittis viverra porttitor. Phasellus eget massa sit amet velit semper ultrices et id augue. Donec vitae ultricies ipsum. Duis non ligula molestie, bibendum sem sit amet, convallis eros. Ut pretium metus nulla, ut maximus ante ornare ut. Aenean vulputate est vulputate auctor suscipit. Donec lectus arcu, fringilla ut mattis at, ultrices et mauris. Nulla arcu justo, volutpat at eleifend at, viverra aliquam nibh. Duis aliquet lorem vitae molestie elementum. Aliquam gravida bibendum nunc, eget facilisis enim rutrum eu. Nullam felis sem, euismod quis accumsan vitae," />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Product Details"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <!--Product Origin-->
                 <LinearLayout
@@ -284,16 +283,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10sp"
+                        android:layout_marginRight="10dp"
                         android:text="Origin:"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_origin"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
+                        android:layout_height="match_parent"
+                        android:textSize="18sp"
+                        android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
 
@@ -306,16 +306,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10sp"
+                        android:layout_marginRight="10dp"
                         android:text="Freshness:"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_freshness"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
+                        android:layout_height="match_parent"
+                        android:textSize="18sp"
+                        android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
 
@@ -328,16 +329,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10sp"
+                        android:layout_marginRight="10dp"
                         android:text="Storage:"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_storage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
+                        android:layout_height="match_parent"
+                        android:textSize="18sp"
+                        android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
 
@@ -374,11 +376,11 @@
                         android:id="@+id/pdp_prod_quantity_to_buy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20sp"
-                        android:layout_marginRight="20sp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:background="@drawable/pdp_prodquantity_counter_style"
-                        android:paddingLeft="80sp"
-                        android:paddingRight="80sp"
+                        android:paddingLeft="80dp"
+                        android:paddingRight="80dp"
                         android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/black"
@@ -408,7 +410,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="14sp"
+                        android:textSize="18sp"
                         android:text="SubTotal:" />
 
                     <TextView
@@ -416,7 +418,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="18sp"
                         android:text="TextView" />
                 </LinearLayout>
 
@@ -429,14 +431,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="13sp"
+                        android:textSize="18sp"
                         android:text="Shipping:" />
 
                     <TextView
                         android:id="@+id/pdp_prod_shipping_cost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="13sp"
+                        android:textSize="18sp"
                         android:text="TextView" />
                 </LinearLayout>
 
@@ -455,15 +457,15 @@
 
                     <ImageButton
                         android:id="@+id/pdp_heart_btn"
-                        android:layout_width="50sp"
-                        android:layout_height="50sp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         style="@style/WhiteOutlinedButton"
                         app:srcCompat="@drawable/pdp_heart_icon" />
 
                     <ImageButton
                         android:id="@+id/pdp_share_btn"
-                        android:layout_width="50sp"
-                        android:layout_height="50sp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         style="@style/WhiteOutlinedButton"
                         app:srcCompat="@drawable/pdp_share_icon" />
                 </LinearLayout>
@@ -481,8 +483,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="50sp"
-                        android:layout_height="50sp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         app:srcCompat="@drawable/pdp_fast_delivery_icon" />
 
                     <LinearLayout
@@ -512,8 +514,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="50sp"
-                        android:layout_height="50sp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         app:srcCompat="@drawable/pdp_protectedgoods_icon" />
 
                     <LinearLayout

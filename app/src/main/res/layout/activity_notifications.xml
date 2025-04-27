@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/agrikita_background"
+    tools:context=".pages.Notifications">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/notif_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pdp_details_styling"
+                android:backgroundTint="@color/agrikita_background"
+                app:srcCompat="@drawable/back_to_marketplace_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="viewEnd"
+                android:textSize="35sp"
+                android:textColor="@color/black"
+                android:text="Notifications" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pdp_details_styling"
+                android:backgroundTint="@color/agrikita_background"
+                app:srcCompat="@drawable/notification" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/notif_new_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/notifGreen"
+                android:text="Button" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/notif_markallasread_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/notifWhite"
+                android:text="Mark all as Read" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/notif_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

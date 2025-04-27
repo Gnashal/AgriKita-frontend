@@ -31,14 +31,17 @@ public class Navbar extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_navbar, container, false);
+
         menuButton = view.findViewById(R.id.menuIcon);
         profileButton = view.findViewById(R.id.profileIcon);
         cartButton = view.findViewById(R.id.cartIcon);
         logoButton = view.findViewById(R.id.homeButton);
+        notificationButton = view.findViewById(R.id.notificationIcon);
 
         profileButton.setOnClickListener(v -> toProfile());
         cartButton.setOnClickListener(v -> toShoppingCart());
         logoButton.setOnClickListener(v -> toHome());
+        notificationButton.setOnClickListener(v -> toNotification());
 
         return view;
     }
@@ -50,6 +53,8 @@ public class Navbar extends Fragment {
         startActivity(new Intent(getContext(),Home.class ));
     }
     private void toShoppingCart() { startActivity(new Intent(getContext(), ShoppingCartPage.class)); }
+
+    private void toNotification() { startActivity(new Intent(getContext(), Notifications.class));}
     /*TODO: Fix this*/
     /*private void setProfilePic() {
         CurrentUser currentUser = CurrentUser.getInstance(getContext());
@@ -61,5 +66,7 @@ public class Navbar extends Fragment {
 
         }
     }*/
+
+
 
 }
