@@ -7,6 +7,8 @@ import java.io.File;
 
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.api.UserServiceApi;
+import mobdev.agrikita.models.user.UpdatePasswordRequest;
+import mobdev.agrikita.models.user.UpdatePasswordResponse;
 import mobdev.agrikita.models.user.UpdateProfileImageResponse;
 import mobdev.agrikita.models.user.UpdateUserRequest;
 import mobdev.agrikita.models.user.UpdateUserResponse;
@@ -98,6 +100,33 @@ public class UserService {
         });
     }
 
+    public void updatePassword(String uid, String password, final UpdatePasswordCallback callback) {
+        UpdatePasswordRequest request = new UpdatePasswordRequest(uid, password);
+        Call<UpdatePasswordResponse> call = userServiceApi.updatePassword(request);
+
+        call.enqueue(new Callback<UpdatePasswordResponse>() {
+            @Override
+            public void onResponse(Call<UpdatePasswordResponse> call, Response<UpdatePasswordResponse> response) {
+                if (response.isSuccessful()) {
+                    UpdatePasswordResponse updatePasswordResponse = response.body();
+                    if (updatePasswordResponse != null) {
+                        callback.onSuccess(updatePasswordResponse);
+                    } else {
+                        callback.onFailure("Update failed: Empty response");
+                    }
+                } else  {
+                    callback.onFailure("Update failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdatePasswordResponse> call, Throwable t) {
+                Log.v("UpdatePassword", "Error updating: "+ t.getMessage());
+                callback.onFailure("Network failure: " + t.getMessage());
+            }
+        });
+    }
+
     public interface FetchUserCallback {
         void onSuccess(UserResponse userResponse);
         void onFailure(String errorMessage);
@@ -108,6 +137,10 @@ public class UserService {
     }
     public interface UpdateProfileImageCallback {
         void onSuccess(UpdateProfileImageResponse updateProfileImageResponse);
+        void onFailure(String errorMessage);
+    }
+    public interface UpdatePasswordCallback {
+        void onSuccess(UpdatePasswordResponse updatePasswordResponse);
         void onFailure(String errorMessage);
     }
 }
