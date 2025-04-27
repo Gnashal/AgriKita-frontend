@@ -54,14 +54,29 @@ public class Notification extends AppCompatActivity {
         notificationsList.add(new Notifications("Special Offer!", "Get 15% off this week. Use code ORGANIC15.", "2025-04-20", false));
 
         notifAdapter = new NotificationAdapter(this, notificationsList);
+        notif_view.setAdapter(notifAdapter);
 
         go_back.setOnClickListener(v -> finish());
+
+        notif_new.setText(String.format("%d", countUnRead(notificationsList))+" New");
 
         notif_markallasread.setOnClickListener(v -> {
             for (Notifications item : notificationsList) {
                 item.setRead_status(true);
+                notif_new.setText("0 New");
             }
             notifAdapter.notifyDataSetChanged();
         });
+    }
+
+    private int countUnRead(List<Notifications> notificationsList) {
+        int count = 0;
+        for (Notifications item: notificationsList) {
+            if (!item.isRead_status()) {
+                count += 1;
+            }
+        }
+
+        return count;
     }
 }
