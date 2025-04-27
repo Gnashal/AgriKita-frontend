@@ -32,7 +32,7 @@ import java.util.Objects;
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.models.user.UserService;
+import mobdev.agrikita.controllers.UserService;
 
 public class CreateShop extends AppCompatActivity {
     private ScrollView mainScrollView;
