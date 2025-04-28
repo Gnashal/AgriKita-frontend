@@ -25,14 +25,23 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
+        boolean isFirstTime = prefs.getBoolean("isFirstTime", true);
         String tokenID = prefs.getString("idToken", "");
 
-        if (tokenID.isEmpty() || tokenID.isBlank()) {
+        if (isFirstTime) {
+            prefs.edit().putBoolean("isFirstTime", false).apply();
+            toLanding();
+        } else if (tokenID.isEmpty()) {
             toLogin();
         } else {
             toHome();
         }
 
+    }
+
+    private void toLanding() {
+        startActivity(new Intent(this, LandingPage.class));
+        finish();
     }
     private void toLogin() {
         startActivity(new Intent(this, Login.class));

@@ -21,7 +21,7 @@ import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
     ImageView profileButton;
-    ImageButton menuButton, cartButton, logoButton;
+    ImageButton menuButton, cartButton, logoButton, notificationButton;
 
     public Navbar() {
         // Required empty public constructor
