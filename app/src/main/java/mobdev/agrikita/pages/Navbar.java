@@ -1,7 +1,6 @@
 package mobdev.agrikita.pages;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,17 +12,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-import mobdev.agrikita.MainActivity;
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.user.CurrentUser;
-import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
     ImageView profileButton;
-    ImageButton menuButton, cartButton, logoButton;
-    ImageView notificationButton;
+    ImageButton menuButton, cartButton, logoButton, notificationButton;
 
     public Navbar() {
         // Required empty public constructor
@@ -56,7 +49,7 @@ public class Navbar extends Fragment {
     }
     private void toShoppingCart() { startActivity(new Intent(getContext(), ShoppingCartPage.class)); }
 
-    private void toNotification() { startActivity(new Intent(getContext(), Notifications.class));}
+    private void toNotification() { startActivity(new Intent(getContext(), Notification.class));}
     /*TODO: Fix this*/
     /*private void setProfilePic() {
         CurrentUser currentUser = CurrentUser.getInstance(getContext());

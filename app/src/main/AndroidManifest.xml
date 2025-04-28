@@ -19,10 +19,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".pages.Notification"
+            android:exported="false" />
+        <activity
             android:name=".pages.CreateShop"
             android:exported="false" />
         <activity
-            android:name=".pages.Notifications"
+            android:name=".pages.Notifications
             android:exported="false" />
         <activity
             android:name=".pages.ProductDetailPage"
@@ -59,17 +62,16 @@
             android:exported="false" />
         <activity
             android:name=".pages.InventoryManagement"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".pages.Home"
             android:exported="false">
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.MAIN" />-->
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+<!--             <category android:name="android.intent.category.LAUNCHER" />-->
+<!--             </intent-filter>-->
         </activity>
         <activity
             android:name=".MainActivity"
