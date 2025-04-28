@@ -24,7 +24,8 @@ public class RetrofitClient {
     * */
     private static  final String localIP = "10.0.2.2:4040";
     private static final String wirelessIP = "10.16.245.143:4040"; /*Replace with local ip*/
-    private static final String BASE_URL = "http://"+ wirelessIP + "/api/";
+    private static final String BACKEND_URL = "https://griita-backend-gnashal6914-x2n9tdsh.leapcell.dev/api/"; /*Deployed backend*/
+    private static final String BASE_URL = BACKEND_URL;
   
     private static Retrofit retrofit = null;
     
