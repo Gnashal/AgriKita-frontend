@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -67,6 +68,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.price.setText("₱ "+String.format("%.2f", productItem.getPrice()));
         holder.rating.setText(String.valueOf(productItem.getRating()));
         holder.seller_name.setText(productItem.getShopID());
+
+        String imgaeURL = productItem.getImageUrl();
+
+        Glide.with(context)
+                .load(imgaeURL)
+                .placeholder(R.drawable.agrikita_logo)
+                .error(R.drawable.agrikita_logo)
+                .into(holder.productImage);
 
         holder.addToCart_btn.setOnClickListener(v -> {
             ShoppingCartController.getInstance().addToCart(productItem);

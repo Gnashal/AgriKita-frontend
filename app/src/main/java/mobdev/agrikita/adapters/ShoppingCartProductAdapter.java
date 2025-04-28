@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -72,12 +73,19 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
 
         Products singleProd = getItem(position);
 
-//        holder.coutprod_imgv.setImageResource(singleProd.getImageUrl());
         holder.coutprod_name.setText(singleProd.getProductName());
         holder.coutprod_price.setText("₱ "+String.format("%.2f", singleProd.getPrice() * singleProd.getQuantityToBuy()));
         holder.coutprod_perprice.setText("₱ "+String.format("%.2f", singleProd.getPrice()));
         holder.coutprod_seller.setText(singleProd.getShopID());
         holder.coutprod_quantity.setText(String.valueOf(singleProd.getQuantityToBuy()));
+
+        String imageURL = singleProd.getImageUrl();
+
+        Glide.with(context)
+                .load(imageURL)
+                .placeholder(R.drawable.agrikita_logo)
+                .error(R.drawable.agrikita_logo)
+                .into(holder.coutprod_imgv);
 
         holder.add_btn.setOnClickListener(v -> {
             singleProd.setQuantityToBuy(singleProd.getQuantityToBuy() + 1);
