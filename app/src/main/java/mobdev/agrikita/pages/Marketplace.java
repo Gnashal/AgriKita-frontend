@@ -2,10 +2,13 @@ package mobdev.agrikita.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,9 +30,11 @@ public class Marketplace extends AppCompatActivity {
     RecyclerView productGridView;
     List<Products> productList = new ArrayList<>();
     ProductAdapter adapter;
-    MaterialButton all_btn, fruits_btn, grains_btn, meat_btn, poultry_btn, produce_btn, herbs_btn;
+    AppCompatButton selectedBtn;
 
     ProductService productService;
+
+    LinearLayout categoryBtnContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +48,7 @@ public class Marketplace extends AppCompatActivity {
             return insets;
         });
 
-        // Call the stuff from the .xml file
-        all_btn = findViewById(R.id.all_button);
-        fruits_btn = findViewById(R.id.fruit_button);
-        grains_btn = findViewById(R.id.grain_button);
-        meat_btn = findViewById(R.id.meat_button);
-        poultry_btn = findViewById(R.id.poultry_button);
-        produce_btn = findViewById(R.id.produce_button);
-        herbs_btn = findViewById(R.id.herb_button);
+        categoryBtnContainer = findViewById(R.id.mkpl_category_btn_container);
 
         // Initialize RecyclerView (formerly GridView)
         productGridView = findViewById(R.id.product_grid_view);
@@ -73,12 +71,54 @@ public class Marketplace extends AppCompatActivity {
 
                     startActivity(go_to_product_detail);
                 });
+
+                generateCategoryBtn();
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(Marketplace.this, "Failed fetching data", Toast.LENGTH_LONG);
+                Toast.makeText(Marketplace.this, "Failed fetching data", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void filterProductsByCategory(String category) {
+        List<Products> filteredList = new ArrayList<>();
+
+        if (category.equals("All")) {
+            filteredList = productList;
+        } else {
+            for (Products item: productList) {
+                if (item.getCategory().equalsIgnoreCase(category)) {
+                    filteredList.add(item);
+                }
+            }
+        }
+
+        adapter.updateList(filteredList);
+    }
+
+    private void generateCategoryBtn() {
+        List<String> categoryList = new ArrayList<>();
+
+        categoryList.add("All");
+
+        for (Products product : productList) {
+            String category = product.getCategory();
+
+            if (category != null && !categoryList.contains(category)) {
+                categoryList.add(category);
+            }
+        }
+
+        for (String cat : categoryList) {
+            // In your code:
+            AppCompatButton btn = new AppCompatButton(new ContextThemeWrapper(this, R.style.CategoryButton), null, 0);
+            btn.setText(cat);
+
+            btn.setOnClickListener(v -> filterProductsByCategory(cat));
+
+            categoryBtnContainer.addView(btn);
+        }
     }
 }
