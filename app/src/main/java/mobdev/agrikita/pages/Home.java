@@ -179,8 +179,9 @@ public class Home extends AppCompatActivity {
                 Intent goToShop = new Intent(Home.this, InventoryManagement.class);
                 startActivity(goToShop);
             }else{
-                Toast.makeText(this, "My Shop clicked but you got no shop", Toast.LENGTH_SHORT).show();
-                /*TODO: Add actual logic that if user has no shop, a module for the shop creation will appear*/
+                Toast.makeText(this, "You don't have a shop, let's make you one", Toast.LENGTH_SHORT).show();
+                Intent goToMakeShop = new Intent(Home.this, CreateShop.class);
+                startActivity(goToMakeShop);
             }
         });
     }

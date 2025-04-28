@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F2E5"
+    android:padding="16dp"
+    android:id="@+id/main"
+    tools:context=".pages.CreateShop">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/navbarContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Profile Image Upload -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setup your shop"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="#000000"
+                tools:ignore="HardcodedText"/>
+
+            <ImageView
+                android:id="@+id/shopImageLayout"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:contentDescription="Upload Shop Image"
+                android:focusable="true"
+                android:src="@drawable/plus_but_white_for_shop"
+                android:background="@drawable/circle_add_shop_img"
+                android:scaleType="centerInside"
+                android:layout_marginTop="15dp"
+                tools:ignore="HardcodedText"
+                android:clickable="true"/>
+
+            <ImageView
+                android:id="@+id/uploaded_image"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="Uploaded Image Display"
+                android:scaleType="centerCrop"
+                tools:ignore="HardcodedText"
+                android:background="@android:color/transparent"
+                android:layout_marginTop="15dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+        <!-- Shop Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop Name"
+                android:textColor="@color/agrikita_dark_green"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shopNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your shop name"
+                tools:ignore="HardcodedText"
+                app:hintTextColor="#777777"
+                android:textColorHint="#777777"
+                app:boxStrokeColor="@android:color/transparent"
+                app:boxBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shopNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColorHint="#777777"
+                    android:textColor="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Address -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textColor="@color/agrikita_dark_green"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shopAddressLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your shop address"
+                tools:ignore="HardcodedText"
+                app:hintTextColor="#777777"
+                android:textColorHint="#777777"
+                app:boxStrokeColor="@android:color/transparent"
+                app:boxBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shopAddressField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColorHint="#777777"
+                    android:textColor="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Zip Code -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Zip Code"
+                android:textColor="@color/agrikita_dark_green"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shopZipCodeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your zip code"
+                tools:ignore="HardcodedText"
+                app:hintTextColor="#777777"
+                android:textColorHint="#777777"
+                app:boxStrokeColor="@android:color/transparent"
+                app:boxBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shopZipCodeField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColorHint="#777777"
+                    android:textColor="@color/black"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Shop Description -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop Description"
+                android:textColor="@color/agrikita_dark_green"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                tools:ignore="HardcodedText" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shopDescLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Type here.."
+                tools:ignore="HardcodedText"
+                app:hintTextColor="#777777"
+                android:textColorHint="#777777"
+                app:boxStrokeColor="@android:color/transparent"
+                app:boxBackgroundColor="@color/white"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shopDescField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColorHint="#777777"
+                    android:textColor="@color/black"
+                    android:minLines="6"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Certificate Upload -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insert Certificate of Acknowledgment"
+                android:textColor="@color/agrikita_dark_green"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/browseCertificateButton"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:text="Browse"
+                android:textStyle="bold"
+                android:textColor="@color/agrikita_dark_green"
+                tools:ignore="HardcodedText"
+                android:backgroundTint="#FFFFFF"
+                android:layout_marginTop="7dp"/>
+
+            <!-- Enter Your Shop Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/enterShopButton"
+                    android:layout_width="180dp"
+                    android:gravity="center"
+                    android:layout_height="60dp"
+                    android:text="Enter your Shop"
+                    android:textStyle="bold"
+                    android:backgroundTint="#2E7D32"
+                    android:textColor="@android:color/white"
+                    tools:ignore="HardcodedText"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

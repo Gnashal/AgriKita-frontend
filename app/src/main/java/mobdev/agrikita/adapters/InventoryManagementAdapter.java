@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +44,16 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
         holder.textProductName.setText(product.getProductName());
         holder.textPrice.setText(String.format("%.2f", product.getPrice()));
         holder.textProductStock.setText(String.valueOf(product.getStockQuantity()));
-//        holder.imageProduct.setImageResource(product.getImageUrl());
+
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.agrikita_logo)
+                .error(R.drawable.error_no_image)
+                .circleCrop();
+
+        Glide.with(holder.itemView.getContext())
+                .load(product.getImageUrl())
+                .apply(requestOptions)
+                .into(holder.imageProduct);
     }
 
     @Override
@@ -58,7 +70,7 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
             textProductName = itemView.findViewById(R.id.productName);
             textPrice = itemView.findViewById(R.id.productPrice);
             textProductStock = itemView.findViewById(R.id.productStock);
-//            imageProduct = itemView.findViewById(R.id.productImage);
+            imageProduct = itemView.findViewById(R.id.productImage);
         }
     }
 

@@ -1,14 +1,23 @@
 package mobdev.agrikita.pages;
 
+import static mobdev.agrikita.controllers.ImagePickerUtil.prepareFilePart;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
@@ -16,9 +25,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.models.products.CreateProductRequest;
@@ -26,6 +39,8 @@ import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
 import mobdev.agrikita.controllers.UserService;
+import mobdev.agrikita.controllers.ImagePickerUtil;
+import okhttp3.MultipartBody;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;
@@ -36,6 +51,15 @@ public class CreateProduct extends AppCompatActivity {
     ProductService productService;
     CreateProductRequest prodRequest;
 
+    ImageView imageView, uploadedImage;
+    Button chooseFileButton;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
+    View uploadIcon, uploadBox;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +93,11 @@ public class CreateProduct extends AppCompatActivity {
 //        switches
         switchOrganic = findViewById(R.id.switchOrganic);
         switchFeature = findViewById(R.id.switchFeature);
+
+        chooseFileButton = findViewById(R.id.addImgButton);
+        uploadIcon = findViewById(R.id.upload_icon);
+        uploadBox = findViewById(R.id.upload_box);
+        uploadedImage = findViewById(R.id.uploaded_image);
 
         String[] units = {
                 "Kg",       // Kilogram
@@ -136,55 +165,93 @@ public class CreateProduct extends AppCompatActivity {
 
         setupNavbar();
 
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedUri = result.getData().getData();
+
+                        assert selectedUri != null;
+                        String mimeType = getContentResolver().getType(selectedUri);
+                        if (mimeType == null || !mimeType.startsWith("image/")) {
+                            Toast.makeText(this, "Selected file is not a valid image.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        imageUri = selectedUri;
+
+                        Glide.with(this)
+                                .load(imageUri)
+                                .transform(new CenterCrop(), new RoundedCorners(30))
+                                .into(uploadedImage);
+
+                        uploadBox.setVisibility(View.GONE);
+                        uploadedImage.setVisibility(View.VISIBLE);
+                    }
+                }
+        );
+
+
         btnSubmit.setOnClickListener(v -> {
-            if (validateInputs()) {
-                CurrentUser user = CurrentUser.getInstance(this);
-                user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
-                    @Override
-                    public void onSuccess(UserResponse response) {
-                        String shopId = user.getShopId();
-                        String name = editName.getText().toString().trim();
-                        String unit = unitDropdown.getText().toString().trim();
-                        String category = categoryDropdown.getText().toString().trim();
-                        String freshness = freshnessDropdown.getText().toString().trim();
-                        int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
-                        float price = Float.parseFloat(editPrice.getText().toString().trim());
-                        String origin = Objects.requireNonNull(productOriginField.getText()).toString().trim();
-                        String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
-                        String description = Objects.requireNonNull(productDescField.getText()).toString().trim();
-                        boolean isOrganic = switchOrganic.isChecked();
-                        boolean isFeatured = switchFeature.isChecked();
+            if (!validateInputs()) return;
 
-                        // 🔜 You can now store this in Firebase
-                        Log.d("VALID_INPUT", "Shop ID: " + shopId);
-                        Log.d("VALID_INPUT", "Product Name: " + name);
-                        Log.d("VALID_INPUT", "Unit: " + unit);
-                        Log.d("VALID_INPUT", "Category: " + category);
-                        Log.d("VALID_INPUT", "Freshness: " + freshness);
-                        Log.d("VALID_INPUT", "Quantity: " + quantity);
-                        Log.d("VALID_INPUT", "Price: " + price);
-                        Log.d("VALID_INPUT", "Origin Location: " + origin);
-                        Log.d("VALID_INPUT", "Storage Info: " + storage);
-                        Log.d("VALID_INPUT", "Description: " + description);
-                        Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
-                        Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+            btnSubmit.setEnabled(false);
+            btnSubmit.setText("Loading...");
 
-                        prodRequest = new CreateProductRequest(shopId, "https://here.com",
-                                name, price, unit, category, quantity, origin, freshness,
-                                storage, description, isOrganic, isFeatured, "available"
-                        );
+            CurrentUser user = CurrentUser.getInstance(this);
+            user.fetchUserData(user.getUid(), new UserService.FetchUserCallback() {
+                @Override
+                public void onSuccess(UserResponse resp) {
+                    MultipartBody.Part imgPart = prepareFilePart(CreateProduct.this , "image", imageUri);
 
-                        productService.createProduct(prodRequest);
-
-                        finish();
+                    if (imgPart == null) {
+                        Toast.makeText(CreateProduct.this, "Failed to prepare image file. Please try again.", Toast.LENGTH_SHORT).show();
+                        resetSubmitButton();
+                        return;
                     }
 
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        Toast.makeText(CreateProduct.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+                    // Handling image upload using a background task
+                    CompletableFuture<Void> uploadFuture = CompletableFuture.runAsync(() -> {
+                        productService.uploadImage(imgPart, new ProductService.UploadCallback() {
+                            @Override
+                            public void onSuccess(String imageUrl) {
+                                runOnUiThread(() -> {
+                                    handleCreateProduct(imageUrl);
+                                    resetSubmitButton();
+                                });
+                            }
+
+                            @Override
+                            public void onError(String errorMessage) {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(CreateProduct.this, "Image upload failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    resetSubmitButton();
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(CreateProduct.this, "Failed to get imgPart: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                    resetSubmitButton();
+                                });
+                            }
+                        });
+                    });
+
+                    uploadFuture.thenRun(() -> {
+                        Log.d("UPLOAD_COMPLETE", "Product creation will continue after the image upload is completed.");
+                        // You can add any other logic that depends on the upload being finished here
+                    });
+
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    Toast.makeText(CreateProduct.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    resetSubmitButton();
+                }
+            });
         });
 
         btnCancel.setOnClickListener(v -> finish());
@@ -202,6 +269,8 @@ public class CreateProduct extends AppCompatActivity {
                 editQuantity.setText(String.valueOf(currentQty));
             }
         });
+
+        chooseFileButton.setOnClickListener(v -> ImagePickerUtil.launchImagePicker(CreateProduct.this, imagePickerLauncher));
 
     }
 
@@ -236,6 +305,18 @@ public class CreateProduct extends AppCompatActivity {
             editPrice.setError("Price is required");
             return false;
         }
+        float priceValue;
+        try {
+            priceValue = Float.parseFloat(editPrice.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            editPrice.setError("Invalid price format");
+            return false;
+        }
+
+        if (priceValue >= 10000000) {
+            editPrice.setError("Price can't be that high");
+            return false;
+        }
         if (unitDropdown.getText().toString().trim().isEmpty()) {
             unitDropdown.setError("Unit is required");
             return false;
@@ -266,5 +347,51 @@ public class CreateProduct extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void handleCreateProduct(String imageUrl) {
+        CurrentUser user = CurrentUser.getInstance(this);
+        String shopId = user.getShopId();
+        String name = editName.getText().toString().trim();
+        String unit = unitDropdown.getText().toString().trim();
+        String category = categoryDropdown.getText().toString().trim();
+        String freshness = freshnessDropdown.getText().toString().trim();
+        int quantity = Integer.parseInt(editQuantity.getText().toString().trim());
+        float price = Float.parseFloat(editPrice.getText().toString().trim());
+        String origin = Objects.requireNonNull(productOriginField.getText()).toString().trim();
+        String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
+        String description = Objects.requireNonNull(productDescField.getText()).toString().trim();
+        boolean isOrganic = switchOrganic.isChecked();
+        boolean isFeatured = switchFeature.isChecked();
+
+        // Log the product details
+        Log.d("VALID_INPUT", "Shop ID: " + shopId);
+        Log.d("VALID_INPUT", "Product Image Url: " + imageUrl);
+        Log.d("VALID_INPUT", "Product Name: " + name);
+        Log.d("VALID_INPUT", "Unit: " + unit);
+        Log.d("VALID_INPUT", "Category: " + category);
+        Log.d("VALID_INPUT", "Freshness: " + freshness);
+        Log.d("VALID_INPUT", "Quantity: " + quantity);
+        Log.d("VALID_INPUT", "Price: " + price);
+        Log.d("VALID_INPUT", "Origin Location: " + origin);
+        Log.d("VALID_INPUT", "Storage Info: " + storage);
+        Log.d("VALID_INPUT", "Description: " + description);
+        Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
+        Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+
+        CreateProductRequest prodRequest = new CreateProductRequest(shopId, imageUrl,
+                name, price, unit, category, quantity, origin, freshness,
+                storage, description, isOrganic, isFeatured, "available"
+        );
+        productService.createProduct(prodRequest);
+
+        Intent goBack = new Intent(CreateProduct.this, InventoryManagement.class);
+        startActivity(goBack);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void resetSubmitButton() {
+        btnSubmit.setText("Submit");
+        btnSubmit.setEnabled(true);
     }
 }

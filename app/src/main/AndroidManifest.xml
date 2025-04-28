@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,6 +22,12 @@
             android:name=".pages.Notification"
             android:exported="false" />
         <activity
+            android:name=".pages.CreateShop"
+            android:exported="false" />
+        <activity
+            android:name=".pages.Notifications
+            android:exported="false" />
+        <activity
             android:name=".pages.ProductDetailPage"
             android:exported="false"/>
         <activity
@@ -28,6 +35,9 @@
             android:exported="false" />
         <activity
             android:name=".pages.CreateNewPassword"
+            android:exported="false" />
+        <activity
+            android:name=".pages.CreateProduct"
             android:exported="false" />
         <activity
             android:name=".pages.VerifyPhoneNumber"
@@ -46,7 +56,7 @@
             android:exported="false" />
         <activity
             android:name=".pages.Marketplace"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".pages.ShoppingCartPage"
             android:exported="false" />

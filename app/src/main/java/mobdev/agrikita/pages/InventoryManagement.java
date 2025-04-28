@@ -29,7 +29,8 @@ import java.util.List;
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.CustomerOrdersAdapter;
 import mobdev.agrikita.adapters.InventoryManagementAdapter;
-import mobdev.agrikita.models.Orders;
+import mobdev.agrikita.controllers.OrderService;
+import mobdev.agrikita.models.order.Orders;
 import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.user.CurrentUser;
@@ -51,6 +52,7 @@ public class InventoryManagement extends AppCompatActivity {
     LinearLayout tabOrders;
     Button createProduct;
     ProductService productService;
+    OrderService orderService;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,6 +68,7 @@ public class InventoryManagement extends AppCompatActivity {
         });
 
         productService = new ProductService(this);
+        orderService = new OrderService(this);
 
         layoutProducts = findViewById(R.id.containerProduct);
         layoutOrders = findViewById(R.id.containerOrder);
@@ -111,12 +114,17 @@ public class InventoryManagement extends AppCompatActivity {
         adapterProducts = new InventoryManagementAdapter(productList);
         recyclerProductView.setAdapter(adapterProducts);
 
+        ordersList = new ArrayList<>();
+        adapterOrders = new CustomerOrdersAdapter(ordersList);
+        recyclerOrderView.setAdapter(adapterOrders);
+
         CurrentUser user = CurrentUser.getInstance(this);
         user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
             @Override
             public void onSuccess(UserResponse response) {
                 String shopId = user.getShopId();
                 fetchProducts(shopId);
+                fetchOrders(shopId);
             }
 
             @Override
@@ -124,14 +132,6 @@ public class InventoryManagement extends AppCompatActivity {
                 Toast.makeText(InventoryManagement.this, "Failed to load user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
-
-        ordersList = new ArrayList<>();
-        ordersList.add(new Orders("sdqni231f", "0913djica", "Callen", 100, "09-30-2025"));
-        ordersList.add(new Orders("fsf3254fw", "45edy7wwf", "Kyerie", 122, "05-10-2025"));
-        ordersList.add(new Orders("y5ty3wrgtfae3rrf4ew3q3rrf32w", "dsfe35tgs", "Kyerie", 2, "01-05-2025"));
-
-        adapterOrders = new CustomerOrdersAdapter(ordersList);
-        recyclerOrderView.setAdapter(adapterOrders);
 
         tabProducts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +202,21 @@ public class InventoryManagement extends AppCompatActivity {
         });
     }
 
+    private void fetchOrders(String shopId) {
+        orderService.getOrdersByShopID(shopId, new OrderService.OrderCallback() {
+            @Override
+            public void onOrdersFetched(List<Orders> orders) {
+                ordersList.clear();
+                ordersList.addAll(orders);
+                adapterOrders.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(InventoryManagement.this, "Failed to fetch orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     private void fetchProducts(String shopId) {
@@ -219,5 +234,4 @@ public class InventoryManagement extends AppCompatActivity {
             }
         });
     }
-
 }
