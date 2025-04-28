@@ -21,5 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Agrikita Frontend"
+rootProject.name = "Agrikita"
 include(":app")
