@@ -1,18 +1,25 @@
 package mobdev.agrikita.pages;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,8 +29,13 @@ import java.util.List;
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.CustomerOrdersAdapter;
 import mobdev.agrikita.adapters.InventoryManagementAdapter;
-import mobdev.agrikita.models.Orders;
-import mobdev.agrikita.models.Products;
+import mobdev.agrikita.controllers.OrderService;
+import mobdev.agrikita.models.order.Orders;
+import mobdev.agrikita.controllers.ProductService;
+import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.controllers.UserService;
 
 public class InventoryManagement extends AppCompatActivity {
     private RecyclerView recyclerProductView;
@@ -38,11 +50,15 @@ public class InventoryManagement extends AppCompatActivity {
 
     TextView tabProducts;
     LinearLayout tabOrders;
+    Button createProduct;
+    ProductService productService;
+    OrderService orderService;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_inventory_management);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -51,7 +67,8 @@ public class InventoryManagement extends AppCompatActivity {
             return insets;
         });
 
-        setupNavbar();
+        productService = new ProductService(this);
+        orderService = new OrderService(this);
 
         layoutProducts = findViewById(R.id.containerProduct);
         layoutOrders = findViewById(R.id.containerOrder);
@@ -62,29 +79,67 @@ public class InventoryManagement extends AppCompatActivity {
         recyclerProductView = findViewById(R.id.recycler_view_inventory);
         recyclerOrderView = findViewById(R.id.recycler_view_order);
 
+        createProduct = findViewById(R.id.addProductButton);
+
+        SearchView searchViewProduct = findViewById(R.id.searchProductView);
+        int searchTextId = searchViewProduct.getContext().getResources()
+                .getIdentifier("search_src_text", "id", "android");
+        int searchIconId = searchViewProduct.getContext().getResources()
+                .getIdentifier("search_mag_icon", "id", "android");
+        EditText searchEditTextProduct = searchViewProduct.findViewById(searchTextId);
+        ImageView searchIconProduct = searchViewProduct.findViewById(searchIconId);
+        if (searchEditTextProduct != null) {
+            searchEditTextProduct.setTextColor(ContextCompat.getColor(this, R.color.black));
+            searchEditTextProduct.setHintTextColor(Color.GRAY);
+        }
+        if (searchIconProduct != null) {
+            searchIconProduct.setColorFilter(Color.GRAY);
+        }
+
+        SearchView searchViewOrders = findViewById(R.id.searchOrderView);
+        ImageView searchIconOrder = searchViewOrders.findViewById(searchIconId);
+        EditText searchEditTextOrder = searchViewOrders.findViewById(searchTextId);
+        if (searchEditTextOrder != null) {
+            searchEditTextOrder.setTextColor(Color.BLACK);
+            searchEditTextOrder.setHintTextColor(Color.GRAY);
+        }
+        if (searchIconOrder != null) {
+            searchIconOrder.setColorFilter(Color.GRAY);
+        }
+
         recyclerProductView.setLayoutManager(new LinearLayoutManager(this));
         recyclerOrderView.setLayoutManager(new LinearLayoutManager(this));
 
         productList = new ArrayList<>();
-        productList.add(new Products("⭐ 4.8", 26, "Per kilo", "Produce", "Fresh Tomatoes", "Locally sourced, high-quality fresh tomatoes, hand-picked.", "Available", "dwo24ndw ", 100, "A+", "http://ThisisImage", "04, 12, 2025"));
-        productList.add(new Products( "⭐ 4.6", 40, "Per kilo", "Produce", "Fresh Potatoes", "High quality, organically grown potatoes.", "Available", "dwo24ndw ", 100, "A+", "http://ThisisImage", "07, 26, 2025"));
-
         adapterProducts = new InventoryManagementAdapter(productList);
         recyclerProductView.setAdapter(adapterProducts);
 
         ordersList = new ArrayList<>();
-        ordersList.add(new Orders("sdqni231f", "0913djica", "Callen", 100, "09-30-2025"));
-        ordersList.add(new Orders("fsf3254fw", "45edy7wwf", "Kyerie", 122, "05-10-2025"));
-        ordersList.add(new Orders("y5ty3wrgt", "dsfe35tgs", "Kyerie", 2, "01-05-2025"));
-
         adapterOrders = new CustomerOrdersAdapter(ordersList);
         recyclerOrderView.setAdapter(adapterOrders);
+
+        CurrentUser user = CurrentUser.getInstance(this);
+        user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
+            @Override
+            public void onSuccess(UserResponse response) {
+                String shopId = user.getShopId();
+                fetchProducts(shopId);
+                fetchOrders(shopId);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(InventoryManagement.this, "Failed to load user: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         tabProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutProducts.setVisibility(View.VISIBLE);
-                layoutOrders.setVisibility(View.GONE);
+                if (layoutProducts.getVisibility() != View.VISIBLE) {
+                    layoutProducts.setVisibility(View.VISIBLE);
+                    layoutOrders.setVisibility(View.GONE);
+                }
 
                 tabProducts.setSelected(true);
                 tabOrders.setSelected(false);
@@ -97,8 +152,10 @@ public class InventoryManagement extends AppCompatActivity {
         tabOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutProducts.setVisibility(View.GONE);
-                layoutOrders.setVisibility(View.VISIBLE);
+                if (layoutOrders.getVisibility() != View.VISIBLE) {
+                    layoutOrders.setVisibility(View.VISIBLE);
+                    layoutProducts.setVisibility(View.GONE);
+                }
 
                 tabOrders.setSelected(true);
                 tabProducts.setSelected(false);
@@ -107,12 +164,74 @@ public class InventoryManagement extends AppCompatActivity {
                 tabProducts.setBackgroundResource(R.drawable.tab_selector);
             }
         });
+
+        searchViewProduct.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapterProducts.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapterProducts.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        searchViewOrders.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapterOrders.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapterOrders.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        createProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToCreateProduct = new Intent(InventoryManagement.this, CreateProduct.class);
+                startActivity(goToCreateProduct);
+            }
+        });
     }
 
-    private void setupNavbar() {
-        Navbar navbarFragment = new Navbar();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.navbarContainer, navbarFragment);
-        transaction.commit();
+    private void fetchOrders(String shopId) {
+        orderService.getOrdersByShopID(shopId, new OrderService.OrderCallback() {
+            @Override
+            public void onOrdersFetched(List<Orders> orders) {
+                ordersList.clear();
+                ordersList.addAll(orders);
+                adapterOrders.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(InventoryManagement.this, "Failed to fetch orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void fetchProducts(String shopId) {
+        productService.getProductsByShopID(shopId, new ProductService.ProductCallback() {
+            @Override
+            public void onProductsFetched(List<Products> products) {
+                productList.clear();
+                productList.addAll(products);
+                adapterProducts.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(InventoryManagement.this, "Failed to fetch products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

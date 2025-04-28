@@ -18,7 +18,7 @@
 
         <!-- Text Colors -->
         <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">#B3FFFFFF</item> <!-- semi-transparent white -->
+        <item name="android:textColorHint">#FFFFFF</item> <!-- semi-transparent white -->
 
         <!-- Status Bar -->
         <item name="android:statusBarColor">@color/black</item>

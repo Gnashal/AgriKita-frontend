@@ -9,7 +9,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import mobdev.agrikita.MainActivity;
 import mobdev.agrikita.R;
@@ -17,7 +21,9 @@ import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.Login;
 
 public class Navbar extends Fragment {
-    ImageButton menuButton;
+    ImageView profileButton;
+    ImageButton menuButton, cartButton, logoButton;
+    ImageView notificationButton;
 
     public Navbar() {
         // Required empty public constructor
@@ -29,34 +35,40 @@ public class Navbar extends Fragment {
         View view = inflater.inflate(R.layout.fragment_navbar, container, false);
 
         menuButton = view.findViewById(R.id.menuIcon);
-       /* menuButton.setOnClickListener(v -> logout());*/
+        profileButton = view.findViewById(R.id.profileIcon);
+        cartButton = view.findViewById(R.id.cartIcon);
+        logoButton = view.findViewById(R.id.homeButton);
+        notificationButton = view.findViewById(R.id.notificationIcon);
+
+        profileButton.setOnClickListener(v -> toProfile());
+        cartButton.setOnClickListener(v -> toShoppingCart());
+        logoButton.setOnClickListener(v -> toHome());
+        notificationButton.setOnClickListener(v -> toNotification());
 
         return view;
     }
 
-    /*private void logout() {
-        SharedPreferences authPrefs = requireActivity().getSharedPreferences("AuthPrefs", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor authEditor = authPrefs.edit();
-        authEditor.remove("idToken");
-        authEditor.remove("refreshToken");
-        authEditor.remove("localId");
-        authEditor.putBoolean("isLoggedIn", false);
-        authEditor.apply();
-        SharedPreferences userPrefs = requireActivity().getSharedPreferences("UserPrefs", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor userEditor = userPrefs.edit();
-        userEditor.remove("UserID");
-        if (userPrefs.getBoolean("HasShop", false)) {
-            userEditor.remove("ShopID");
+    private void toProfile() {
+        startActivity(new Intent(getContext(), Profile.class));
+    }
+    private void toHome() {
+        startActivity(new Intent(getContext(),Home.class ));
+    }
+    private void toShoppingCart() { startActivity(new Intent(getContext(), ShoppingCartPage.class)); }
+
+    private void toNotification() { startActivity(new Intent(getContext(), Notifications.class));}
+    /*TODO: Fix this*/
+    /*private void setProfilePic() {
+        CurrentUser currentUser = CurrentUser.getInstance(getContext());
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(profileButton);
+
         }
-        userEditor.remove("HasShop");
-        userEditor.apply();
-
-        CurrentUser.clear();
-        Intent intent = new Intent(requireActivity(), Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-
-        requireActivity().finish();
     }*/
+
+
 
 }

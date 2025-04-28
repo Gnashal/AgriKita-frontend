@@ -7,15 +7,17 @@
     android:id="@+id/main"
     tools:context=".pages.InventoryManagement">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <FrameLayout
-            android:id="@+id/navbarContainer"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navbar"
+            tools:layout="@layout/fragment_navbar"
+            android:name="mobdev.agrikita.pages.Navbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:layout_weight="0"
+                android:layout_weight="0.03"
                 android:background="@drawable/tab_selector"
                 android:id="@+id/tabOrders"
                 android:clickable="true"
@@ -109,9 +111,11 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:contentDescription="BagIcon"
                     android:src="@drawable/order_bag_icon"
                     android:layout_marginStart="14dp"
-                    android:duplicateParentState="true"/>
+                    android:duplicateParentState="true"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
 
                 <TextView
                     android:layout_width="170dp"
@@ -159,6 +163,7 @@
                     android:id="@+id/searchProductView"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
+                    android:textColor="#000000"
                     android:background="@android:color/transparent"
                     android:iconifiedByDefault="false"
                     android:queryHint="Search products..." />  <!-- Remove default background -->
@@ -267,6 +272,7 @@
                     android:layout_height="25dp"
                     android:background="@android:color/transparent"
                     android:iconifiedByDefault="false"
+                    android:textColor="#000000"
                     android:queryHint="Search orders..." />  <!-- Remove default background -->
             </FrameLayout>
 

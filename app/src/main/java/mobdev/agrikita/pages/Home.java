@@ -6,9 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,10 +21,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -27,10 +33,10 @@ import java.io.IOException;
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
 import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.api.UserServiceApi;
 import mobdev.agrikita.models.auth.NewsApiResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.controllers.UserService;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -38,16 +44,18 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
+    private Spinner locationSpinner;
     private Button toWeather;
-    private ImageButton profileButton;
-    private UserServiceApi userServiceApi;
+    private ImageView profileButton;
     private SearchView locationSearchView;
     private LinearLayout marketplaceLayout;
     private LinearLayout ordersLayout;
     private LinearLayout shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
-    // private NewsApiClient newsApiClient; //  No longer needed
+    private SwipeRefreshLayout refresh;
+
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,34 +67,54 @@ public class Home extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        userServiceApi = RetrofitClient.getClient(this).create(UserServiceApi.class);
+
         /*IMPORTANT: This sets up the user in the app*/
-        if (CurrentUser.getInstance().getUserData() == null) {setupUser();}
+        if (CurrentUser.getInstance(this).getUserData() == null) {fetchUserData();}
         profileButton = findViewById(R.id.profileButton);
         toWeather = findViewById(R.id.toWeatherForcast);
         profileButton.setOnClickListener(v -> toProfile());
         toWeather.setOnClickListener(v -> toWeather());
 
-        // newsApiClient = new NewsApiClient("YOUR_API_KEY"); // ❌ Old library not used
-
-        // Initialize views
-        locationSearchView = findViewById(R.id.searchView);
+        userService = new UserService(this);
+        // Initialize views\
+        refresh = findViewById(R.id.swipeRefreshLayout);
+        locationSpinner = findViewById(R.id.spinner_loc);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
         ordersLayout = findViewById(R.id.ordersLayout);
         shopLayout = findViewById(R.id.shopLayout);
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
 
+        /*This sets up initial user data if it is null */
+      if (CurrentUser.getInstance(this).getUserData() == null) { fetchUserData(); }
+        /*Swipe down to refresh*/
+      refresh.setOnRefreshListener(() -> {
+          fetchUserData();
+          refresh.setRefreshing(false);
+      });
+
+        profileButton.setOnClickListener(v -> toProfile());
+
         // Setup RecyclerView
         setupRecyclerView();
 
-        // Setup search functionality
-        setupSearch();
+        setupLocationSpinner();
 
         // Set click listeners for the three sections
         setupSectionClickListeners();
 
         // Optional: fetch news on load
-        fetchEverythingNews("trees OR food OR farming OR nature OR agribusiness");
+        fetchEverythingNews("agriculture");
+    }
+
+    private void setProfilePic() {
+        CurrentUser currentUser = CurrentUser.getInstance(this);
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(profileButton);
+
+        }
     }
 
     private void setupRecyclerView() {
@@ -95,17 +123,21 @@ public class Home extends AppCompatActivity {
         newsRecyclerView.setAdapter(newsAdapter);
     }
 
-    private void setupSearch() {
-        locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    private void setupLocationSpinner() {
+        String[] locations = {"Philippines", "China", "United States", "Russia"}; // Sample locations
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationSpinner.setAdapter(adapter);
+
+        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                fetchEverythingNews(query);
-                return true;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLocation = parent.getItemAtPosition(position).toString();
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                return false; // Real-time search not implemented
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
@@ -146,7 +178,7 @@ public class Home extends AppCompatActivity {
 
     private void setupSectionClickListeners() {
         marketplaceLayout.setOnClickListener(v -> {
-            Toast.makeText(this, "Marketplace clicked", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, Marketplace.class));
         });
 
         ordersLayout.setOnClickListener(v -> {
@@ -154,16 +186,16 @@ public class Home extends AppCompatActivity {
         });
 
         shopLayout.setOnClickListener(v -> {
-            Toast.makeText(this, "My Shop clicked", Toast.LENGTH_SHORT).show();
+            if(CurrentUser.getInstance(this).hasShop()){
+                Intent goToShop = new Intent(Home.this, InventoryManagement.class);
+                startActivity(goToShop);
+            }else{
+                Toast.makeText(this, "You don't have a shop, let's make you one", Toast.LENGTH_SHORT).show();
+                Intent goToMakeShop = new Intent(Home.this, CreateShop.class);
+                startActivity(goToMakeShop);
+            }
         });
     }
-
-    /*private void setupNavbar() {
-        Navbar navbarFragment = new Navbar();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.navbarContainer, navbarFragment);
-        transaction.commit();
-    }*/
 
     private void toProfile() {
         startActivity(new Intent(this, Profile.class));
@@ -171,41 +203,27 @@ public class Home extends AppCompatActivity {
     private void toWeather(){startActivity(new Intent(this, WeatherForecast.class));}
 
 
-    public void setupUser() {
+    public void fetchUserData() {
         Toast.makeText(Home.this, "SetupUser Was Called", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String uid = prefs.getString("localId", "");
-        if (uid == null || uid.isEmpty()) {
+        if ( uid.isEmpty()) {
             Log.e("UserSetup", "UID is missing. Cannot fetch user data.");
             Toast.makeText(Home.this, "UID is missing. Cannot fetch user data", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        userServiceApi.getUserData(uid).enqueue(new retrofit2.Callback<UserResponse>() {
+        CurrentUser.getInstance(this).fetchUserData(uid, new UserService.FetchUserCallback() {
             @Override
-            public void onResponse(retrofit2.Call<UserResponse> call, retrofit2.Response<UserResponse> response) {
-                if (response.isSuccessful() ) {
-                    UserResponse data = response.body();
-                    if (response.body() != null) {
-                        assert data != null;
-                        CurrentUser.getInstance().setUserData(data.user);
-                        CurrentUser.getInstance().setShopData(data.shop);
-                        CurrentUser.getInstance().setUid(uid);
-                        Log.v("UserSetup", "User and shop data successfully set.");
-                        saveToPrefs();
-                    } else {
-                        Log.v("UserSetup", "User and shop data unsuccessful.");
-                    }
-                } else {
-                    Log.e("UserSetup", "Failed to fetch user data. Code: " + response.code());
-                    Toast.makeText(Home.this, "Failed to fetch user data. Please try again.", Toast.LENGTH_SHORT).show();
-                }
+            public void onSuccess(UserResponse userResponse) {
+                CurrentUser.getInstance(getBaseContext()).setUid(uid);
+                saveToPrefs();
+                setProfilePic();
             }
 
             @Override
-            public void onFailure(retrofit2.Call<UserResponse> call, Throwable t) {
-                Log.e("UserSetup", "Network error while fetching user data: " + t.getMessage());
-                call.cancel();
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Home.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -213,10 +231,10 @@ public class Home extends AppCompatActivity {
     private void saveToPrefs() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("UserID", CurrentUser.getInstance().getUid());
-        editor.putBoolean("HasShop", CurrentUser.getInstance().hasShop());
-        if (CurrentUser.getInstance().hasShop()) {
-            editor.putString("ShopID", CurrentUser.getInstance().getShopId());
+        editor.putString("UserID", CurrentUser.getInstance(this).getUid());
+        editor.putBoolean("HasShop", CurrentUser.getInstance(this).hasShop());
+        if (CurrentUser.getInstance(this).hasShop()) {
+            editor.putString("ShopID", CurrentUser.getInstance(this).getShopId());
         }
         editor.apply();
     }
