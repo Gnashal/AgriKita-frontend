@@ -1,44 +1,54 @@
 package mobdev.agrikita.pages;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import mobdev.agrikita.R;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import mobdev.agrikita.controllers.WeatherService;
 
 public class WeatherForecast extends AppCompatActivity {
 
     private static final String TAG = "WeatherForecast";
-    private  final int apiKeyID = R.string.OPENWEATHER_API_KEY;  // Replace with actual API key
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     private EditText location;
-    private TextView conditionText, Temperature, maxTemp, minTemp, humidity,
-            pressure, wind, sunriseTime, sunriseDesc, sunsetTime, sunsetDesc;
+    private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
+            pressure, wind, sunriseTime, sunriseDesc, sunsetTime, sunsetDesc, countryName, weatherDesc;
     private Button RefreshButton;
-
     private ImageView weatherIcon;
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private WeatherService weatherService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_forecast);
 
+        // Initialize views
         location = findViewById(R.id.location);
+        currentDate = findViewById(R.id.currentDate);
         conditionText = findViewById(R.id.conditionText);
         Temperature = findViewById(R.id.Temperature);
         maxTemp = findViewById(R.id.maxTemp);
@@ -52,36 +62,94 @@ public class WeatherForecast extends AppCompatActivity {
         sunsetDesc = findViewById(R.id.sunsetDesc);
         RefreshButton = findViewById(R.id.fetchWeatherButton);
         weatherIcon = findViewById(R.id.weatherIcon);
+        weatherDesc = findViewById(R.id.weatherDescription);
+        countryName = findViewById(R.id.countryName);
 
+        showCurrentDate();
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        weatherService = new WeatherService(this);
+
+        getCurrentLocation();
 
         RefreshButton.setOnClickListener(view -> {
             String cityName = location.getText().toString();
             if (!cityName.isEmpty()) {
                 Log.v(TAG, "Fetching weather for: " + cityName);
-                FetchWeatherData(cityName);
+                fetchWeather(cityName);
             } else {
-                Log.v(TAG, "City name is empty.");
-                location.setError("Please enter a city name");
+                Log.v(TAG, "City name is empty, trying current location...");
+                getCurrentLocation();
             }
         });
     }
 
-    private void FetchWeatherData(String location) {
-        String apiKey = getString(apiKeyID);
-        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=" + apiKey + "&units=metric";
-        Log.v(TAG, "Request URL: " + url);
+    private void showCurrentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy", Locale.getDefault());
+        String formattedDate = dateFormat.format(new Date());
+        currentDate.setText(formattedDate);
+    }
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(url).build();
-            try {
-                Response response = client.newCall(request).execute();
-                String result = response.body().string();
-                Log.v(TAG, "API Response: " + result);
+    private void getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+            return;
+        }
+
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+            if (location != null) {
+                double lat = location.getLatitude();
+                double lon = location.getLongitude();
+                Log.v(TAG, "Location: " + lat + ", " + lon);
+                getCityFromCoordinates(lat, lon);
+            } else {
+                Log.v(TAG, "Location is null.");
+                Toast.makeText(this, "Could not determine your location.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getCityFromCoordinates(double lat, double lon) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                String city = addresses.get(0).getLocality();
+                if (city != null) {
+                    if (city.equals("Lungsod ng Cebu")) {
+                        String shortCity = city.substring(city.lastIndexOf(" ") + 1);
+                        location.setText(shortCity);
+                        fetchWeather(shortCity);
+                    } else {
+                        location.setText(city);
+                        fetchWeather(city);
+                    }
+                    Log.v(TAG, "Detected city: " + city);
+                } else {
+                    Log.v(TAG, "City not found.");
+                    Toast.makeText(this, "Unable to detect city.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (IOException e) {
+            Log.v(TAG, "Geocoder error", e);
+        }
+    }
+
+    private void fetchWeather(String cityName) {
+        weatherService.fetchWeatherData(cityName, new WeatherService.WeatherCallback() {
+            @Override
+            public void onSuccess(String result) {
                 runOnUiThread(() -> updateUI(result));
-            } catch (IOException e) {
-                Log.v(TAG, "Error fetching weather data", e);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                runOnUiThread(() ->
+                        Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show()
+                );
             }
         });
     }
@@ -101,56 +169,56 @@ public class WeatherForecast extends AppCompatActivity {
                 JSONObject windObj = jsonObject.getJSONObject("wind");
                 double windSpeed = windObj.getDouble("speed");
 
-                String description = jsonObject.getJSONArray("weather")
-                        .getJSONObject(0).getString("description");
-                String iconCode = jsonObject.getJSONArray("weather")
-                        .getJSONObject(0).getString("icon");
-
                 JSONObject sys = jsonObject.getJSONObject("sys");
                 long sunrise = sys.getLong("sunrise");
                 long sunset = sys.getLong("sunset");
 
-                Log.v(TAG, "Parsed Weather Data: " +
-                        "\nTemp: " + temperature +
-                        "\nMax: " + maxTemperature +
-                        "\nMin: " + minTemperature +
-                        "\nHumidity: " + humidityVal +
-                        "\nPressure: " + pressureVal +
-                        "\nWind: " + windSpeed +
-                        "\nDescription: " + description +
-                        "\nIcon: " + iconCode +
-                        "\nSunrise: " + sunrise +
-                        "\nSunset: " + sunset);
+                String countryCode = sys.getString("country");
+                Locale locale = new Locale("", countryCode);
+                String fullCountryName = locale.getDisplayCountry();
 
-                // Set weather icon
+                JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
+                String description = weather.getString("description");
+                String mainCondition = weather.getString("main");
+                String iconCode = weather.getString("icon");
+
                 String resourceName = "ic_" + iconCode;
                 int resId = getResources().getIdentifier(resourceName, "drawable", getPackageName());
                 if (resId != 0) {
                     weatherIcon.setImageResource(resId);
-                } else {
-                    Log.v(TAG, "Icon resource not found for: " + resourceName);
                 }
 
-                // Update UI
                 conditionText.setText(description);
+                weatherDesc.setText(mainCondition);
+                countryName.setText(fullCountryName);
+
                 Temperature.setText(String.format("%.0f°", temperature));
                 maxTemp.setText(String.format("Max: %.0f°", maxTemperature));
                 minTemp.setText(String.format("Min: %.0f°", minTemperature));
                 humidity.setText(String.format("Humidity: %d%%", humidityVal));
                 pressure.setText(String.format("Pressure: %d hPa", pressureVal));
                 wind.setText(String.format("Wind: %.1f km/h", windSpeed));
-
                 sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
-                sunriseDesc.setText("Sunrise");
-
                 sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));
-                sunsetDesc.setText("Sunset");
 
             } catch (JSONException e) {
                 Log.v(TAG, "JSON parsing error", e);
             }
-        } else {
-            Log.v(TAG, "Result is null, cannot update UI.");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                Toast.makeText(this, "Location permission is required to get weather for your current location.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

@@ -7,13 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -29,6 +26,9 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
@@ -44,10 +44,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
-    private Spinner locationSpinner;
+    private TextView location;
+    private TextView temperatureText;
+    private TextView weatherDescriptionText;
+    private TextView dateText;
     private Button toWeather;
     private ImageView profileButton;
-    private SearchView locationSearchView;
     private LinearLayout marketplaceLayout;
     private LinearLayout ordersLayout;
     private LinearLayout shopLayout;
@@ -56,6 +58,7 @@ public class Home extends AppCompatActivity {
     private SwipeRefreshLayout refresh;
 
     private UserService userService;
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,53 +71,39 @@ public class Home extends AppCompatActivity {
             return insets;
         });
 
-        /*IMPORTANT: This sets up the user in the app*/
-        if (CurrentUser.getInstance(this).getUserData() == null) {fetchUserData();}
+        /* Initialize */
         profileButton = findViewById(R.id.profileButton);
         toWeather = findViewById(R.id.toWeatherForcast);
-        profileButton.setOnClickListener(v -> toProfile());
-        toWeather.setOnClickListener(v -> toWeather());
-
-        userService = new UserService(this);
-        // Initialize views\
-        refresh = findViewById(R.id.swipeRefreshLayout);
-        locationSpinner = findViewById(R.id.spinner_loc);
+        location = findViewById(R.id.location);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
         ordersLayout = findViewById(R.id.ordersLayout);
         shopLayout = findViewById(R.id.shopLayout);
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
+        refresh = findViewById(R.id.swipeRefreshLayout);
+        temperatureText = findViewById(R.id.temperatureText);
+        weatherDescriptionText = findViewById(R.id.weatherDescriptionText);
+        dateText = findViewById(R.id.dateText);
 
-        /*This sets up initial user data if it is null */
-      if (CurrentUser.getInstance(this).getUserData() == null) { fetchUserData(); }
-        /*Swipe down to refresh*/
-      refresh.setOnRefreshListener(() -> {
-          fetchUserData();
-          refresh.setRefreshing(false);
-      });
+        userService = new UserService(this);
+
+        if (CurrentUser.getInstance(this).getUserData() == null) {
+            fetchUserData();
+        }
 
         profileButton.setOnClickListener(v -> toProfile());
+        toWeather.setOnClickListener(v -> toWeather());
 
-        // Setup RecyclerView
+        refresh.setOnRefreshListener(() -> {
+            fetchUserData();
+            fetchWeatherData();
+            refresh.setRefreshing(false);
+        });
+
         setupRecyclerView();
-
-        setupLocationSpinner();
-
-        // Set click listeners for the three sections
         setupSectionClickListeners();
-
-        // Optional: fetch news on load
         fetchEverythingNews("agriculture");
-    }
 
-    private void setProfilePic() {
-        CurrentUser currentUser = CurrentUser.getInstance(this);
-        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
-            Glide.with(this)
-                    .load(currentUser.getImageUrl())
-                    .circleCrop()
-                    .into(profileButton);
-
-        }
+        fetchWeatherData();  // Fetch weather when opening the app
     }
 
     private void setupRecyclerView() {
@@ -123,38 +112,15 @@ public class Home extends AppCompatActivity {
         newsRecyclerView.setAdapter(newsAdapter);
     }
 
-    private void setupLocationSpinner() {
-        String[] locations = {"Philippines", "China", "United States", "Russia"}; // Sample locations
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locations);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        locationSpinner.setAdapter(adapter);
-
-        locationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedLocation = parent.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
-
     private void fetchEverythingNews(String query) {
-        String apiKey = "2e4ccecff1244970bd1240c65c99a2f2"; // ✅ Your API key
+        String apiKey = "2e4ccecff1244970bd1240c65c99a2f2";
         String url = "https://newsapi.org/v2/everything?q=" + query + "&language=en&sortBy=publishedAt&pageSize=4&apiKey=" + apiKey;
 
-        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url(url).build();
-
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                runOnUiThread(() ->
-                        Toast.makeText(Home.this, "Error fetching news: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> Toast.makeText(Home.this, "Error fetching news: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
 
             @Override
@@ -176,23 +142,67 @@ public class Home extends AppCompatActivity {
         });
     }
 
-    private void setupSectionClickListeners() {
-        marketplaceLayout.setOnClickListener(v -> {
-            startActivity(new Intent(this, Marketplace.class));
-        });
+    private void fetchWeatherData() {
+        String city = "Manila"; // Static location for now
+        String apiKey = "your_openweather_api_key"; // <--- Replace with your API key
+        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
 
-        ordersLayout.setOnClickListener(v -> {
-            Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show();
+        Request request = new Request.Builder().url(url).build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(() -> Toast.makeText(Home.this, "Failed to get weather data", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful() && response.body() != null) {
+                    String json = response.body().string();
+                    try {
+                        org.json.JSONObject jsonObject = new org.json.JSONObject(json);
+                        String description = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
+                        double temperature = jsonObject.getJSONObject("main").getDouble("temp");
+
+                        runOnUiThread(() -> {
+                            weatherDescriptionText.setText(capitalizeWords(description));
+                            temperatureText.setText(Math.round(temperature) + "°C");
+                            dateText.setText(getFormattedDate());
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(() -> Toast.makeText(Home.this, "Error parsing weather data", Toast.LENGTH_SHORT).show());
+                    }
+                }
+            }
         });
+    }
+
+    private String capitalizeWords(String input) {
+        String[] words = input.split(" ");
+        StringBuilder builder = new StringBuilder();
+        for (String word : words) {
+            builder.append(Character.toUpperCase(word.charAt(0)))
+                    .append(word.substring(1))
+                    .append(" ");
+        }
+        return builder.toString().trim();
+    }
+
+    private String getFormattedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a | MMM d", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
+    private void setupSectionClickListeners() {
+        marketplaceLayout.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
+
+        ordersLayout.setOnClickListener(v -> Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show());
 
         shopLayout.setOnClickListener(v -> {
-            if(CurrentUser.getInstance(this).hasShop()){
-                Intent goToShop = new Intent(Home.this, InventoryManagement.class);
-                startActivity(goToShop);
-            }else{
+            if (CurrentUser.getInstance(this).hasShop()) {
+                startActivity(new Intent(this, InventoryManagement.class));
+            } else {
                 Toast.makeText(this, "You don't have a shop, let's make you one", Toast.LENGTH_SHORT).show();
-                Intent goToMakeShop = new Intent(Home.this, CreateShop.class);
-                startActivity(goToMakeShop);
+                startActivity(new Intent(this, CreateShop.class));
             }
         });
     }
@@ -200,14 +210,16 @@ public class Home extends AppCompatActivity {
     private void toProfile() {
         startActivity(new Intent(this, Profile.class));
     }
-    private void toWeather(){startActivity(new Intent(this, WeatherForecast.class));}
 
+    private void toWeather() {
+        startActivity(new Intent(this, WeatherForecast.class));
+    }
 
     public void fetchUserData() {
         Toast.makeText(Home.this, "SetupUser Was Called", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String uid = prefs.getString("localId", "");
-        if ( uid.isEmpty()) {
+        if (uid.isEmpty()) {
             Log.e("UserSetup", "UID is missing. Cannot fetch user data.");
             Toast.makeText(Home.this, "UID is missing. Cannot fetch user data", Toast.LENGTH_SHORT).show();
             return;
@@ -226,6 +238,16 @@ public class Home extends AppCompatActivity {
                 Toast.makeText(Home.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void setProfilePic() {
+        CurrentUser currentUser = CurrentUser.getInstance(this);
+        if (currentUser.getImageUrl() != null && !currentUser.getImageUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(currentUser.getImageUrl())
+                    .circleCrop()
+                    .into(profileButton);
+        }
     }
 
     private void saveToPrefs() {

@@ -121,4 +121,40 @@
     </style>
 
 
+    <!-- Date item for the horizontal date selector -->
+    <style name="DateItem">
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:background">@drawable/tab_selector</item> <!-- you can create a rounded bg if you want -->
+        <item name="android:textColor">#555555</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Highlighted Date Item (selected date) -->
+    <style name="DateItem.Highlighted">
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:backgroundTint">#2E7D32</item> <!-- green highlight -->
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/social_circle</item> <!-- optional if you want a separate bg -->
+    </style>
+
+    <!-- WeatherService Stat Text (Humidity, Pressure, Wind) -->
+    <style name="WeatherStat">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">#555555</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+
 </resources>

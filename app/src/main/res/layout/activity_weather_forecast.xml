@@ -50,15 +50,24 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
-                    <!-- Sample Dates -->
-                    <TextView style="@style/DateItem" android:text="6\nSun"/>
-                    <TextView style="@style/DateItem" android:text="7\nMon"/>
-                    <TextView style="@style/DateItem.Highlighted" android:text="8\nTue"/>
-                    <TextView style="@style/DateItem" android:text="9\nWed"/>
-                    <TextView style="@style/DateItem" android:text="10\nThu"/>
+
+                    <TextView
+                        android:id="@+id/currentDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:text="Date"
+                        android:textSize="16sp"
+                        android:gravity="center"/>
+<!--                    &lt;!&ndash; Sample Dates &ndash;&gt;-->
+<!--                    <TextView style="@style/DateItem" android:text="6\nSun"/>-->
+<!--                    <TextView style="@style/DateItem" android:text="7\nMon"/>-->
+<!--                    <TextView style="@style/DateItem.Highlighted" android:text="8\nTue"/>-->
+<!--                    <TextView style="@style/DateItem" android:text="9\nWed"/>-->
+<!--                    <TextView style="@style/DateItem" android:text="10\nThu"/>-->
                 </LinearLayout>
 
-                <!-- Weather Card -->
+                <!-- WeatherService Card -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/weatherCard"
                     android:layout_width="0dp"
@@ -74,6 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:background="@color/white"
                         android:padding="16dp">
 
                         <LinearLayout
@@ -267,7 +277,7 @@
                     </LinearLayout>
 
                     <!-- Row 2: Rainfall + Feels Like -->
-                    <!-- Country Name + Weather Description -->
+                    <!-- Country Name + WeatherService Description -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
