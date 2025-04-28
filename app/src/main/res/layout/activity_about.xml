@@ -89,17 +89,17 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="Mission Icon"
-                    android:src="@drawable/ic_launcher_foreground" />
+                    android:src="@drawable/ab_web" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,17 +136,17 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="Vision Icon"
-                    android:src="@drawable/ic_launcher_foreground" />
+                    android:src="@drawable/ab_circle" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -182,10 +182,10 @@
 
         <!-- Divider -->
         <View
-            android:layout_marginTop="15dp"
             android:id="@+id/divider1"
             android:layout_width="275dp"
             android:layout_height="1dp"
+            android:layout_marginTop="15dp"
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -211,7 +211,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:contentDescription="Integrity"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ab_integrity" />
 
             <TextView
                 android:layout_width="150dp"
@@ -253,7 +253,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:contentDescription="Community"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ab_community" />
 
             <TextView
                 android:layout_width="150dp"
@@ -295,7 +295,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:contentDescription="Sustainability"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ab_sustainability" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -319,10 +319,10 @@
 
         <!-- Divider -->
         <View
-            android:layout_marginTop="20dp"
             android:id="@+id/divider2"
             android:layout_width="275dp"
             android:layout_height="1dp"
+            android:layout_marginTop="20dp"
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -348,7 +348,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
                 android:contentDescription="Learning Modules"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ab_book" />
 
             <TextView
                 android:layout_width="274dp"
@@ -371,6 +371,7 @@
                 android:textSize="15sp" />
 
             <Button
+                android:id="@+id/module_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -379,8 +380,9 @@
                 android:text="Explore modules" />
         </LinearLayout>
 
-        <!-- Marketplace CTA -->
+
         <LinearLayout
+            android:id="@+id/mplace_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -403,7 +405,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ab_arrow" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
