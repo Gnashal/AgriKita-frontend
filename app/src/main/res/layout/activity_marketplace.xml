@@ -96,51 +96,10 @@
             android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/mkpl_category_btn_container"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/all_button"
-                    style="@style/CategoryButton"
-                    android:text="All"
-                    app:backgroundTint="@null" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/fruit_button"
-                    style="@style/CategoryButton"
-                    android:text="Fruits"
-                    app:backgroundTint="@null" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/grain_button"
-                    style="@style/CategoryButton"
-                    android:text="Grains"
-                    app:backgroundTint="@null" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/meat_button"
-                    style="@style/CategoryButton"
-                    android:text="Meat"
-                    app:backgroundTint="@null" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/poultry_button"
-                    style="@style/CategoryButton"
-                    android:text="Poultry"
-                    app:backgroundTint="@null" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/produce_button"
-                    style="@style/CategoryButton"
-                    android:text="Produce"
-                    app:backgroundTint="@null" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/herb_button"
-                    style="@style/CategoryButton"
-                    android:text="Herbs"
-                    app:backgroundTint="@null" />
             </LinearLayout>
         </HorizontalScrollView>
 

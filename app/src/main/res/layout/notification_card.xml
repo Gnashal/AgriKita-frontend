@@ -15,6 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <FrameLayout
+            android:id="@+id/notifcard_indicator"
             android:layout_width="25dp"
             android:layout_height="match_parent">
 
