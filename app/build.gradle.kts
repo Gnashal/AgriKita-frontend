@@ -7,6 +7,8 @@ plugins {
 
 val var1= gradleLocalProperties(rootDir, providers)
     .getProperty("OPENWEATHER_API_KEY", "")
+val var2= gradleLocalProperties(rootDir, providers)
+    .getProperty("NEWS_API_KEY", "")
 
 android {
     namespace = "mobdev.agrikita"
@@ -23,6 +25,11 @@ android {
             "string",
             "OPENWEATHER_API_KEY",
                 "\"" + var1 + "\""
+        )
+        resValue(
+            "string",
+            "NEWS_API_KEY",
+            "\"" + var2 + "\""
         )
     }
 
