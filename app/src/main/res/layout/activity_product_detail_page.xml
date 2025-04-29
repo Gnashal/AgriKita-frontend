@@ -54,37 +54,10 @@
 
 
                 <ImageView
-                    android:id="@+id/pdp_prod_image1"
+                    android:id="@+id/pdp_prod_image"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     app:srcCompat="@drawable/test_tomato" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/pdp_prod_image2"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/test_tomato" />
-
-                    <ImageView
-                        android:id="@+id/pdp_prod_image3"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        app:srcCompat="@drawable/test_tomato" />
-
-                    <ImageView
-                        android:id="@+id/pdp_prod_image4"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/test_tomato" />
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -125,36 +98,13 @@
                             android:textColor="@color/black"
                             android:textSize="20sp" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/pdp_seller_start_date"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"
-                                app:srcCompat="@drawable/product_card_star" />
-
-                            <TextView
-                                android:id="@+id/pdp_seller_rating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="20dp"
-                                android:text="TextView"
-                                android:textSize="12sp" />
-
-                            <!-- Follow this string format for the setText = "Since {year the seller started}" -->
-                            <TextView
-                                android:id="@+id/pdp_seller_start_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="TextView"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
+                            android:textColor="@color/gray"
+                            android:text="TextView"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -164,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a mauris a lorem convallis commodo in non erat. Aenean suscipit congue tellus, et pulvinar velit aliquet sit amet. Integer sagittis neque id vehicula fermentum. Etiam euismod risus turpis. Mauris dignissim, mauris non ornare consectetur, "
                     android:textAlignment="center"
+                    android:textColor="@color/gray"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -208,7 +159,6 @@
                         android:layout_marginRight="10dp"
                         app:srcCompat="@drawable/product_card_star" />
 
-                    <!-- Follow this string format for the setText = "{rating} ({number of reviews} reviews)" -->
                     <TextView
                         android:id="@+id/pdp_prod_rating"
                         android:layout_width="wrap_content"
@@ -218,11 +168,11 @@
                         android:textColor="@color/gray"
                         android:textSize="18sp" />
 
-                    <!-- Follow this string format for the setText = "{number} in Stock" -->
                     <TextView
-                        android:id="@+id/pdp_prod_instock_amnt"
+                        android:id="@+id/pdp_prod_instockamt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
                         android:text="TextView"
                         android:textColor="@color/gray"
                         android:textSize="18sp" />
@@ -411,6 +361,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
+                        android:textColor="@color/gray"
                         android:text="SubTotal:" />
 
                     <TextView
@@ -432,6 +383,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="18sp"
+                        android:textColor="@color/gray"
                         android:text="Shipping:" />
 
                     <TextView
@@ -439,6 +391,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
+                        android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
 

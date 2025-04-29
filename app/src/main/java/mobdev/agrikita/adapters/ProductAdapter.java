@@ -18,6 +18,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.pages.ShoppingCartPage;
 import mobdev.agrikita.controllers.ShoppingCartController;
@@ -27,6 +28,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private Context context;
     private List<Products> productList;
     private OnItemClickListener listener;
+    UserService userService;
 
     public interface OnItemClickListener {
         void onItemClick(Products product);

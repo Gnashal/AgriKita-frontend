@@ -2,6 +2,7 @@ package mobdev.agrikita.pages;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -23,7 +24,10 @@ import java.util.List;
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.ProductAdapter;
 import mobdev.agrikita.controllers.ProductService;
+import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.UserResponse;
 
 public class Marketplace extends AppCompatActivity {
 
@@ -31,10 +35,14 @@ public class Marketplace extends AppCompatActivity {
     List<Products> productList = new ArrayList<>();
     ProductAdapter adapter;
     AppCompatButton selectedBtn;
-
     ProductService productService;
+    UserService userService;
+    LinearLayout categoryBtnContainer, paginationContainer;
 
-    LinearLayout categoryBtnContainer;
+    private static final int PAGE_SIZE = 6;
+    private int currentPage = 0;
+    private List<Products> displayedList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,37 +57,56 @@ public class Marketplace extends AppCompatActivity {
         });
 
         categoryBtnContainer = findViewById(R.id.mkpl_category_btn_container);
+        paginationContainer = findViewById(R.id.mkpl_paginator_container);
 
         // Initialize RecyclerView (formerly GridView)
         productGridView = findViewById(R.id.product_grid_view);
         productGridView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
+        // Implement Pagination
         productService = new ProductService(this);
+        CurrentUser thisUser  = CurrentUser.getInstance(this);
 
-        productService.getAllProducts(new ProductService.ProductCallback(){
+        thisUser.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
             @Override
-            public void onProductsFetched(List<Products> products) {
-                productList = products;
+            public void onSuccess(UserResponse userResponse) {
+                String userID = thisUser.getUid();
 
-                adapter = new ProductAdapter(Marketplace.this, productList);
-                productGridView.setAdapter(adapter);
+                productService.getAllProducts(userID, new ProductService.ProductCallback(){
+                    @Override
+                    public void onProductsFetched(List<Products> products) {
+                        productList = products;
 
-                adapter.setOnItemClickListener(product -> {
-                    Intent go_to_product_detail = new Intent(Marketplace.this, ProductDetailPage.class);
+                        adapter = new ProductAdapter(Marketplace.this, productList);
+                        productGridView.setAdapter(adapter);
 
-                    go_to_product_detail.putExtra("product_data", product);
+                        adapter.setOnItemClickListener(product -> {
+                            Intent go_to_product_detail = new Intent(Marketplace.this, ProductDetailPage.class);
 
-                    startActivity(go_to_product_detail);
+                            go_to_product_detail.putExtra("product_data", product);
+
+                            startActivity(go_to_product_detail);
+                        });
+
+                        generateCategoryBtn();
+                        generatePaginationButtons();
+                        showPage(0);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Toast.makeText(Marketplace.this, "Failed fetching data", Toast.LENGTH_LONG).show();
+                    }
                 });
-
-                generateCategoryBtn();
             }
 
             @Override
-            public void onFailure(Throwable t) {
-                Toast.makeText(Marketplace.this, "Failed fetching data", Toast.LENGTH_LONG).show();
+            public void onFailure(String errorMessage) {
+                Toast.makeText(Marketplace.this, "Failed to fetch user uid: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 
     private void filterProductsByCategory(String category) {
@@ -100,25 +127,93 @@ public class Marketplace extends AppCompatActivity {
 
     private void generateCategoryBtn() {
         List<String> categoryList = new ArrayList<>();
-
         categoryList.add("All");
 
         for (Products product : productList) {
             String category = product.getCategory();
-
             if (category != null && !categoryList.contains(category)) {
                 categoryList.add(category);
             }
         }
 
+        // Keep track of selected button
+        final AppCompatButton[] selectedCategoryBtn = {null};
+
         for (String cat : categoryList) {
-            // In your code:
             AppCompatButton btn = new AppCompatButton(new ContextThemeWrapper(this, R.style.CategoryButton), null, 0);
             btn.setText(cat);
 
-            btn.setOnClickListener(v -> filterProductsByCategory(cat));
+            btn.setOnClickListener(v -> {
+                if (selectedCategoryBtn[0] != null) {
+                    selectedCategoryBtn[0].setSelected(false);
+                }
+
+                btn.setSelected(true);
+                selectedCategoryBtn[0] = btn;
+
+                filterProductsByCategory(cat);
+            });
+
+            if (cat.equals("All")) {
+                btn.setSelected(true);
+                selectedCategoryBtn[0] = btn;
+            }
 
             categoryBtnContainer.addView(btn);
+        }
+    }
+    private void generatePaginationButtons() {
+        paginationContainer.removeAllViews();
+
+        int totalPages = (int) Math.ceil((double) productList.size() / PAGE_SIZE);
+
+        // Previous button
+        paginationContainer.addView(createPageButton("<", () -> {
+            int newPage = (currentPage - 1 + totalPages) % totalPages;
+            showPage(newPage);
+            generatePaginationButtons();
+        }));
+
+        // Page buttons
+        Button currentPageBtn = createPageButton(String.valueOf(currentPage + 1), null);
+        currentPageBtn.setEnabled(false);
+        paginationContainer.addView(currentPageBtn);
+
+        // Next button
+        paginationContainer.addView(createPageButton(">", () -> {
+            int newPage = (currentPage + 1) % totalPages;
+            showPage(newPage);
+            generatePaginationButtons();
+        }));
+    }
+
+    private Button createPageButton(String pageNumber, Runnable onClick) {
+        AppCompatButton btn = new AppCompatButton(new ContextThemeWrapper(this, R.style.PaginatorButton), null, 0);
+        btn.setText(pageNumber);
+
+        btn.setOnClickListener(v -> onClick.run());
+
+        return btn;
+    }
+
+    private void showPage(int page) {
+        currentPage = page;
+
+        int startIndex = page * PAGE_SIZE;
+        int endIndex = Math.min(startIndex + PAGE_SIZE, productList.size());
+
+        displayedList = productList.subList(startIndex, endIndex);
+
+        if (adapter == null) {
+            adapter = new ProductAdapter(this, displayedList);
+            productGridView.setAdapter(adapter);
+            adapter.setOnItemClickListener(product -> {
+                Intent go_to_product_detail = new Intent(Marketplace.this, ProductDetailPage.class);
+                go_to_product_detail.putExtra("product_data", product);
+                startActivity(go_to_product_detail);
+            });
+        } else {
+            adapter.updateList(displayedList);
         }
     }
 }

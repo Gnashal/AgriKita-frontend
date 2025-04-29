@@ -30,6 +30,6 @@ public interface ProductServiceApi {
     Call<GetProductsByShopIDResponse> getProductsByShopID(@Query("shopID") String shopID);
 
     @GET("service/product/get-all-products")
-    Call<GetAllProductsResponse> getAllProducts();
+    Call<GetAllProductsResponse> getAllProducts(@Query("shopID") String shopID);
 
 }

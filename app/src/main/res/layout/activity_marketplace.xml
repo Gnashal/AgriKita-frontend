@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +92,7 @@
         <!-- Category Filter -->
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:fillViewport="true">
 
             <LinearLayout
@@ -113,5 +113,21 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:fillViewport="true"
+            android:layout_gravity="center_vertical"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/mkpl_paginator_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
