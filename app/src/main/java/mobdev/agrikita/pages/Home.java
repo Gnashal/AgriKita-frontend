@@ -88,6 +88,8 @@ public class Home extends AppCompatActivity {
 
         if (CurrentUser.getInstance(this).getUserData() == null) {
             fetchUserData();
+        } else {
+            setProfilePic();
         }
 
         profileButton.setOnClickListener(v -> toProfile());
@@ -113,7 +115,7 @@ public class Home extends AppCompatActivity {
     }
 
     private void fetchEverythingNews(String query) {
-        String apiKey = "2e4ccecff1244970bd1240c65c99a2f2";
+        String apiKey = getString(R.string.NEWS_API_KEY);
         String url = "https://newsapi.org/v2/everything?q=" + query + "&language=en&sortBy=publishedAt&pageSize=4&apiKey=" + apiKey;
 
         Request request = new Request.Builder().url(url).build();
@@ -235,7 +237,13 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                Toast.makeText(Home.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
+                if (errorMessage.toLowerCase().contains("unauthorized") || errorMessage.toLowerCase().contains("token")) {
+                    Toast.makeText(Home.this, "Session expired. Please log in again.", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(Home.this, Login.class));
+                    finish();
+                } else {
+                    Toast.makeText(Home.this, "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

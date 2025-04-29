@@ -15,17 +15,17 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
-/*Found this online, contacts backend api*/
 public class RetrofitClient {
     /*INFO:
     * When running locally use localIP, but when wirelessly
     * emulating use wirelessIP
     * */
-    private static  final String localIP = "10.0.2.2:4040";
+    private static  final String localIP = "http://10.0.2.2:4040/api/";
     private static final String wirelessIP = "10.16.245.143:4040"; /*Replace with local ip*/
     private static final String BACKEND_URL = "https://griita-backend-gnashal6914-x2n9tdsh.leapcell.dev/api/"; /*Deployed backend*/
-    private static final String BASE_URL = BACKEND_URL;
+    private static final String BASE_URL = localIP;
+    private static boolean isRefreshingToken = false;
+    private static final Object lock = new Object();
   
     private static Retrofit retrofit = null;
     
@@ -36,30 +36,77 @@ public class RetrofitClient {
                         SharedPreferences prefs = context.getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE);
                         SharedPreferences userPrefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
                         String idToken = prefs.getString("idToken", null);
+                        String refreshToken = prefs.getString("refreshToken", null);
 
                         Request originalRequest = chain.request();
                         Request.Builder builder = originalRequest.newBuilder();
+
                         if (idToken != null && !idToken.isEmpty()) {
                             builder.addHeader("Authorization", "Bearer " + idToken);
                         }
 
+                        Request requestWithAuth = builder.build();
+                        Response response = chain.proceed(requestWithAuth);
 
-                        Request newRequest = builder.build();
-                        Response response =  chain.proceed(newRequest);
+                       /*If unauthorized, refresh using new refresh route*/
+                        if (response.code() == 401 && refreshToken != null) {
+                            response.close();
 
-                        // If unauthorized, clear credentials and redirect to login
-                        if (idToken != null && !idToken.isEmpty() && response.code() == 401) {
-                            response.close(); // Close to avoid leaks
+                            synchronized (lock) {
+                                if (!isRefreshingToken) {
+                                    isRefreshingToken = true;
 
-                            // Clear stored token
-                            prefs.edit().clear().apply();
-                            userPrefs.edit().clear().apply();
-                            Intent intent = new Intent(context, Login.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            context.startActivity(intent);
-                            Toast.makeText(context, "Unauthorized - Redirecting to Login", Toast.LENGTH_SHORT).show();
-                            throw new IOException("Unauthorized - Redirecting to Login");
+                                    try {
+                                        Request refreshRequest = new Request.Builder()
+                                                .url(BASE_URL + "auth/refresh")
+                                                .post(okhttp3.RequestBody.create(new byte[0]))
+                                                .addHeader("X-Ref-Tok", refreshToken)
+                                                .build();
+
+                                        Response refreshResponse = chain.proceed(refreshRequest);
+
+                                        if (refreshResponse.isSuccessful()) {
+                                            String newIdToken = refreshResponse.header("X-New-Tok");
+
+                                            if (newIdToken != null) {
+                                                prefs.edit().putString("idToken", newIdToken).apply();
+
+                                                Request retryRequest = originalRequest.newBuilder()
+                                                        .removeHeader("Authorization")
+                                                        .addHeader("Authorization", "Bearer " + newIdToken)
+                                                        .build();
+
+                                                return chain.proceed(retryRequest);
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    prefs.edit().clear().apply();
+                                    userPrefs.edit().clear().apply();
+                                    Intent intent = new Intent(context, Login.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    context.startActivity(intent);
+                                    Toast.makeText(context, "Session expired. Please log in again.", Toast.LENGTH_SHORT).show();
+                                    throw new IOException("Unauthorized - Redirecting to Login");
+                                } else {
+                                    while (isRefreshingToken) {
+                                        try {
+                                            Thread.sleep(100);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    return chain.proceed(originalRequest.newBuilder()
+                                            .removeHeader("Authorization")
+                                            .addHeader("Authorization", "Bearer " + prefs.getString("idToken", ""))
+                                            .build());
+                                }
+                            }
                         }
+
                         return response;
                     })
                     .build();
