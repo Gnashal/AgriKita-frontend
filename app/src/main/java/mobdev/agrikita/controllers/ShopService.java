@@ -6,7 +6,10 @@ import android.util.Log;
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.api.ShopServiceApi;
+import mobdev.agrikita.models.shop.CreateShopResponse;
 import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,9 +44,42 @@ public class ShopService {
         });
     }
 
+    public void createShop(MultipartBody.Part file,
+                           RequestBody ownerUid,
+                           RequestBody name,
+                           RequestBody address,
+                           RequestBody zipCode,
+                           RequestBody shopDescription,
+                           CreateShopCallback callback) {
+
+        Call<CreateShopResponse> call = serviceShopApi.createShop(
+                file, ownerUid, name, address, zipCode, shopDescription
+        );
+
+        call.enqueue(new Callback<CreateShopResponse>() {
+            @Override
+            public void onResponse(Call<CreateShopResponse> call, Response<CreateShopResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onError("Failed to create shop. Code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreateShopResponse> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+
     public interface ShopCallback {
         void onSuccess(GetShopByShopIDResponse shop);
         void onError(String errorMessage);
     }
 
+    public interface CreateShopCallback {
+        void onSuccess(CreateShopResponse response);
+        void onError(String errorMessage);
+    }
 }
