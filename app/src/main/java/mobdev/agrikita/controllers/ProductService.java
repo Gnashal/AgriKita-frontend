@@ -28,18 +28,6 @@ public class ProductService {
     private final ProductServiceApi serviceProductsApi;
     private final Context context;
 
-    public interface UploadCallback {
-        void onSuccess(String imageUrl);
-        void onError(String errorMsg);
-
-        void onFailure(String errorMessage);
-    }
-
-    public interface ProductCallback {
-        void onProductsFetched(List<Products> products);
-        void onFailure(Throwable t);
-    }
-
     public ProductService(Context context) {
         this.context = context;
         serviceProductsApi = RetrofitClient.getClient(context).create(ProductServiceApi.class);
@@ -135,5 +123,17 @@ public class ProductService {
                 callback.onFailure(t);
             }
         });
+    }
+
+    public interface UploadCallback {
+        void onSuccess(String imageUrl);
+        void onError(String errorMsg);
+
+        void onFailure(String errorMessage);
+    }
+
+    public interface ProductCallback {
+        void onProductsFetched(List<Products> products);
+        void onFailure(Throwable t);
     }
 }
