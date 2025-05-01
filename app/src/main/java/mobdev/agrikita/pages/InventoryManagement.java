@@ -137,6 +137,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse response) {
                 String shopId = user.getShopId();
+                Toast.makeText(InventoryManagement.this, "Shop ID" + shopId, Toast.LENGTH_SHORT).show();
                 fetchProducts(shopId);
                 fetchOrders(shopId);
                 fetchShopInfo(shopId);
@@ -247,7 +248,7 @@ public class InventoryManagement extends AppCompatActivity {
     }
 
     private void fetchShopInfo(String shopId) {
-        shopService.getShopById("X8Jq8FBqhXdTpj2OkDhT", new ShopService.ShopCallback() {
+        shopService.getShopById(shopId, new ShopService.ShopCallback() {
             @Override
             public void onSuccess(GetShopByShopIDResponse shop) {
                 shopName.setText(shop.getName());

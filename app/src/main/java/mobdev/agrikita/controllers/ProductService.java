@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,7 +85,14 @@ public class ProductService {
             public void onResponse(Call<GetProductsByShopIDResponse> call, Response<GetProductsByShopIDResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Products> products = response.body().getProducts();
-                    Log.d("ProductService", "Retrieved " + products.size() + " products: " + response.body().getMessage());
+
+                    if (products != null && !products.isEmpty()) {
+                        Log.d("ProductService", "Retrieved " + products.size() + " products: " + response.body().getMessage());
+                    } else {
+                        Log.d("ProductService", "No products found for this shop.");
+                        products = new ArrayList<>(); // Return an empty list to avoid null issues later
+                    }
+
                     callback.onProductsFetched(products);
                 } else {
                     Log.e("ProductService", "Fetch failed: " + response.code() + " - " + response.message());
