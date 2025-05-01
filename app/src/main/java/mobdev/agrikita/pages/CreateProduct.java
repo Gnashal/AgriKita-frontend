@@ -44,7 +44,7 @@ import okhttp3.MultipartBody;
 
 public class CreateProduct extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown;
-    Button btnSubmit, btnCancel, btnAddQty, btnMinusQty;
+    Button btnSubmit, btnCancel, btnAddQty, btnMinusQty, reselectButton;
     EditText editName, editQuantity, editPrice;
     TextInputEditText productOriginField, productStorageField, productDescField;
     SwitchCompat switchOrganic, switchFeature;
@@ -97,6 +97,7 @@ public class CreateProduct extends AppCompatActivity {
         uploadIcon = findViewById(R.id.upload_icon);
         uploadBox = findViewById(R.id.upload_box);
         uploadedImage = findViewById(R.id.uploaded_image);
+        reselectButton = findViewById(R.id.reselectButton);
 
         String[] units = {
                 "Kg",       // Kilogram
@@ -187,6 +188,8 @@ public class CreateProduct extends AppCompatActivity {
 
                         uploadBox.setVisibility(View.GONE);
                         uploadedImage.setVisibility(View.VISIBLE);
+                        reselectButton.setVisibility(View.VISIBLE);
+                        Log.d("Image Upload", "Uploaded image is visible: " + uploadedImage.getVisibility());
                     }
                 }
         );
@@ -393,5 +396,15 @@ public class CreateProduct extends AppCompatActivity {
     private void resetSubmitButton() {
         btnSubmit.setText("Submit");
         btnSubmit.setEnabled(true);
+    }
+
+    public void reselectImage(View view) {
+        imageUri = null;
+
+        uploadedImage.setVisibility(View.GONE);
+        uploadBox.setVisibility(View.VISIBLE);
+
+        reselectButton.setVisibility(View.GONE);
+        Glide.with(this).clear(uploadedImage);
     }
 }

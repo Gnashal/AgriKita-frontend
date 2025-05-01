@@ -42,7 +42,7 @@ public class CreateShop extends AppCompatActivity {
     private ImageView shopImageLayout, uploadedImage;
     private TextInputLayout shopNameLayout, shopAddressLayout, shopZipCodeLayout, shopDescLayout;
     private TextInputEditText shopNameField, shopAddressField, shopZipCodeField, shopDescField;
-    private Button browseCertificateButton, enterShopButton;
+    private Button enterShopButton, reselectButton;
     Uri imageUri;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     ShopService shopService;
@@ -74,7 +74,7 @@ public class CreateShop extends AppCompatActivity {
         shopZipCodeField = findViewById(R.id.shopZipCodeField);
         shopDescField = findViewById(R.id.shopDescField);
 
-        browseCertificateButton = findViewById(R.id.browseCertificateButton);
+        reselectButton = findViewById(R.id.reselectButton);
         enterShopButton = findViewById(R.id.enterShopButton);
 
         setupNavbar();
@@ -103,6 +103,7 @@ public class CreateShop extends AppCompatActivity {
 
                         shopImageLayout.setVisibility(View.GONE);
                         uploadedImage.setVisibility(View.VISIBLE);
+                        reselectButton.setVisibility(View.VISIBLE);
                     }
                 }
         );
@@ -198,5 +199,15 @@ public class CreateShop extends AppCompatActivity {
     private void resetSubmitButton() {
         enterShopButton.setText("Submit");
         enterShopButton.setEnabled(true);
+    }
+
+    public void reselectImage(View view) {
+        imageUri = null;
+
+        uploadedImage.setVisibility(View.GONE);
+        shopImageLayout.setVisibility(View.VISIBLE);
+
+        reselectButton.setVisibility(View.GONE);
+        Glide.with(this).clear(uploadedImage);
     }
 }
