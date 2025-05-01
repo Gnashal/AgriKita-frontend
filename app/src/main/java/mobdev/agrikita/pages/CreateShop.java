@@ -1,5 +1,6 @@
 package mobdev.agrikita.pages;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,9 +28,14 @@ import java.util.Objects;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ImagePickerUtil;
+import mobdev.agrikita.controllers.ShopService;
+import mobdev.agrikita.models.shop.CreateShopResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
 import mobdev.agrikita.controllers.UserService;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class CreateShop extends AppCompatActivity {
     private ScrollView mainScrollView;
@@ -39,6 +45,7 @@ public class CreateShop extends AppCompatActivity {
     private Button browseCertificateButton, enterShopButton;
     Uri imageUri;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
+    ShopService shopService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,8 @@ public class CreateShop extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        shopService = new ShopService(this);
 
         mainScrollView = findViewById(R.id.main);
         shopImageLayout = findViewById(R.id.shopImageLayout);
@@ -99,6 +108,10 @@ public class CreateShop extends AppCompatActivity {
         );
 
         enterShopButton.setOnClickListener(v -> {
+            if (!validateInputs()) return;
+
+            enterShopButton.setEnabled(false);
+            enterShopButton.setText("Loading...");
             if (validateInputs()) {
                 CurrentUser user = CurrentUser.getInstance(this);
                 user.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
@@ -110,27 +123,48 @@ public class CreateShop extends AppCompatActivity {
                         int zipCode = Integer.parseInt(Objects.requireNonNull(shopZipCodeField.getText()).toString().trim());
                         String shopDesc = Objects.requireNonNull(shopDescField.getText()).toString().trim();
 
-//                        File imgProd = new File(getRealPathFromUri(imageUri));
-//
-//                        // 🔜 You can now store this in Firebase
-//                        Log.d("VALID_INPUT", "User ID: " + userId);
-//                        Log.d("VALID_INPUT", "Shop Name: " + shopNameStr);
-//
-//                        shopRequest = new CreateShop(userId, shopNameStr, imgProd);
-//
-//                        shopService.createShop(shopRequest);
+                        MultipartBody.Part imagePart = ImagePickerUtil.prepareFilePart(CreateShop.this, "file", imageUri);
+                        if (imagePart == null) {
+                            Toast.makeText(CreateShop.this, "Failed to prepare image for upload.", Toast.LENGTH_SHORT).show();
+                            resetSubmitButton();
+                            return;
+                        }
+                        RequestBody ownerUid = toPlainText(userId);
+                        RequestBody name = toPlainText(shopNameStr);
+                        RequestBody address = toPlainText(shopAddr);
+                        RequestBody zipCodeBody = toPlainText(String.valueOf(zipCode));
+                        RequestBody shopDescription = toPlainText(shopDesc);
 
-                        Intent goToInventory = new Intent(CreateShop.this, InventoryManagement.class);
-                        startActivity(goToInventory);
+                        shopService.createShop(imagePart, ownerUid, name, address, zipCodeBody, shopDescription, new ShopService.CreateShopCallback() {
+                            @Override
+                            public void onSuccess(CreateShopResponse response) {
+                                Toast.makeText(CreateShop.this, "Shop created: " + response.getMessage(), Toast.LENGTH_SHORT).show();
+                                Intent goToInventory = new Intent(CreateShop.this, InventoryManagement.class);
+                                startActivity(goToInventory);
+                                resetSubmitButton();
+                                finish();
+                            }
+
+                            @Override
+                            public void onError(String errorMessage) {
+                                Toast.makeText(CreateShop.this, "Failed to create shop: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                resetSubmitButton();
+                            }
+                        });
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
                         Toast.makeText(CreateShop.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        resetSubmitButton();
                     }
                 });
             }
         });
+    }
+
+    private RequestBody toPlainText(String value) {
+        return RequestBody.create(value, MediaType.get("text/plain"));
     }
 
     private void setupNavbar() {
@@ -158,5 +192,11 @@ public class CreateShop extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void resetSubmitButton() {
+        enterShopButton.setText("Submit");
+        enterShopButton.setEnabled(true);
     }
 }

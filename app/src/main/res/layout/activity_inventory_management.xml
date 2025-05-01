@@ -52,15 +52,22 @@
                     android:layout_marginTop="12dp"
                     tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:id="@+id/shopDesc"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Manage your products and orders"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="4dp"
-                    tools:ignore="HardcodedText" />
+                    android:layout_height="45dp"
+                    android:fillViewport="true">
+
+                    <TextView
+                        android:id="@+id/shopDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Manage your products and orders"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
+                        tools:ignore="HardcodedText" />
+                </ScrollView>
 
                 <!-- Add New Product Button -->
                 <Button
