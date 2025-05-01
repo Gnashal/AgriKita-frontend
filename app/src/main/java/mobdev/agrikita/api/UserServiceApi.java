@@ -1,5 +1,6 @@
 package mobdev.agrikita.api;
 
+import mobdev.agrikita.models.user.FetchUserByIDResponse;
 import mobdev.agrikita.models.user.UpdatePasswordRequest;
 import mobdev.agrikita.models.user.UpdatePasswordResponse;
 import mobdev.agrikita.models.user.UpdateProfileImageResponse;
@@ -32,5 +33,9 @@ public interface UserServiceApi {
     );
     @PATCH("auth/update-password")
     Call<UpdatePasswordResponse>updatePassword(@Body UpdatePasswordRequest request);
+
+    @GET("service/user/fetch-user-by-id")
+    Call<FetchUserByIDResponse> fetchUserByID (@Query("uid") String uid);
+
 }
 

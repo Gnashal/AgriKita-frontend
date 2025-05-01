@@ -1,5 +1,7 @@
 package mobdev.agrikita.pages;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,6 +25,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +35,11 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.CustomerOrdersAdapter;
 import mobdev.agrikita.adapters.InventoryManagementAdapter;
 import mobdev.agrikita.controllers.OrderService;
+import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.models.order.Orders;
 import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
 import mobdev.agrikita.controllers.UserService;
@@ -48,11 +55,13 @@ public class InventoryManagement extends AppCompatActivity {
     LinearLayout layoutProducts;
     LinearLayout layoutOrders;
 
-    TextView tabProducts;
+    TextView tabProducts, shopName, shopDesc;
+    ImageView shopImg;
     LinearLayout tabOrders;
     Button createProduct;
     ProductService productService;
     OrderService orderService;
+    ShopService shopService;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -69,6 +78,7 @@ public class InventoryManagement extends AppCompatActivity {
 
         productService = new ProductService(this);
         orderService = new OrderService(this);
+        shopService = new ShopService(this);
 
         layoutProducts = findViewById(R.id.containerProduct);
         layoutOrders = findViewById(R.id.containerOrder);
@@ -80,6 +90,10 @@ public class InventoryManagement extends AppCompatActivity {
         recyclerOrderView = findViewById(R.id.recycler_view_order);
 
         createProduct = findViewById(R.id.addProductButton);
+
+        shopImg = findViewById(R.id.shopImage);
+        shopName = findViewById(R.id.shopName);
+        shopDesc = findViewById(R.id.shopDesc);
 
         SearchView searchViewProduct = findViewById(R.id.searchProductView);
         int searchTextId = searchViewProduct.getContext().getResources()
@@ -115,7 +129,7 @@ public class InventoryManagement extends AppCompatActivity {
         recyclerProductView.setAdapter(adapterProducts);
 
         ordersList = new ArrayList<>();
-        adapterOrders = new CustomerOrdersAdapter(ordersList);
+        adapterOrders = new CustomerOrdersAdapter(this, ordersList);
         recyclerOrderView.setAdapter(adapterOrders);
 
         CurrentUser user = CurrentUser.getInstance(this);
@@ -123,8 +137,10 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse response) {
                 String shopId = user.getShopId();
+                Toast.makeText(InventoryManagement.this, "Shop ID" + shopId, Toast.LENGTH_SHORT).show();
                 fetchProducts(shopId);
                 fetchOrders(shopId);
+                fetchShopInfo(shopId);
             }
 
             @Override
@@ -206,9 +222,7 @@ public class InventoryManagement extends AppCompatActivity {
         orderService.getOrdersByShopID(shopId, new OrderService.OrderCallback() {
             @Override
             public void onOrdersFetched(List<Orders> orders) {
-                ordersList.clear();
-                ordersList.addAll(orders);
-                adapterOrders.notifyDataSetChanged();
+                adapterOrders.updateData(orders);
             }
 
             @Override
@@ -223,14 +237,37 @@ public class InventoryManagement extends AppCompatActivity {
         productService.getProductsByShopID(shopId, new ProductService.ProductCallback() {
             @Override
             public void onProductsFetched(List<Products> products) {
-                productList.clear();
-                productList.addAll(products);
-                adapterProducts.notifyDataSetChanged();
+                adapterProducts.updateData(products);
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Toast.makeText(InventoryManagement.this, "Failed to fetch products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchShopInfo(String shopId) {
+        shopService.getShopById(shopId, new ShopService.ShopCallback() {
+            @Override
+            public void onSuccess(GetShopByShopIDResponse shop) {
+                shopName.setText(shop.getName());
+                shopDesc.setText(shop.getDescription());
+
+                RequestOptions requestOptions = new RequestOptions()
+                        .placeholder(R.drawable.agrikita_logo)
+                        .error(R.drawable.error_no_image)
+                        .circleCrop();
+
+                Glide.with(InventoryManagement.this)
+                        .load(shop.getImageUrl())
+                        .apply(requestOptions)
+                        .into(shopImg);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(InventoryManagement.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,18 +28,6 @@ import retrofit2.Response;
 public class ProductService {
     private final ProductServiceApi serviceProductsApi;
     private final Context context;
-
-    public interface UploadCallback {
-        void onSuccess(String imageUrl);
-        void onError(String errorMsg);
-
-        void onFailure(String errorMessage);
-    }
-
-    public interface ProductCallback {
-        void onProductsFetched(List<Products> products);
-        void onFailure(Throwable t);
-    }
 
     public ProductService(Context context) {
         this.context = context;
@@ -96,7 +85,14 @@ public class ProductService {
             public void onResponse(Call<GetProductsByShopIDResponse> call, Response<GetProductsByShopIDResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Products> products = response.body().getProducts();
-                    Log.d("ProductService", "Retrieved " + products.size() + " products: " + response.body().getMessage());
+
+                    if (products != null && !products.isEmpty()) {
+                        Log.d("ProductService", "Retrieved " + products.size() + " products: " + response.body().getMessage());
+                    } else {
+                        Log.d("ProductService", "No products found for this shop.");
+                        products = new ArrayList<>(); // Return an empty list to avoid null issues later
+                    }
+
                     callback.onProductsFetched(products);
                 } else {
                     Log.e("ProductService", "Fetch failed: " + response.code() + " - " + response.message());
@@ -135,5 +131,17 @@ public class ProductService {
                 callback.onFailure(t);
             }
         });
+    }
+
+    public interface UploadCallback {
+        void onSuccess(String imageUrl);
+        void onError(String errorMsg);
+
+        void onFailure(String errorMessage);
+    }
+
+    public interface ProductCallback {
+        void onProductsFetched(List<Products> products);
+        void onFailure(Throwable t);
     }
 }

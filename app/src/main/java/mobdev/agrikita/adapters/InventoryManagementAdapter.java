@@ -102,8 +102,16 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             productList.clear();
-            productList.addAll((List) results.values);
+            productList.addAll((List<Products>) results.values);
             notifyDataSetChanged();
         }
     };
+
+    public void updateData(List<Products> newProductList) {
+        productList.clear();
+        productList.addAll(newProductList);
+        productListFull.clear();
+        productListFull.addAll(newProductList);
+        notifyDataSetChanged();
+    }
 }

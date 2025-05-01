@@ -21,9 +21,9 @@ public class RetrofitClient {
     * emulating use wirelessIP
     * */
     private static  final String localIP = "http://10.0.2.2:4040/api/";
-    private static final String wirelessIP = "10.16.245.143:4040"; /*Replace with local ip*/
+    private static final String wirelessIP = "http://192.168.180.240:4040/api/"; /*Replace with local ip*/
     private static final String BACKEND_URL = "https://griita-backend-gnashal6914-x2n9tdsh.leapcell.dev/api/"; /*Deployed backend*/
-    private static final String BASE_URL = localIP;
+    private static final String BASE_URL = wirelessIP;
     private static boolean isRefreshingToken = false;
     private static final Object lock = new Object();
   
