@@ -34,9 +34,7 @@ public class Marketplace extends AppCompatActivity {
     RecyclerView productGridView;
     List<Products> productList = new ArrayList<>();
     ProductAdapter adapter;
-    AppCompatButton selectedBtn;
     ProductService productService;
-    UserService userService;
     LinearLayout categoryBtnContainer, paginationContainer;
 
     private static final int PAGE_SIZE = 6;
@@ -63,7 +61,6 @@ public class Marketplace extends AppCompatActivity {
         productGridView = findViewById(R.id.product_grid_view);
         productGridView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
-        // Implement Pagination
         productService = new ProductService(this);
         CurrentUser thisUser  = CurrentUser.getInstance(this);
 
@@ -95,7 +92,7 @@ public class Marketplace extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Throwable t) {
-                        Toast.makeText(Marketplace.this, "Failed fetching data", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Marketplace.this, "Failed fetch data", Toast.LENGTH_LONG).show();
                     }
                 });
             }

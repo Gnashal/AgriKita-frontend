@@ -50,6 +50,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:orientation="vertical">
 
 
@@ -57,12 +58,14 @@
                     android:id="@+id/pdp_prod_image"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
+                    android:padding="10dp"
                     app:srcCompat="@drawable/test_tomato" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:background="@drawable/product_card_rounded_edges"
                 android:orientation="vertical">
 
@@ -82,6 +85,7 @@
                         android:id="@+id/pdp_seller_pfp"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
+                        android:padding="10dp"
                         app:srcCompat="@drawable/agrikita_logo" />
 
                     <LinearLayout
@@ -96,15 +100,16 @@
                             android:paddingLeft="10dp"
                             android:text="TextView"
                             android:textColor="@color/black"
-                            android:textSize="20sp" />
+                            android:textSize="22sp" />
 
                         <TextView
                             android:id="@+id/pdp_seller_start_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
                             android:textColor="@color/gray"
                             android:text="TextView"
-                            android:textSize="12sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -112,6 +117,7 @@
                     android:id="@+id/pdp_seller_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a mauris a lorem convallis commodo in non erat. Aenean suscipit congue tellus, et pulvinar velit aliquet sit amet. Integer sagittis neque id vehicula fermentum. Etiam euismod risus turpis. Mauris dignissim, mauris non ornare consectetur, "
                     android:textAlignment="center"
                     android:textColor="@color/gray"
@@ -136,12 +142,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/pdp_prod_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="TextView"
                     android:textColor="@color/black"
                     android:textSize="24sp" />
@@ -149,6 +157,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -173,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:text="TextView"
+                        android:text="0 In Stock"
                         android:textColor="@color/gray"
                         android:textSize="18sp" />
 
@@ -182,6 +191,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="5dp"
                     android:orientation="horizontal">
 
                     <!-- Follow this string format for the setText = "php symbol {value}" -->
@@ -205,6 +215,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="Description"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -213,6 +224,7 @@
                     android:id="@+id/pdp_prod_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:textSize="18sp"
                     android:textColor="@color/gray"
                     android:text="Lorem ipsum dolor molestie vulputate odio nec dictum. Fusce sagittis viverra porttitor. Phasellus eget massa sit amet velit semper ultrices et id augue. Donec vitae ultricies ipsum. Duis non ligula molestie, bibendum sem sit amet, convallis eros. Ut pretium metus nulla, ut maximus ante ornare ut. Aenean vulputate est vulputate auctor suscipit. Donec lectus arcu, fringilla ut mattis at, ultrices et mauris. Nulla arcu justo, volutpat at eleifend at, viverra aliquam nibh. Duis aliquet lorem vitae molestie elementum. Aliquam gravida bibendum nunc, eget facilisis enim rutrum eu. Nullam felis sem, euismod quis accumsan vitae," />
@@ -220,6 +232,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="Product Details"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
@@ -228,6 +241,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -251,6 +265,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -274,6 +289,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -299,11 +315,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="2dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:text="Quantity"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -311,6 +329,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -349,11 +368,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="2dp"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:padding="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -370,12 +391,13 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        android:text="TextView" />
+                        android:text="0" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:padding="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -392,12 +414,14 @@
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:textColor="@color/gray"
-                        android:text="TextView" />
+                        android:text="0" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:padding="4dp"
+                    android:layout_margin="4dp"
                     android:background="@drawable/pdp_details_styling"
                     android:orientation="horizontal">
 
@@ -427,17 +451,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/pdp_details_styling"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_margin="2dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginRight="10dp"
                         app:srcCompat="@drawable/pdp_fast_delivery_icon" />
 
                     <LinearLayout
@@ -464,11 +493,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_margin="2dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginRight="10dp"
                         app:srcCompat="@drawable/pdp_protectedgoods_icon" />
 
                     <LinearLayout

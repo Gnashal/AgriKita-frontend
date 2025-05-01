@@ -1,6 +1,5 @@
 package mobdev.agrikita.pages;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
@@ -18,10 +17,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+
 import mobdev.agrikita.R;
-import mobdev.agrikita.controllers.UserService;
+import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.controllers.ShoppingCartController;
+import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
 
 public class ProductDetailPage extends AppCompatActivity {
 
@@ -33,6 +36,8 @@ public class ProductDetailPage extends AppCompatActivity {
             prod_total_price, prod_shipping_cost;
     MaterialButton prod_addMore_btn, prod_subMore_btn, prod_addToCart_btn;
     ImageButton prod_heart_btn, prod_share_btn;
+
+    ShopService shopService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +121,35 @@ public class ProductDetailPage extends AppCompatActivity {
                 .into(prod_display);
         // ===========================
 
+        // Get Shop Details
+        shopService = new ShopService(this);
 
-        // About Seller
-        seller_name.setText(selectedProd.getShopID());
-        seller_description.setText("Test Im am the seller of this "+selectedProd.getProductName());
-        seller_startdate.setText("30-4-2025");
-        // seller_pfp_display
+        shopService.getShopById(selectedProd.getShopID(), new ShopService.ShopCallback() {
+            @Override
+            public void onSuccess(GetShopByShopIDResponse shop) {
+                OffsetDateTime dateTime = OffsetDateTime.parse(shop.getCreatedAt());
+                String reformattedDate = dateTime.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+                seller_name.setText(shop.getName());
+                seller_description.setText(shop.getDescription());
+                seller_startdate.setText(reformattedDate);
+
+                String sellerPic = selectedProd.getImageUrl();
+
+                Glide.with(ProductDetailPage.this)
+                        .load(sellerPic)
+                        .placeholder(R.drawable.agrikita_logo)
+                        .error(R.drawable.agrikita_logo)
+                        .into(seller_pfp_display);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                seller_name.setText("Juan");
+                seller_description.setText("From the next mountain");
+                seller_startdate.setText("June 12, 1898");
+                Toast.makeText(ProductDetailPage.this, "Failed fetching data", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void goToMarketPlace() { startActivity(new Intent(this, Marketplace.class)); }
