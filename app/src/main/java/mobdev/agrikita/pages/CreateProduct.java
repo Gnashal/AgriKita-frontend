@@ -49,7 +49,6 @@ public class CreateProduct extends AppCompatActivity {
     TextInputEditText productOriginField, productStorageField, productDescField;
     SwitchCompat switchOrganic, switchFeature;
     ProductService productService;
-    CreateProductRequest prodRequest;
 
     ImageView imageView, uploadedImage;
     Button chooseFileButton;
@@ -151,6 +150,7 @@ public class CreateProduct extends AppCompatActivity {
         };
         String[] freshnessProd = {
                 "Harvested Today",
+                "Fresh From The Farm",
                 "1–2 Days Old",
                 "Fresh",
                 "Moderate",
