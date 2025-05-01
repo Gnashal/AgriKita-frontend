@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF1DB"
+    android:id="@+id/main"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Agrikita"
+                android:text=" Agrikita"
                 android:textColor="@color/agrikita_dark_green"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -114,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida."
+                android:text="AgriKita is committed to empowering Filipino farmers by bridging the gap between the farm and the market through innovative digital solutions. Our mission is to provide farmers with direct access to buyers, real-time market data, crop management tools, and essential educational resources. By integrating mobile payment systems and weather alerts, we aim to improve the livelihoods of farmers, promote fair trade, and contribute to a more efficient and resilient agricultural sector in the Philippines."
                 android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -161,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                android:text="We envision a thriving, tech-enabled agricultural community where Filipino farmers are financially empowered, well-informed, and directly connected to a broader market. Through AgriKita, we strive to lead a nationwide transformation in agriculture—fostering sustainability, reducing exploitation, and ensuring food security for generations to come."
                 android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -270,7 +271,7 @@
                 android:layout_height="75dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="We operate with transparency and honesty in all our dealings with farmers, consumers, and partners."
+                android:text="We believe in the power of connection and collaboration to create resilient farming communities."
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -312,7 +313,7 @@
                 android:layout_height="75dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:text="We operate with transparency and honesty in all our dealings with farmers, consumers, and partners."
+                android:text="We promote agricultural practices that respect the environment and ensure long-term viability."
                 android:textColor="@color/black"
                 android:textSize="15sp" />
         </LinearLayout>
