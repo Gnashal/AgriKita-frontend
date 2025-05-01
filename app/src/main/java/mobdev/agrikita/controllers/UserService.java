@@ -7,6 +7,7 @@ import java.io.File;
 
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.api.UserServiceApi;
+import mobdev.agrikita.models.user.FetchUserByIDResponse;
 import mobdev.agrikita.models.user.UpdatePasswordRequest;
 import mobdev.agrikita.models.user.UpdatePasswordResponse;
 import mobdev.agrikita.models.user.UpdateProfileImageResponse;
@@ -127,6 +128,25 @@ public class UserService {
         });
     }
 
+    public void fetchUserByID(String uid, final FetchUserByIDCallback callback) {
+        userServiceApi.fetchUserByID(uid).enqueue(new Callback<FetchUserByIDResponse>() {
+            @Override
+            public void onResponse(Call<FetchUserByIDResponse> call, Response<FetchUserByIDResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onFailure("Failed to fetch user by ID. Code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FetchUserByIDResponse> call, Throwable t) {
+                callback.onFailure("Network error: " + t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
     public interface FetchUserCallback {
         void onSuccess(UserResponse userResponse);
         void onFailure(String errorMessage);
@@ -143,4 +163,10 @@ public class UserService {
         void onSuccess(UpdatePasswordResponse updatePasswordResponse);
         void onFailure(String errorMessage);
     }
+
+    public interface FetchUserByIDCallback {
+        void onSuccess(FetchUserByIDResponse response);
+        void onFailure(String errorMessage);
+    }
+
 }

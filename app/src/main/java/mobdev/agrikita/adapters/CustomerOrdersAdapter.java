@@ -1,5 +1,6 @@
 package mobdev.agrikita.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +21,18 @@ import java.util.List;
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.order.Orders;
-import mobdev.agrikita.models.user.CurrentUser;
-import mobdev.agrikita.models.user.UserResponse;
-import mobdev.agrikita.pages.InventoryManagement;
+import mobdev.agrikita.models.user.FetchUserByIDResponse;
 
 public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAdapter.OrderViewHolder> implements Filterable  {
     private List<Orders> orderList;
     private List<Orders> orderListFull;
     String userName;
+    Context context;
+    UserService userService;
 
-    public CustomerOrdersAdapter(List<Orders> orderList) {
+    public CustomerOrdersAdapter(Context context, List<Orders> orderList) {
+        this.context = context;
+        this.userService = new UserService(context);
         this.orderList = orderList;
         this.orderListFull = new ArrayList<>(orderList);
     }
@@ -44,21 +47,23 @@ public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAd
     @Override
     public void onBindViewHolder(@NonNull CustomerOrdersAdapter.OrderViewHolder holder, int position) {
         Orders orders = orderList.get(position);
+        String customerUid = orders.getBuyerID();
 
         String cleanedDate = cleanDate(orders.getCreatedAt());
-        CurrentUser user = CurrentUser.getInstance(holder.textCustomer.getContext());
-
-        user.fetchUserData(user.getUid(), new UserService.FetchUserCallback() {
+        userService.fetchUserByID(customerUid, new UserService.FetchUserByIDCallback() {
             @Override
-            public void onSuccess(UserResponse response) {
-                String userName = user.getUserName();
-
-                holder.textCustomer.setText(userName);
+            public void onSuccess(FetchUserByIDResponse response) {
+                if (response.getData() != null) {
+                    holder.textCustomer.setText(response.getData().getName());
+                } else {
+                    holder.textCustomer.setText("Unknown");
+                }
             }
 
             @Override
             public void onFailure(String errorMessage) {
-                Toast.makeText(holder.textCustomer.getContext(), "Failed to load user: " + errorMessage, Toast.LENGTH_SHORT).show();
+                holder.textCustomer.setText("Error");
+                Toast.makeText(holder.textCustomer.getContext(), "Failed to fetch user: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -116,6 +121,14 @@ public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAd
             notifyDataSetChanged();
         }
     };
+
+    public void updateData(List<Orders> newOrderList) {
+        orderList.clear();
+        orderList.addAll(newOrderList);
+        orderListFull.clear();
+        orderListFull.addAll(newOrderList);
+        notifyDataSetChanged();
+    }
 
     private String cleanDate(String timestamp) {
         try {

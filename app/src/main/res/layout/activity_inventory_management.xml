@@ -26,12 +26,14 @@
             android:padding="10dp">
 
             <ImageView
-                android:id="@+id/productImage"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
+                android:id="@+id/shopImage"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:gravity="center"
                 android:contentDescription="Product Image"
                 android:src="@drawable/agrikita_logo"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
                 tools:ignore="HardcodedText" />
 
             <LinearLayout
@@ -40,6 +42,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/shopName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Cebu Farm"
@@ -50,6 +53,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
+                    android:id="@+id/shopDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Manage your products and orders"
