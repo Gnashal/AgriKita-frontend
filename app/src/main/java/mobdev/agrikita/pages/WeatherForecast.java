@@ -35,7 +35,6 @@ import mobdev.agrikita.controllers.WeatherService;
 public class WeatherForecast extends AppCompatActivity {
 
     private static final String TAG = "WeatherForecast";
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
 
     private EditText location;
     private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
@@ -43,7 +42,6 @@ public class WeatherForecast extends AppCompatActivity {
     private Button RefreshButton;
     private ImageView weatherIcon;
 
-    private FusedLocationProviderClient fusedLocationClient;
     private WeatherService weatherService;
 
     @Override
@@ -77,20 +75,13 @@ public class WeatherForecast extends AppCompatActivity {
         countryName = findViewById(R.id.countryName);
 
         showCurrentDate();
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         weatherService = new WeatherService(this);
-
-        getCurrentLocation();
 
         RefreshButton.setOnClickListener(view -> {
             String cityName = location.getText().toString();
             if (!cityName.isEmpty()) {
                 Log.v(TAG, "Fetching weather for: " + cityName);
-                fetchWeather(cityName);
-            } else {
-                Log.v(TAG, "City name is empty, trying current location...");
-                getCurrentLocation();
+                fetchWeather();
             }
         });
     }
@@ -101,59 +92,17 @@ public class WeatherForecast extends AppCompatActivity {
         currentDate.setText(formattedDate);
     }
 
-    private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-            return;
-        }
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-            if (location != null) {
-                double lat = location.getLatitude();
-                double lon = location.getLongitude();
-                Log.v(TAG, "Location: " + lat + ", " + lon);
-                getCityFromCoordinates(lat, lon);
-            } else {
-                Log.v(TAG, "Location is null.");
-                Toast.makeText(this, "Could not determine your location.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void getCityFromCoordinates(double lat, double lon) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                String city = addresses.get(0).getLocality();
-                if (city != null) {
-                    if (city.equals("Lungsod ng Cebu")) {
-                        String shortCity = city.substring(city.lastIndexOf(" ") + 1);
-                        location.setText(shortCity);
-                        fetchWeather(shortCity);
-                    } else {
-                        location.setText(city);
-                        fetchWeather(city);
-                    }
-                    Log.v(TAG, "Detected city: " + city);
-                } else {
-                    Log.v(TAG, "City not found.");
-                    Toast.makeText(this, "Unable to detect city.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } catch (IOException e) {
-            Log.v(TAG, "Geocoder error", e);
-        }
-    }
-
-    private void fetchWeather(String cityName) {
-        weatherService.fetchWeatherData(cityName, new WeatherService.WeatherCallback() {
+    private void fetchWeather() {
+        weatherService.fetchWeatherData(new WeatherService.WeatherCallback() {
             @Override
-            public void onSuccess(String result) {
-                runOnUiThread(() -> updateUI(result));
+            public void onSuccess(Boolean ok) {
+                if (ok) {
+                    runOnUiThread(() -> updateUI());
+                } else {
+                    runOnUiThread(() ->
+                            Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show()
+                    );
+                }
             }
 
             @Override
@@ -165,7 +114,8 @@ public class WeatherForecast extends AppCompatActivity {
         });
     }
 
-    private void updateUI(String result) {
+    private void updateUI() {
+        String result = weatherService.getJsonWeatherString();
         if (result != null) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -214,21 +164,6 @@ public class WeatherForecast extends AppCompatActivity {
 
             } catch (JSONException e) {
                 Log.v(TAG, "JSON parsing error", e);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                Toast.makeText(this, "Location permission is required to get weather for your current location.", Toast.LENGTH_SHORT).show();
             }
         }
     }

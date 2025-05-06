@@ -17,10 +17,20 @@ import retrofit2.Response;
 
 public class AuthService {
     private AuthServiceApi serviceApi;
+    private static AuthService instance;
+
 
     public AuthService(Context context) {
         serviceApi = RetrofitClient.getClient(context).create(AuthServiceApi.class);
     }
+
+    public static AuthService getInstance(Context context) {
+        if (instance == null) {
+            instance = new AuthService(context);
+        }
+        return instance;
+    }
+
     public void loginUser(String email, String password, final LoginCallback callback) {
         LoginRequest loginRequest = new LoginRequest(email, password);
         Call<LoginResponseWrapper> call = serviceApi.loginUser(loginRequest);
@@ -99,6 +109,31 @@ public class AuthService {
         });
     }
 
+    public void validateAndNavigate(final RefreshTokenCallback callback) {
+        Call<Void> call = serviceApi.validateToken();
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(true);
+                } else {
+                    callback.onFailure("Token invalid");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onFailure("Request failed: " + t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+
+    public interface RefreshTokenCallback {
+        void onSuccess(boolean ok);
+        void onFailure(String error);
+    }
     public interface ForgotPasswordCallback{
        void onSuccess(ForgotPasswordResponse response);
        void onFailure(String error);
