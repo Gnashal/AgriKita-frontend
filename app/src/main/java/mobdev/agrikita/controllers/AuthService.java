@@ -2,13 +2,13 @@ package mobdev.agrikita.controllers;
 
 import android.content.Context;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import mobdev.agrikita.api.AuthServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.models.auth.ForgotPasswordRequest;
 import mobdev.agrikita.models.auth.ForgotPasswordResponse;
-import mobdev.agrikita.models.auth.LoginRequest;
-import mobdev.agrikita.models.auth.LoginResponse;
-import mobdev.agrikita.models.auth.LoginResponseWrapper;
 import mobdev.agrikita.models.auth.SignupRequest;
 import mobdev.agrikita.models.auth.SignupResponse;
 import retrofit2.Call;
@@ -32,29 +32,21 @@ public class AuthService {
     }
 
     public void loginUser(String email, String password, final LoginCallback callback) {
-        LoginRequest loginRequest = new LoginRequest(email, password);
-        Call<LoginResponseWrapper> call = serviceApi.loginUser(loginRequest);
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            String uid = user.getUid();
 
-        call.enqueue(new Callback<LoginResponseWrapper>() {
-            @Override
-            public void onResponse(Call<LoginResponseWrapper> call, Response<LoginResponseWrapper> response) {
-                if (response.isSuccessful()) {
-                    LoginResponseWrapper wrapper = response.body();
-                    if (wrapper != null && wrapper.getResponse() != null) {
-                        callback.onSuccess(wrapper.getResponse());
+                            callback.onSuccess(uid);
+                        } else {
+                            callback.onFailure("User object is null after login.");
+                        }
                     } else {
-                        callback.onFailure("Login failed: Invalid response structure");
+                        callback.onFailure("Firebase login failed: " + task.getException().getMessage());
                     }
-                } else {
-                    callback.onFailure("Login failed: " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponseWrapper> call, Throwable t) {
-                callback.onFailure("Network failure: " + t.getMessage());
-            }
-        });
+                });
     }
 
     public void signupUser(String email, String username, String name, String phone, String password, final SignupCallback callback) {
@@ -110,23 +102,20 @@ public class AuthService {
     }
 
     public void validateAndNavigate(final RefreshTokenCallback callback) {
-        Call<Void> call = serviceApi.validateToken();
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(true);
-                } else {
-                    callback.onFailure("Token invalid");
-                }
-            }
+       FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                callback.onFailure("Request failed: " + t.getMessage());
-                t.printStackTrace();
-            }
-        });
+       if (user == null) {
+           callback.onFailure("User not logged in");
+           return;
+       }
+
+        user.getIdToken(true).addOnCompleteListener(task -> {
+           if (task.isSuccessful()) {
+               callback.onSuccess(true);
+           } else {
+               callback.onFailure("Failed to refresh token");
+           }
+       });
     }
 
 
@@ -140,7 +129,7 @@ public class AuthService {
     }
 
     public interface LoginCallback {
-        void onSuccess(LoginResponse loginResponse);
+        void onSuccess(String uid);
         void onFailure(String errorMessage);
     }
     public interface SignupCallback {
