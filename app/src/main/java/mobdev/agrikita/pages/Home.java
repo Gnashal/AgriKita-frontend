@@ -51,9 +51,8 @@ import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
     private TextView temperatureText, weatherDescriptionText, location, dateText;
-    private Button toWeather;
     private ImageView profileButton, weatherIcon;
-    private LinearLayout marketplaceLayout, ordersLayout, shopLayout;
+    private LinearLayout marketplaceLayout, ordersLayout, shopLayout, toWeather;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
     private SwipeRefreshLayout refresh;
