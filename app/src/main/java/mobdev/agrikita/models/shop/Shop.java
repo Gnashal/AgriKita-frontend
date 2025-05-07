@@ -8,6 +8,7 @@ public class Shop {
     @SerializedName("ImageUrl")
     private String shopImgUrl;
     private String name;
+    @SerializedName("address")
     private String addr;
     private String zipcode;
     private String desc;
