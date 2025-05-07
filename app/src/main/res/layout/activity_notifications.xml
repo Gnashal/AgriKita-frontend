@@ -27,7 +27,7 @@
             <ImageButton
                 android:id="@+id/notif_back_btn"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/pdp_details_styling"
                 android:backgroundTint="@color/agrikita_background"
                 app:srcCompat="@drawable/back_to_marketplace_arrow" />
@@ -75,6 +75,8 @@
             android:id="@+id/notif_list_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="5dp"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

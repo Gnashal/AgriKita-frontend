@@ -1,11 +1,18 @@
 package mobdev.agrikita.models.notifications;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Notifications implements Serializable {
 
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("content")
     private String content;
+
+    @SerializedName("create_at")
     private String date;
     private boolean read_status = false;
 

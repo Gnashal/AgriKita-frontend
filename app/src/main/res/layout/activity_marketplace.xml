@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="10sp"
-            android:paddingTop="5sp"
-            android:paddingBottom="5sp">
+            android:paddingLeft="10dp" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,20 +54,22 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5sp"
+            android:clipToOutline="true"
             android:background="@drawable/round_search_bar">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="5dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="25sp"
-                    android:layout_height="25sp"
-                    android:layout_margin="5sp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="5dp"
+                    android:padding="1dp"
                     android:background="@drawable/round_search_icon"
                     android:clipToOutline="true">
 
@@ -82,23 +82,25 @@
                 <EditText
                     android:id="@+id/search_product_input"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:hint="What are you looking for?"
                     android:inputType="text"
-                    android:textSize="12sp" />
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
             </LinearLayout>
         </FrameLayout>
 
         <!-- Category Filter -->
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:fillViewport="true">
 
             <LinearLayout
                 android:id="@+id/mkpl_category_btn_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:padding="5dp"
                 android:orientation="horizontal">
             </LinearLayout>
         </HorizontalScrollView>
@@ -113,5 +115,19 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:fillViewport="true"
+            android:layout_gravity="center_vertical"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/mkpl_paginator_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package mobdev.agrikita.pages;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +18,12 @@ import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NotificationAdapter;
+import mobdev.agrikita.api.NotificationApi;
+import mobdev.agrikita.controllers.NotificationService;
 import mobdev.agrikita.models.notifications.Notifications;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Notification extends AppCompatActivity {
 
@@ -28,6 +34,7 @@ public class Notification extends AppCompatActivity {
     List<Notifications> notificationsList;
 
     NotificationAdapter notifAdapter;
+    NotificationService notificationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +55,32 @@ public class Notification extends AppCompatActivity {
 
         notificationsList = new ArrayList<>();
 
-        notificationsList.add(new Notifications("Order Delivered", "Your order #ORD-2025-001 has been delivered.", "2025-04-18", true));
-        notificationsList.add(new Notifications("Order Shipped", "Your order #ORD-2023-002 has been shipped!", "2025-04-20", false));
-        notificationsList.add(new Notifications("Payment Confirmed", "Your payment has been confirmed.", "2025-04-18", false));
-        notificationsList.add(new Notifications("Special Offer!", "Get 15% off this week. Use code ORGANIC15.", "2025-04-20", false));
+        notificationService = new NotificationService(this);
+
+        notificationService.getNotifications(new Callback<List<Notifications>>() {
+            @Override
+            public void onResponse(Call<List<Notifications>> call, Response<List<Notifications>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    notificationsList.clear();
+                    notificationsList.addAll(response.body());
+                    notifAdapter.notifyDataSetChanged();
+                    notif_new.setText(String.format("%d", countUnRead(notificationsList))+" New");
+                } else {
+                    Toast.makeText(Notification.this, "No notifications available", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Notifications>> call, Throwable t) {
+                Toast.makeText(Notification.this, "Error fetching notifications", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
 
         notifAdapter = new NotificationAdapter(this, notificationsList);
         notif_view.setAdapter(notifAdapter);
 
         go_back.setOnClickListener(v -> finish());
-
-        notif_new.setText(String.format("%d", countUnRead(notificationsList))+" New");
 
         notif_markallasread.setOnClickListener(v -> {
             for (Notifications item : notificationsList) {

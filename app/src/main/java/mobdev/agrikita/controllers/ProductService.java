@@ -109,8 +109,8 @@ public class ProductService {
         });
     }
 
-    public void getAllProducts(ProductCallback callback) {
-        Call<GetAllProductsResponse> call = serviceProductsApi.getAllProducts();
+    public void getAllProducts(String shopID, ProductCallback callback) {
+        Call<GetAllProductsResponse> call = serviceProductsApi.getAllProducts(shopID);
 
         call.enqueue(new Callback<GetAllProductsResponse>() {
             @Override
