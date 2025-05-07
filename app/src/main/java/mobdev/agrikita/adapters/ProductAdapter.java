@@ -18,7 +18,11 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.ShopService;
+import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
+import mobdev.agrikita.pages.ProductDetailPage;
 import mobdev.agrikita.pages.ShoppingCartPage;
 import mobdev.agrikita.controllers.ShoppingCartController;
 
@@ -27,6 +31,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private Context context;
     private List<Products> productList;
     private OnItemClickListener listener;
+    ShopService shopService;
 
     public interface OnItemClickListener {
         void onItemClick(Products product);
@@ -67,6 +72,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.category.setText(productItem.getCategory());
         holder.price.setText("₱ "+String.format("%.2f", productItem.getPrice()));
         holder.rating.setText(String.valueOf(productItem.getRating()));
+
+        shopService = new ShopService(context);
+
+        shopService.getShopById(productItem.getShopID(), new ShopService.ShopCallback() {
+            @Override
+            public void onSuccess(GetShopByShopIDResponse shop) {
+                holder.seller_name.setText(shop.getName());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                holder.seller_name.setText("Fail to fetch");
+            }
+        });
+
         holder.seller_name.setText(productItem.getShopID());
 
         String imgaeURL = productItem.getImageUrl();

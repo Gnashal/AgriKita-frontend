@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="310dp"
+    android:layout_height="350dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:padding="5dp"
+        android:background="@drawable/shopcart_prod_card"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,11 +19,13 @@
             android:id="@+id/sc_prodimg_display"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:padding="5dp"
             app:srcCompat="@drawable/agrikita_logo" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -45,6 +49,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -67,6 +72,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -89,11 +95,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:padding="1dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -107,8 +115,9 @@
                     android:id="@+id/sc_prodquantity_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
+                    android:padding="5dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
                     android:textSize="12sp"
                     android:textColor="@color/gray"
                     android:text="0" />
@@ -123,13 +132,13 @@
 
             <FrameLayout
                 android:layout_width="100dp"
-                android:layout_height="match_parent">
-
-            </FrameLayout>
+                android:layout_height="match_parent" />
 
             <LinearLayout
+                android:id="@+id/sc_prodremove_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:padding="5dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -139,7 +148,6 @@
                     app:srcCompat="@drawable/shoppingcart_card_remove_icon" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/sc_prodremove_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/RemoveButton"

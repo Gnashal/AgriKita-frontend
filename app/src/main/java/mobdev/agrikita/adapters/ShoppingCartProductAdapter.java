@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,9 +43,10 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        LinearLayout remove_btn;
         ImageView coutprod_imgv;
         TextView coutprod_name, coutprod_price, coutprod_seller, coutprod_perprice, coutprod_quantity;
-        MaterialButton add_btn, sub_btn, remove_btn;
+        MaterialButton add_btn, sub_btn;
     }
 
     @Override
