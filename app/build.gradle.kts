@@ -62,7 +62,6 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 //    implementation("com.github.KwabenBerko:News-API-Java:1.0.2")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
-
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
