@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
         holder.productPrice.setText(String.format("₱%.2f", product.getPrice()));
         holder.productUnit.setText(product.getMeasuringUnit());
         holder.productRating.setText(String.valueOf(product.getRating()));
+        holder.freshLabel.setText(product.getFreshnessRate());
+        holder.container.setBackgroundResource(getFreshnessBackground(product.getFreshnessRate()));
 
         shopService.getShopById(product.getShopID(), new ShopService.ShopCallback() {
             @Override
@@ -71,7 +74,6 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
             }
         });
 
-        holder.freshLabel.setVisibility(View.GONE);
 
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.agrikita_logo)
@@ -92,6 +94,7 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView productName, productPrice, productRating, freshLabel, shopName, productUnit;
         ImageView imageProduct;
+        LinearLayout container;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +105,35 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
             productRating = itemView.findViewById(R.id.rating);
             freshLabel = itemView.findViewById(R.id.freshLabel);
             imageProduct = itemView.findViewById(R.id.imageProduct);
+            container = itemView.findViewById(R.id.freshLabelContainer);
         }
     }
+
+    private int getFreshnessBackground(String freshness) {
+        if (freshness == null) return R.drawable.round_gray_background_latest;
+
+        String normalized = freshness.trim().toLowerCase();
+
+        switch (normalized) {
+            case "harvested today":
+            case "fresh from the farm":
+            case "1–2 days old":
+            case "fresh":
+                return R.drawable.round_green_background_latest;
+
+            case "moderate":
+            case "overripe":
+                return R.drawable.round_yellow_background_latest;
+
+            case "stale":
+                return R.drawable.round_orange_background_latest;
+
+            case "rotten":
+                return R.drawable.round_dark_red_background_latest;
+
+            default:
+                return R.drawable.round_gray_background_latest;
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package mobdev.agrikita.api;
 
 import mobdev.agrikita.models.shop.CreateShopResponse;
+import mobdev.agrikita.models.shop.GetFeaturedShopsResponse;
 import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -25,4 +26,7 @@ public interface ShopServiceApi {
             @Part("zip_code") RequestBody zipCode,
             @Part("shop_description") RequestBody shopDescription
     );
+
+    @GET("service/shop/get-featured")
+    Call<GetFeaturedShopsResponse> getFeaturedShops();
 }
