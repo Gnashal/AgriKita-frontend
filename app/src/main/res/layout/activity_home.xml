@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#7AA93C"
+    android:background="#F8F0E4"
     tools:context=".pages.Home">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -15,30 +15,65 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="#7AA93C">
+        android:background="#7AA93C">-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#7AA93C"
+        android:background="#F8F0E4"
         android:orientation="vertical">
 
         <!-- Top Search + Profile -->
+
+
+
         <LinearLayout
+            android:id="@+id/rice_bg"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/agrikita_homepage_bg"
+            android:layout_height="250dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/agrikita_header_text_w1"
+                    android:scaleType="fitStart"
+                    android:layout_gravity="start" />
+
+                <ImageButton
+                    android:id="@+id/toNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_notification"
+                    android:layout_gravity="end"
+                    android:paddingEnd="8dp"
+                    android:background="@null"
+                    app:tint="@color/black" />
+            </LinearLayout>
+
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_searchview"
                 android:gravity="center_vertical"
@@ -56,12 +91,12 @@
 
                 <TextView
                     android:id="@+id/location"
-                    android:layout_width="wrap_content"
+                    android:layout_width="227dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="user loc"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <ImageView
@@ -79,7 +114,7 @@
         <!-- WeatherService Section -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="@drawable/rounded_background"
             android:backgroundTint="#AE3E3E3E"
@@ -90,46 +125,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/weatherDescriptionText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="Cloudy Day!"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/temperatureText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="16 ℃"
-                    android:textColor="@color/white"
-                    android:textSize="80dp" />
-            </LinearLayout>
-
-            <!-- Right Box -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:backgroundTint="#4CAF50"
-                android:gravity="top"
                 android:orientation="vertical"
-                android:paddingTop="20dp">
+                android:padding="10dp">
 
-                <!-- Row for icon + text -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/weatherIcon"
@@ -140,189 +142,464 @@
                         android:src="@drawable/cloudy_day" />
 
                     <TextView
+                        android:id="@+id/WeatherForcastTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Partly Cloudy"
+                        android:layout_gravity="left"
+                        android:text="Weather Forcast"
                         android:textColor="@color/white"
-                        android:textSize="15dp" />
+                        android:textSize="16dp" />
                 </LinearLayout>
 
-                <!-- Date Text -->
                 <TextView
                     android:id="@+id/dateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
                     android:layout_marginTop="4dp"
+                    android:layout_gravity="center"
                     android:fontFamily="sans-serif-thin"
                     android:text="9:41 AM | Apr 9"
                     android:textColor="@color/white"
-                    android:textSize="9dp" />
+                    android:textSize="25sp" />
 
                 <!-- Button below the text -->
-                <Button
-                    android:id="@+id/toWeatherForcast"
-                    android:layout_width="130dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/rounded_button_latest"
-                    android:fontFamily="sans-serif"
-                    android:text="View Weather Forecast"
-                    android:textColor="@color/white"
-                    android:textSize="8dp" />
-            </LinearLayout>
-        </LinearLayout>
 
-        <!-- Marketplace, My Orders, My Shop Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="354dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_background_latest_white"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Container for the three buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <!-- Marketplace -->
-                <LinearLayout
-                    android:id="@+id/marketplaceLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:background="@drawable/round_green_background_latest"
-                        android:elevation="4dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/marketplace" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Marketplace"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- My Orders -->
-                <LinearLayout
-                    android:id="@+id/ordersLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:background="@drawable/round_green_background_latest"
-                        android:elevation="4dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="83dp"
-                            android:layout_height="80dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/orders" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="My Orders"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- My Shop -->
-                <LinearLayout
-                    android:id="@+id/shopLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:background="@drawable/round_green_background_latest"
-                        android:elevation="4dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/shop" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="My Shop"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
             </LinearLayout>
 
-            <!-- News Section -->
+            <!-- Right Box -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:backgroundTint="#4CAF50"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- Row for icon + text -->
+
+                <!-- Date Text -->
+                <LinearLayout
+                    android:id="@+id/toWeatherForecast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Details"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:id="@+id/exclamation"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="Weather icon"
+                        android:src="@drawable/baseline_error_outline_24"
+                        app:tint="#4CAE50" />
+
+                </LinearLayout>
+
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/temperatureText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Latest News"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:text="16 ℃"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
 
-                <!-- RecyclerView for News Items -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/newsRecyclerView"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/weatherDescriptionText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:nestedScrollingEnabled="false"
-                    android:overScrollMode="never"
-                    android:paddingBottom="16dp"/>
+                    android:layout_gravity="end"
+                    android:text="Cloudy Day!"
+                    android:textColor="#C3C3C3"
+                    android:textSize="14dp" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="35dp"
+            android:paddingEnd="35dp">
+
+            <!-- Common Style for Each Menu Item -->
+            <LinearLayout
+                android:id="@+id/profileLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Profile"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/marketplaceLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:background="@drawable/white_icon_bg"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/market"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Market"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cartLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/shopping_cart"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Cart"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ordersLayout"
+                android:layout_width="40dp"
+                android:clickable="true"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/clipboard"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Orders"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shopLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/store"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="My Shop"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+
+        <!-- Container for the three buttons -->
+<!--        <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:background="@color/white"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                &lt;!&ndash; Marketplace &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/marketplaceLayout"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="120dp"-->
+<!--                        android:layout_height="120dp"-->
+<!--                        android:background="@drawable/round_green_background_latest"-->
+<!--                        android:elevation="4dp"-->
+<!--                        android:gravity="center">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="80dp"-->
+<!--                            android:layout_height="80dp"-->
+<!--                            android:src="@drawable/marketplace" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:text="Marketplace"-->
+<!--                        android:textColor="@android:color/black"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="bold" />-->
+<!--                </LinearLayout>-->
+
+<!--                &lt;!&ndash; My Orders &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ordersLayout"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <LinearLayout-->
+
+<!--                        android:layout_width="120dp"-->
+<!--                        android:layout_height="120dp"-->
+<!--                        android:background="@drawable/round_green_background_latest"-->
+<!--                        android:elevation="4dp"-->
+<!--                        android:gravity="center">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="83dp"-->
+<!--                            android:layout_height="80dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/orders" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:text="My Orders"-->
+<!--                        android:textColor="@android:color/black"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="bold" />-->
+<!--                </LinearLayout>-->
+
+<!--                &lt;!&ndash; My Shop &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/shopLayout"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_margin="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="120dp"-->
+<!--                        android:layout_height="120dp"-->
+<!--                        android:background="@drawable/round_green_background_latest"-->
+<!--                        android:elevation="4dp"-->
+<!--                        android:gravity="center">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="80dp"-->
+<!--                            android:layout_height="80dp"-->
+<!--                            android:src="@drawable/shop" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="8dp"-->
+<!--                        android:text="My Shop"-->
+<!--                        android:textColor="@android:color/black"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="bold" />-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+
+            <!-- News Section -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:weightSum="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="⭐ Best Sellers"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/see_all_BestSellers"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:background="@android:color/transparent"
+                    android:text="See All"
+                    android:textColor="#2C6B2F"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bestSeller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            
+            
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:weightSum="1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:padding="8dp"
+                    android:text="⭐ Featured Farms"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/featuredFarms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Latest News"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- RecyclerView for News Items -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/newsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingBottom="16dp"/>
+        </LinearLayout>
+        </LinearLayout>
+    <!--</ScrollView>-->
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
