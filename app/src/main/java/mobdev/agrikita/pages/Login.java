@@ -18,7 +18,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.AuthService;
-import mobdev.agrikita.models.auth.LoginResponse;
 
 public class Login extends AppCompatActivity {
     EditText emailField, passwordField;
@@ -71,9 +70,10 @@ public class Login extends AppCompatActivity {
         AuthService.getInstance(this).loginUser(email, password, new AuthService.LoginCallback()
         {
             @Override
-            public void onSuccess(LoginResponse loginResponse) {
-                saveAuthTokens(loginResponse);
-                navigateToHomeScreen();
+            public void onSuccess(String loginResponse) {
+                saveAuthTokens(loginResponse, () -> {
+                    navigateToHomeScreen();
+                });
             }
 
             @Override
@@ -96,16 +96,14 @@ public class Login extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void saveAuthTokens(LoginResponse loginResponse) {
+    private void saveAuthTokens(String uid, Runnable runnable) {
         SharedPreferences sharedPreferences = getSharedPreferences("AuthPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("idToken", loginResponse.getIdToken());
-        editor.putString("refreshToken", loginResponse.getRefreshToken());
         editor.putBoolean("isLoggedIn", true);
-        /*TODO: Use this to pass as the current user DocRef*/
-        editor.putString("localId", loginResponse.getLocalId());
+        editor.putString("localId", uid);
 
         editor.apply();
+        runnable.run();
     }
     public void toForgotPassword() {
         startActivity(new Intent(this, ForgotPassword.class));
