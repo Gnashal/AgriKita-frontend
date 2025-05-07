@@ -37,7 +37,7 @@ public class RetrofitClient {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                         if (user != null) {
-                            try {
+                             try {
                                 String idToken = Tasks.await(user.getIdToken(true)).getToken(); // force refresh
 
                                 if (idToken != null && !idToken.isEmpty()) {

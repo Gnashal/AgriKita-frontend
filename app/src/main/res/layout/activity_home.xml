@@ -15,11 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="#7AA93C">
+        android:background="#7AA93C">-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,6 +53,7 @@
                     android:layout_gravity="start" />
 
                 <ImageButton
+                    android:id="@+id/toNotifications"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_notification"
@@ -178,7 +179,7 @@
 
                 <!-- Date Text -->
                 <LinearLayout
-                    android:id="@+id/toWeatherForcast"
+                    android:id="@+id/toWeatherForecast"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -556,6 +557,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
+                    android:padding="8dp"
                     android:text="⭐ Featured Farms"
                     android:textColor="@color/black"
                     android:textSize="16sp"
@@ -598,6 +600,6 @@
                 android:paddingBottom="16dp"/>
         </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

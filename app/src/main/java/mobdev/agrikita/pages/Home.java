@@ -3,10 +3,14 @@ package mobdev.agrikita.pages;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -52,10 +56,12 @@ import okhttp3.Response;
 public class Home extends AppCompatActivity {
     private TextView temperatureText, weatherDescriptionText, location, dateText;
     private ImageView profileButton, weatherIcon;
-    private LinearLayout marketplaceLayout, ordersLayout, shopLayout, toWeather;
-    private RecyclerView newsRecyclerView;
+    private LinearLayout marketplaceLayout, ordersLayout, shopLayout, toWeather, cartLayout, profileLayout;
+    private RecyclerView newsRecyclerView, bestSellersView, featuredShopsView;
     private NewsAdapter newsAdapter;
     private SwipeRefreshLayout refresh;
+    private ImageButton toNotifications;
+    private Button toMarketplace;
 
     private UserService userService;
     private OkHttpClient client = new OkHttpClient();
@@ -65,6 +71,8 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
+        getWindow().getDecorView().setSystemUiVisibility(0); // ensures white icons
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -73,11 +81,15 @@ public class Home extends AppCompatActivity {
 
         /* Initialize */
         profileButton = findViewById(R.id.profileButton);
-        toWeather = findViewById(R.id.toWeatherForcast);
+        toNotifications = findViewById(R.id.toNotifications);
+        toMarketplace = findViewById(R.id.see_all_BestSellers);
+        toWeather = findViewById(R.id.toWeatherForecast);
         location = findViewById(R.id.location);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
         ordersLayout = findViewById(R.id.ordersLayout);
         shopLayout = findViewById(R.id.shopLayout);
+        cartLayout = findViewById(R.id.cartLayout);
+        profileLayout = findViewById(R.id.profileLayout);
         newsRecyclerView = findViewById(R.id.newsRecyclerView);
         refresh = findViewById(R.id.swipeRefreshLayout);
         temperatureText = findViewById(R.id.temperatureText);
@@ -229,6 +241,10 @@ public class Home extends AppCompatActivity {
                 startActivity(new Intent(this, CreateShop.class));
             }
         });
+        cartLayout.setOnClickListener(v -> startActivity(new Intent(this, ShoppingCartPage.class)));
+        profileLayout.setOnClickListener(v -> toProfile());
+        toNotifications.setOnClickListener(v -> startActivity(new Intent(this, Notification.class)));
+        toMarketplace.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
     }
 
     private void toProfile() {
