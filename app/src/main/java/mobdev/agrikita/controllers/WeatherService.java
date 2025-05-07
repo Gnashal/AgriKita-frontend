@@ -29,7 +29,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class WeatherService {
-    private WeatherService instance;
+    private static WeatherService instance;
     private static final String TAG = "WeatherService";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
     private FusedLocationProviderClient fusedLocationClient;
@@ -46,7 +46,7 @@ public class WeatherService {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
-    public WeatherService getInstance(Context context) {
+    public static WeatherService getInstance(Context context) {
         if (instance == null) {
             instance = new WeatherService(context);
         }
@@ -61,6 +61,10 @@ public class WeatherService {
 
 
     public void fetchWeatherData(WeatherCallback callback) {
+        if (currentCity == null || currentCity.isEmpty()) {
+            callback.onFailure(new IllegalStateException("Current city is null or empty"));
+            return;
+        }
         String url = "https://api.openweathermap.org/data/2.5/weather?q=" + currentCity + "&appid=" + apiKey + "&units=metric";
         Log.v(TAG, "Request URL: " + url);
 
@@ -76,9 +80,6 @@ public class WeatherService {
                     callback.onSuccess(true);
                 } else {
                     callback.onFailure(new IOException("Unexpected response " + response));
-                }
-                if (currentCity == null || currentCity.isEmpty()) {
-                    callback.onFailure(new IllegalStateException("Current city is null or empty"));
                 }
             } catch (IOException e) {
                 Log.v(TAG, "Error fetching weather data", e);

@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.*;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,15 +36,14 @@ import mobdev.agrikita.controllers.WeatherService;
 
 public class WeatherForecast extends AppCompatActivity {
 
-    private static final String TAG = "WeatherForecast";
-
     private EditText location;
     private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
             pressure, wind, sunriseTime, sunriseDesc, sunsetTime, sunsetDesc, countryName, weatherDesc;
-    private Button RefreshButton;
+    private Button changeCountryBtn;
+    private SwipeRefreshLayout refreshBtn;
     private ImageView weatherIcon;
+    private ProgressBar loadingSpinner;
 
-    private WeatherService weatherService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,20 +70,23 @@ public class WeatherForecast extends AppCompatActivity {
         sunriseDesc = findViewById(R.id.sunriseDesc);
         sunsetTime = findViewById(R.id.sunsetTime);
         sunsetDesc = findViewById(R.id.sunsetDesc);
-        RefreshButton = findViewById(R.id.fetchWeatherButton);
+        changeCountryBtn = findViewById(R.id.fetchWeatherButton);
         weatherIcon = findViewById(R.id.weatherIcon);
         weatherDesc = findViewById(R.id.weatherDescription);
         countryName = findViewById(R.id.countryName);
-
+        refreshBtn = findViewById(R.id.swipeRefreshLayout);
+        loadingSpinner = findViewById(R.id.loadingSpinner);
         showCurrentDate();
-        weatherService = new WeatherService(this);
-
-        RefreshButton.setOnClickListener(view -> {
+        fetchWeather();
+        changeCountryBtn.setOnClickListener(view -> {
             String cityName = location.getText().toString();
             if (!cityName.isEmpty()) {
-                Log.v(TAG, "Fetching weather for: " + cityName);
+                Log.v("WeatherForecastFetch", "Fetching weather for: " + cityName);
                 fetchWeather();
             }
+        });
+        refreshBtn.setOnRefreshListener(() -> {
+            fetchWeather();
         });
     }
 
@@ -93,29 +97,43 @@ public class WeatherForecast extends AppCompatActivity {
     }
 
     private void fetchWeather() {
-        weatherService.fetchWeatherData(new WeatherService.WeatherCallback() {
+        runOnUiThread(() -> {
+            findViewById(R.id.loadingOverlay).setVisibility(View.VISIBLE);
+            loadingSpinner.setVisibility(View.VISIBLE);
+            changeCountryBtn.setEnabled(false);
+            location.setEnabled(false);
+        });
+        WeatherService.getInstance(this).fetchWeatherData(new WeatherService.WeatherCallback() {
             @Override
             public void onSuccess(Boolean ok) {
-                if (ok) {
-                    runOnUiThread(() -> updateUI());
-                } else {
-                    runOnUiThread(() ->
-                            Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show()
-                    );
-                }
+                runOnUiThread(() -> {
+                    findViewById(R.id.loadingOverlay).setVisibility(View.GONE);
+                    loadingSpinner.setVisibility(View.GONE);
+                    changeCountryBtn.setEnabled(true);
+                    location.setEnabled(true);
+
+                    if (refreshBtn.isRefreshing()) {
+                        refreshBtn.setRefreshing(false);
+                    }
+                    if (ok) {
+                        updateUI();
+                    } else {
+                        Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onFailure(Exception e) {
-                runOnUiThread(() ->
-                        Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show()
-                );
+                findViewById(R.id.loadingOverlay).setVisibility(View.GONE);
+                loadingSpinner.setVisibility(View.GONE);
+                Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void updateUI() {
-        String result = weatherService.getJsonWeatherString();
+        String result = WeatherService.getInstance(this).getJsonWeatherString();
         if (result != null) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -161,9 +179,8 @@ public class WeatherForecast extends AppCompatActivity {
                 wind.setText(String.format("Wind: %.1f km/h", windSpeed));
                 sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
                 sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));
-
             } catch (JSONException e) {
-                Log.v(TAG, "JSON parsing error", e);
+                Log.v("WeatherForecastFetch", "JSON parsing error", e);
             }
         }
     }

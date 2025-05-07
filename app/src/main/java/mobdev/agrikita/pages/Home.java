@@ -59,7 +59,6 @@ public class Home extends AppCompatActivity {
     private SwipeRefreshLayout refresh;
 
     private UserService userService;
-    private WeatherService weatherService;
     private OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -88,7 +87,6 @@ public class Home extends AppCompatActivity {
         dateText = findViewById(R.id.dateText);
 
         userService = new UserService(this);
-        weatherService = new WeatherService(this);
 
         if (CurrentUser.getInstance(this).getUserData() == null) {
             fetchUserData();
@@ -118,9 +116,8 @@ public class Home extends AppCompatActivity {
         newsRecyclerView.setAdapter(newsAdapter);
     }
     private void setupWeatherData() {
-        weatherService.getCurrentLocation(this, this::fetchWeatherData);
+        WeatherService.getInstance(this).getCurrentLocation(this, this::fetchWeatherData);
         showCurrentDate();
-        fetchWeatherData();
     }
 
     private void showCurrentDate() {
@@ -130,36 +127,37 @@ public class Home extends AppCompatActivity {
     }
 
     private void fetchWeatherData() {
-        weatherService.fetchWeatherData(new WeatherService.WeatherCallback() {
+        WeatherService.getInstance(this).fetchWeatherData(new WeatherService.WeatherCallback() {
             @Override
             public void onSuccess(Boolean ok) {
                 if (ok.equals(true)) {
                     runOnUiThread(() -> updateUI());
                 } else {
+                    Log.v("WeatherFetch", "Failed to fetch weather data");
                     Toast.makeText(Home.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Exception e) {
-                runOnUiThread(() ->
-                        Toast.makeText(Home.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show()
-                );
+                Log.v("WeatherFetch", "Failed to fetch weather data: " + e.getMessage());
+                Toast.makeText(Home.this, "Network Error in fetching weather data", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
     private void updateUI() {
-        String result = weatherService.getJsonWeatherString();
+        String result = WeatherService.getInstance(this).getJsonWeatherString();
         if (result != null) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
 
                 JSONObject main = jsonObject.getJSONObject("main");
                 double temperature = main.getDouble("temp");
-                int humidityVal = main.getInt("humidity");
-                int pressureVal = main.getInt("pressure");
+                /*int humidityVal = main.getInt("humidity");
+                int pressureVal = main.getInt("pressure");*/
 
-                JSONObject windObj = jsonObject.getJSONObject("wind");
-                double windSpeed = windObj.getDouble("speed");
+                /*JSONObject windObj = jsonObject.getJSONObject("wind");
+                double windSpeed = windObj.getDouble("speed");*/
 
                 JSONObject sys = jsonObject.getJSONObject("sys");
                 long sunrise = sys.getLong("sunrise");
@@ -171,7 +169,7 @@ public class Home extends AppCompatActivity {
 
                 JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
                 String description = weather.getString("description");
-                String mainCondition = weather.getString("temp");
+                String mainCondition = weather.getString("main");
                 String iconCode = weather.getString("icon");
 
                 String resourceName = "ic_" + iconCode;
@@ -180,8 +178,8 @@ public class Home extends AppCompatActivity {
                     weatherIcon.setImageResource(resId);
                 }
 
-                weatherDescriptionText.setText(description);
-                temperatureText.setText(mainCondition);
+                weatherDescriptionText.setText(mainCondition);
+                temperatureText.setText(String.format("%.0f°C", temperature));
                 location.setText(fullCountryName);
 
                 /*Temperature.setText(String.format("%.0f°", temperature));

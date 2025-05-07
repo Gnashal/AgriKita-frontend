@@ -21,13 +21,11 @@
         android:fillViewport="true"
         android:background="#7AA93C">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#7AA93C"
         android:orientation="vertical">
-
 
         <!-- Top Search + Profile -->
         <LinearLayout
