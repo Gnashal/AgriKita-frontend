@@ -15,11 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <!--<ScrollView
+        <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:background="#7AA93C">-->
+        android:background="#7AA93C">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -529,12 +529,20 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/progressBarProds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bestSeller"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            
-            
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"/>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -565,10 +573,17 @@
 
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/progressBarShops"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/featuredFarms"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="500dp"/>
 
 
         </LinearLayout>
@@ -600,6 +615,6 @@
                 android:paddingBottom="16dp"/>
         </LinearLayout>
         </LinearLayout>
-    <!--</ScrollView>-->
+    </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
