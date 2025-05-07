@@ -4,18 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentTransaction;
 
+import mobdev.agrikita.controllers.AuthService;
 import mobdev.agrikita.pages.Home;
 import mobdev.agrikita.pages.LandingPage;
 import mobdev.agrikita.pages.Login;
-import mobdev.agrikita.pages.Navbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,9 +29,22 @@ public class MainActivity extends AppCompatActivity {
         } else if (tokenID.isEmpty()) {
             toLogin();
         } else {
-            toHome();
-        }
+            AuthService.getInstance(this).validateAndNavigate(new AuthService.RefreshTokenCallback() {
+                @Override
+                public void onSuccess(boolean ok) {
+                    if (ok) {
+                        toHome();
+                    } else {
+                        toLogin();
+                    }
+                }
 
+                @Override
+                public void onFailure(String error) {
+                    toLogin();
+                }
+            });
+        }
     }
 
     private void toLanding() {

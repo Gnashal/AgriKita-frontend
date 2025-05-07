@@ -25,7 +25,7 @@ public class Login extends AppCompatActivity {
     Button signIn, forgotPassword, toSignUp;
     ImageView googleSignIn, fbSignIn;
 
-    AuthService authService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
         });
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-        authService = new AuthService(this);
+
 
         emailField = findViewById(R.id.emailField);
         passwordField = findViewById(R.id.passwordField);
@@ -68,7 +68,7 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        authService.loginUser(email, password, new AuthService.LoginCallback()
+        AuthService.getInstance(this).loginUser(email, password, new AuthService.LoginCallback()
         {
             @Override
             public void onSuccess(LoginResponse loginResponse) {

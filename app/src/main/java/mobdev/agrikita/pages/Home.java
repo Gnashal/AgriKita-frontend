@@ -25,7 +25,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,6 +37,8 @@ import java.util.Locale;
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.NewsAdapter;
 import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.controllers.NewsController;
+import mobdev.agrikita.controllers.WeatherService;
 import mobdev.agrikita.models.auth.NewsApiResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.UserResponse;
@@ -44,15 +50,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Home extends AppCompatActivity {
-    private TextView location;
-    private TextView temperatureText;
-    private TextView weatherDescriptionText;
-    private TextView dateText;
+    private TextView temperatureText, weatherDescriptionText, location, dateText;
     private Button toWeather;
-    private ImageView profileButton;
-    private LinearLayout marketplaceLayout;
-    private LinearLayout ordersLayout;
-    private LinearLayout shopLayout;
+    private ImageView profileButton, weatherIcon;
+    private LinearLayout marketplaceLayout, ordersLayout, shopLayout;
     private RecyclerView newsRecyclerView;
     private NewsAdapter newsAdapter;
     private SwipeRefreshLayout refresh;
@@ -82,6 +83,7 @@ public class Home extends AppCompatActivity {
         refresh = findViewById(R.id.swipeRefreshLayout);
         temperatureText = findViewById(R.id.temperatureText);
         weatherDescriptionText = findViewById(R.id.weatherDescriptionText);
+        weatherIcon = findViewById(R.id.weatherIcon);
         dateText = findViewById(R.id.dateText);
 
         userService = new UserService(this);
@@ -91,21 +93,21 @@ public class Home extends AppCompatActivity {
         } else {
             setProfilePic();
         }
+        setupWeatherData();
 
         profileButton.setOnClickListener(v -> toProfile());
         toWeather.setOnClickListener(v -> toWeather());
 
         refresh.setOnRefreshListener(() -> {
             fetchUserData();
-            fetchWeatherData();
+            setupWeatherData();
             refresh.setRefreshing(false);
         });
 
+
         setupRecyclerView();
         setupSectionClickListeners();
-        fetchEverythingNews("agriculture");
-
-        fetchWeatherData();  // Fetch weather when opening the app
+        fetchEverythingNews();
     }
 
     private void setupRecyclerView() {
@@ -113,85 +115,106 @@ public class Home extends AppCompatActivity {
         newsAdapter = new NewsAdapter();
         newsRecyclerView.setAdapter(newsAdapter);
     }
+    private void setupWeatherData() {
+        WeatherService.getInstance(this).getCurrentLocation(this, this::fetchWeatherData);
+        showCurrentDate();
+    }
 
-    private void fetchEverythingNews(String query) {
-        String apiKey = getString(R.string.NEWS_API_KEY);
-        String url = "https://newsapi.org/v2/everything?q=" + query + "&language=en&sortBy=publishedAt&pageSize=4&apiKey=" + apiKey;
-
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> Toast.makeText(Home.this, "Error fetching news: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String json = response.body().string();
-                    Gson gson = new Gson();
-                    NewsApiResponse newsApiResponse = gson.fromJson(json, NewsApiResponse.class);
-
-                    runOnUiThread(() -> {
-                        if (newsApiResponse.getArticles() != null) {
-                            newsAdapter.setArticles(newsApiResponse.getArticles());
-                        } else {
-                            Toast.makeText(Home.this, "No news articles found", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        });
+    private void showCurrentDate() {
+        DateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy", Locale.getDefault());
+        String formattedDate = dateFormat.format(new Date());
+        dateText.setText(formattedDate);
     }
 
     private void fetchWeatherData() {
-        String city = "Manila"; // Static location for now
-        String apiKey = "your_openweather_api_key"; // <--- Replace with your API key
-        String url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric";
-
-        Request request = new Request.Builder().url(url).build();
-        client.newCall(request).enqueue(new Callback() {
+        WeatherService.getInstance(this).fetchWeatherData(new WeatherService.WeatherCallback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(() -> Toast.makeText(Home.this, "Failed to get weather data", Toast.LENGTH_SHORT).show());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful() && response.body() != null) {
-                    String json = response.body().string();
-                    try {
-                        org.json.JSONObject jsonObject = new org.json.JSONObject(json);
-                        String description = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
-                        double temperature = jsonObject.getJSONObject("main").getDouble("temp");
-
-                        runOnUiThread(() -> {
-                            weatherDescriptionText.setText(capitalizeWords(description));
-                            temperatureText.setText(Math.round(temperature) + "°C");
-                            dateText.setText(getFormattedDate());
-                        });
-                    } catch (Exception e) {
-                        runOnUiThread(() -> Toast.makeText(Home.this, "Error parsing weather data", Toast.LENGTH_SHORT).show());
-                    }
+            public void onSuccess(Boolean ok) {
+                if (ok.equals(true)) {
+                    runOnUiThread(() -> updateUI());
+                } else {
+                    Log.v("WeatherFetch", "Failed to fetch weather data");
+                    Toast.makeText(Home.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
                 }
+            }
+            @Override
+            public void onFailure(Exception e) {
+                Log.v("WeatherFetch", "Failed to fetch weather data: " + e.getMessage());
+                Toast.makeText(Home.this, "Network Error in fetching weather data", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
+    private void updateUI() {
+        String result = WeatherService.getInstance(this).getJsonWeatherString();
+        if (result != null) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
 
-    private String capitalizeWords(String input) {
-        String[] words = input.split(" ");
-        StringBuilder builder = new StringBuilder();
-        for (String word : words) {
-            builder.append(Character.toUpperCase(word.charAt(0)))
-                    .append(word.substring(1))
-                    .append(" ");
+                JSONObject main = jsonObject.getJSONObject("main");
+                double temperature = main.getDouble("temp");
+                /*int humidityVal = main.getInt("humidity");
+                int pressureVal = main.getInt("pressure");*/
+
+                /*JSONObject windObj = jsonObject.getJSONObject("wind");
+                double windSpeed = windObj.getDouble("speed");*/
+
+                JSONObject sys = jsonObject.getJSONObject("sys");
+                long sunrise = sys.getLong("sunrise");
+                long sunset = sys.getLong("sunset");
+
+                String countryCode = sys.getString("country");
+                Locale locale = new Locale("", countryCode);
+                String fullCountryName = locale.getDisplayCountry();
+
+                JSONObject weather = jsonObject.getJSONArray("weather").getJSONObject(0);
+                String description = weather.getString("description");
+                String mainCondition = weather.getString("main");
+                String iconCode = weather.getString("icon");
+
+                String resourceName = "ic_" + iconCode;
+                int resId = getResources().getIdentifier(resourceName, "drawable", getPackageName());
+                if (resId != 0) {
+                    weatherIcon.setImageResource(resId);
+                }
+
+                weatherDescriptionText.setText(mainCondition);
+                temperatureText.setText(String.format("%.0f°C", temperature));
+                location.setText(fullCountryName);
+
+                /*Temperature.setText(String.format("%.0f°", temperature));
+                maxTemp.setText(String.format("Max: %.0f°", maxTemperature));
+                minTemp.setText(String.format("Min: %.0f°", minTemperature));
+                humidity.setText(String.format("Humidity: %d%%", humidityVal));
+                pressure.setText(String.format("Pressure: %d hPa", pressureVal));
+                wind.setText(String.format("Wind: %.1f km/h", windSpeed));
+                sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
+                sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));*/
+
+            } catch (JSONException e) {
+                Log.v("WeatherFetch", "JSON parsing error", e);
+            }
         }
-        return builder.toString().trim();
     }
 
-    private String getFormattedDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a | MMM d", Locale.getDefault());
-        return sdf.format(new Date());
+    private void fetchEverythingNews() {
+        NewsController.getInstance(this).fetchNews(new NewsController.NewsCallback() {
+            @Override
+            public void onSuccess(NewsApiResponse response) {
+                runOnUiThread(() -> {
+                    if (response.getArticles() != null) {
+                        newsAdapter.setArticles(response.getArticles());
+                    } else {
+                        Toast.makeText(Home.this, "No articles found", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(Home.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private void setupSectionClickListeners() {
@@ -218,7 +241,6 @@ public class Home extends AppCompatActivity {
     }
 
     public void fetchUserData() {
-        Toast.makeText(Home.this, "SetupUser Was Called", Toast.LENGTH_SHORT).show();
         SharedPreferences prefs = getSharedPreferences("AuthPrefs", MODE_PRIVATE);
         String uid = prefs.getString("localId", "");
         if (uid.isEmpty()) {
@@ -232,7 +254,7 @@ public class Home extends AppCompatActivity {
             public void onSuccess(UserResponse userResponse) {
                 CurrentUser.getInstance(getBaseContext()).setUid(uid);
                 saveToPrefs();
-                setProfilePic();
+                runOnUiThread(() -> setProfilePic());
             }
 
             @Override

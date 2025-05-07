@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.*;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,17 +36,14 @@ import mobdev.agrikita.controllers.WeatherService;
 
 public class WeatherForecast extends AppCompatActivity {
 
-    private static final String TAG = "WeatherForecast";
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
-
     private EditText location;
     private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
             pressure, wind, sunriseTime, sunriseDesc, sunsetTime, sunsetDesc, countryName, weatherDesc;
-    private Button RefreshButton;
+    private Button changeCountryBtn;
+    private SwipeRefreshLayout refreshBtn;
     private ImageView weatherIcon;
+    private ProgressBar loadingSpinner;
 
-    private FusedLocationProviderClient fusedLocationClient;
-    private WeatherService weatherService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +70,23 @@ public class WeatherForecast extends AppCompatActivity {
         sunriseDesc = findViewById(R.id.sunriseDesc);
         sunsetTime = findViewById(R.id.sunsetTime);
         sunsetDesc = findViewById(R.id.sunsetDesc);
-        RefreshButton = findViewById(R.id.fetchWeatherButton);
+        changeCountryBtn = findViewById(R.id.fetchWeatherButton);
         weatherIcon = findViewById(R.id.weatherIcon);
         weatherDesc = findViewById(R.id.weatherDescription);
         countryName = findViewById(R.id.countryName);
-
+        refreshBtn = findViewById(R.id.swipeRefreshLayout);
+        loadingSpinner = findViewById(R.id.loadingSpinner);
         showCurrentDate();
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        weatherService = new WeatherService(this);
-
-        getCurrentLocation();
-
-        RefreshButton.setOnClickListener(view -> {
+        fetchWeather();
+        changeCountryBtn.setOnClickListener(view -> {
             String cityName = location.getText().toString();
             if (!cityName.isEmpty()) {
-                Log.v(TAG, "Fetching weather for: " + cityName);
-                fetchWeather(cityName);
-            } else {
-                Log.v(TAG, "City name is empty, trying current location...");
-                getCurrentLocation();
+                Log.v("WeatherForecastFetch", "Fetching weather for: " + cityName);
+                fetchWeather();
             }
+        });
+        refreshBtn.setOnRefreshListener(() -> {
+            fetchWeather();
         });
     }
 
@@ -101,71 +96,44 @@ public class WeatherForecast extends AppCompatActivity {
         currentDate.setText(formattedDate);
     }
 
-    private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-            return;
-        }
-
-        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
-            if (location != null) {
-                double lat = location.getLatitude();
-                double lon = location.getLongitude();
-                Log.v(TAG, "Location: " + lat + ", " + lon);
-                getCityFromCoordinates(lat, lon);
-            } else {
-                Log.v(TAG, "Location is null.");
-                Toast.makeText(this, "Could not determine your location.", Toast.LENGTH_SHORT).show();
-            }
+    private void fetchWeather() {
+        runOnUiThread(() -> {
+            findViewById(R.id.loadingOverlay).setVisibility(View.VISIBLE);
+            loadingSpinner.setVisibility(View.VISIBLE);
+            changeCountryBtn.setEnabled(false);
+            location.setEnabled(false);
         });
-    }
-
-    private void getCityFromCoordinates(double lat, double lon) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                String city = addresses.get(0).getLocality();
-                if (city != null) {
-                    if (city.equals("Lungsod ng Cebu")) {
-                        String shortCity = city.substring(city.lastIndexOf(" ") + 1);
-                        location.setText(shortCity);
-                        fetchWeather(shortCity);
-                    } else {
-                        location.setText(city);
-                        fetchWeather(city);
-                    }
-                    Log.v(TAG, "Detected city: " + city);
-                } else {
-                    Log.v(TAG, "City not found.");
-                    Toast.makeText(this, "Unable to detect city.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        } catch (IOException e) {
-            Log.v(TAG, "Geocoder error", e);
-        }
-    }
-
-    private void fetchWeather(String cityName) {
-        weatherService.fetchWeatherData(cityName, new WeatherService.WeatherCallback() {
+        WeatherService.getInstance(this).fetchWeatherData(new WeatherService.WeatherCallback() {
             @Override
-            public void onSuccess(String result) {
-                runOnUiThread(() -> updateUI(result));
+            public void onSuccess(Boolean ok) {
+                runOnUiThread(() -> {
+                    findViewById(R.id.loadingOverlay).setVisibility(View.GONE);
+                    loadingSpinner.setVisibility(View.GONE);
+                    changeCountryBtn.setEnabled(true);
+                    location.setEnabled(true);
+
+                    if (refreshBtn.isRefreshing()) {
+                        refreshBtn.setRefreshing(false);
+                    }
+                    if (ok) {
+                        updateUI();
+                    } else {
+                        Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onFailure(Exception e) {
-                runOnUiThread(() ->
-                        Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show()
-                );
+                findViewById(R.id.loadingOverlay).setVisibility(View.GONE);
+                loadingSpinner.setVisibility(View.GONE);
+                Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void updateUI(String result) {
+    private void updateUI() {
+        String result = WeatherService.getInstance(this).getJsonWeatherString();
         if (result != null) {
             try {
                 JSONObject jsonObject = new JSONObject(result);
@@ -211,24 +179,8 @@ public class WeatherForecast extends AppCompatActivity {
                 wind.setText(String.format("Wind: %.1f km/h", windSpeed));
                 sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
                 sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));
-
             } catch (JSONException e) {
-                Log.v(TAG, "JSON parsing error", e);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getCurrentLocation();
-            } else {
-                Toast.makeText(this, "Location permission is required to get weather for your current location.", Toast.LENGTH_SHORT).show();
+                Log.v("WeatherForecastFetch", "JSON parsing error", e);
             }
         }
     }

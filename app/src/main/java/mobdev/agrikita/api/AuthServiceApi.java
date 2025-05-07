@@ -9,6 +9,7 @@ import mobdev.agrikita.models.auth.SignupRequest;
 import mobdev.agrikita.models.auth.SignupResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface AuthServiceApi {
@@ -18,4 +19,6 @@ public interface AuthServiceApi {
     Call<SignupResponse>registerUser(@Body SignupRequest request);
     @POST("auth/forgot-password")
     Call<ForgotPasswordResponse>forgotPassword(@Body ForgotPasswordRequest request);
+    @GET("auth/refresh") // Replace with your actual route
+    Call<Void> validateToken();
 }

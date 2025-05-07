@@ -23,7 +23,6 @@ public class SignUp extends AppCompatActivity {
     CheckBox checkbox;
     Button signUp, toLogin;
 
-    AuthService authService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +34,6 @@ public class SignUp extends AppCompatActivity {
             return insets;
         });
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
-        authService = new AuthService(this);
 
         emailInput = findViewById(R.id.emailInput);
         usernameInput = findViewById(R.id.usernameInput);
@@ -65,7 +62,7 @@ public class SignUp extends AppCompatActivity {
         if (!isCheckboxChecked()) return;
 
 
-        authService.signupUser(email, username, name, phone, password, new AuthService.SignupCallback() {
+        AuthService.getInstance(this).signupUser(email, username, name, phone, password, new AuthService.SignupCallback() {
             @Override
             public void onSuccess(SignupResponse signupResponse) {
                 toLoginSuccess(signupResponse);

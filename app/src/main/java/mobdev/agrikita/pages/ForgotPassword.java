@@ -20,7 +20,7 @@ import mobdev.agrikita.models.auth.ForgotPasswordResponse;
 public class ForgotPassword extends AppCompatActivity {
     EditText emailInput;
     Button sendLink, resendLink, toOTP;
-    AuthService authService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +31,6 @@ public class ForgotPassword extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        authService = new AuthService(this  );
         emailInput = findViewById(R.id.emailField);
         sendLink = findViewById(R.id.btnSendResetLink);
         resendLink = findViewById(R.id.resendEmailButton);
@@ -51,7 +50,7 @@ public class ForgotPassword extends AppCompatActivity {
             Toast.makeText(this, "Enter a valid email address", Toast.LENGTH_SHORT).show();
             return;
         }
-        authService.sendEmail(email, new AuthService.ForgotPasswordCallback() {
+        AuthService.getInstance(this).sendEmail(email, new AuthService.ForgotPasswordCallback() {
             @Override
             public void onSuccess(ForgotPasswordResponse message) {
                 toLoginSuccess(email, message);
