@@ -160,7 +160,7 @@
                     android:fontFamily="sans-serif-thin"
                     android:text="9:41 AM | Apr 9"
                     android:textColor="@color/white"
-                    android:textSize="25sp" />
+                    android:textSize="16sp" />
 
                 <!-- Button below the text -->
 
@@ -577,6 +577,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:background="@color/white"
             android:orientation="vertical">
 
             <TextView
