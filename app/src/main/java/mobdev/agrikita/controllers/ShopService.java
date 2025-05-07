@@ -3,11 +3,15 @@ package mobdev.agrikita.controllers;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.List;
+
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.api.ShopServiceApi;
 import mobdev.agrikita.models.shop.CreateShopResponse;
+import mobdev.agrikita.models.shop.GetFeaturedShopsResponse;
 import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
+import mobdev.agrikita.models.shop.Shop;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -72,6 +76,32 @@ public class ShopService {
             }
         });
     }
+
+    public void getFeaturedShops(FeaturedShopsCallback callback) {
+        Call<GetFeaturedShopsResponse> call = serviceShopApi.getFeaturedShops();
+
+        call.enqueue(new Callback<GetFeaturedShopsResponse>() {
+            @Override
+            public void onResponse(Call<GetFeaturedShopsResponse> call, Response<GetFeaturedShopsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().getShops());
+                } else {
+                    callback.onError("Failed with code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFeaturedShopsResponse> call, Throwable t) {
+                callback.onError("Network error: " + t.getMessage());
+            }
+        });
+    }
+
+    public interface FeaturedShopsCallback {
+        void onSuccess(List<Shop> shops);
+        void onError(String errorMessage);
+    }
+
 
     public interface ShopCallback {
         void onSuccess(GetShopByShopIDResponse shop);

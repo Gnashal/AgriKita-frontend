@@ -15,6 +15,7 @@ import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.models.products.CreateProductRequest;
 import mobdev.agrikita.models.products.CreateProductResponse;
 import mobdev.agrikita.models.products.GetAllProductsResponse;
+import mobdev.agrikita.models.products.GetFeaturedProductsResponse;
 import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.products.UploadProductImageResponse;
@@ -128,6 +129,30 @@ public class ProductService {
             @Override
             public void onFailure(Call<GetAllProductsResponse> call, Throwable t) {
                 Log.e("Product_Service", "Failed to Fetch all products", t);
+                callback.onFailure(t);
+            }
+        });
+    }
+
+    public void getFeaturedProducts(ProductCallback callback) {
+        Call<GetFeaturedProductsResponse> call = serviceProductsApi.getBestSellers();
+
+        call.enqueue(new Callback<GetFeaturedProductsResponse>() {
+            @Override
+            public void onResponse(Call<GetFeaturedProductsResponse> call, Response<GetFeaturedProductsResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Products> featuredProductsList = response.body().getProducts();
+                    Log.d("Product_Service", "Success: " + response.body().getMessage());
+                    callback.onProductsFetched(featuredProductsList);
+                } else {
+                    Log.e("Product_Service", "Failed to Fetch featured products");
+                    callback.onFailure(new Exception("Failed to fetch featured products"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetFeaturedProductsResponse> call, Throwable t) {
+                Log.e("Product_Service", "Failed to Fetch featured products", t);
                 callback.onFailure(t);
             }
         });
