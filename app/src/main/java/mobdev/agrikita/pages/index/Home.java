@@ -55,6 +55,7 @@ import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.pages.addons.ShoppingCartPage;
 import mobdev.agrikita.pages.addons.WeatherForecast;
 import mobdev.agrikita.pages.marketplace.Marketplace;
+import mobdev.agrikita.pages.marketplace.ProductDetailPage;
 import mobdev.agrikita.pages.addons.Notification;
 import mobdev.agrikita.pages.shop.CreateShop;
 import mobdev.agrikita.pages.shop.InventoryManagement;
