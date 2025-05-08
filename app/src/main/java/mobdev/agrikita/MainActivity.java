@@ -8,9 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import mobdev.agrikita.controllers.AuthService;
-import mobdev.agrikita.pages.Home;
-import mobdev.agrikita.pages.LandingPage;
-import mobdev.agrikita.pages.Login;
+import mobdev.agrikita.pages.index.Home;
+import mobdev.agrikita.pages.welcome.LandingPage;
+import mobdev.agrikita.pages.welcome.Login;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -19,11 +19,9 @@ import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ShopService;
-import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.products.Products;
-import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
-import mobdev.agrikita.pages.ProductDetailPage;
-import mobdev.agrikita.pages.ShoppingCartPage;
+import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
+import mobdev.agrikita.pages.addons.ShoppingCartPage;
 import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {

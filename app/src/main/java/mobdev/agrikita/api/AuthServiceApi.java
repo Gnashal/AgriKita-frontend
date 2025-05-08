@@ -1,12 +1,11 @@
 package mobdev.agrikita.api;
 
-import mobdev.agrikita.models.auth.ForgotPasswordRequest;
-import mobdev.agrikita.models.auth.ForgotPasswordResponse;
-import mobdev.agrikita.models.auth.SignupRequest;
-import mobdev.agrikita.models.auth.SignupResponse;
+import mobdev.agrikita.models.auth.request.ForgotPasswordRequest;
+import mobdev.agrikita.models.auth.response.ForgotPasswordResponse;
+import mobdev.agrikita.models.auth.request.SignupRequest;
+import mobdev.agrikita.models.auth.response.SignupResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface AuthServiceApi {

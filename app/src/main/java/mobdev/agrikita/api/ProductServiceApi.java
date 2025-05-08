@@ -1,11 +1,11 @@
 package mobdev.agrikita.api;
 
-import mobdev.agrikita.models.products.CreateProductRequest;
-import mobdev.agrikita.models.products.CreateProductResponse;
-import mobdev.agrikita.models.products.GetAllProductsResponse;
-import mobdev.agrikita.models.products.GetFeaturedProductsResponse;
-import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
-import mobdev.agrikita.models.products.UploadProductImageResponse;
+import mobdev.agrikita.models.products.request.CreateProductRequest;
+import mobdev.agrikita.models.products.response.CreateProductResponse;
+import mobdev.agrikita.models.products.response.GetAllProductsResponse;
+import mobdev.agrikita.models.products.response.GetFeaturedProductsResponse;
+import mobdev.agrikita.models.products.response.GetProductsByShopIDResponse;
+import mobdev.agrikita.models.products.response.UploadProductImageResponse;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -7,10 +7,9 @@ import android.widget.Toast;
 import java.util.List;
 
 import mobdev.agrikita.api.OrderServiceApi;
-import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.models.order.Orders;
-import mobdev.agrikita.models.order.GetOrdersByShopIDResponse;
+import mobdev.agrikita.models.order.response.GetOrdersByShopIDResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
