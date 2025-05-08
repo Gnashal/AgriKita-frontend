@@ -21,7 +21,7 @@ import java.util.List;
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.order.Orders;
-import mobdev.agrikita.models.user.FetchUserByIDResponse;
+import mobdev.agrikita.models.user.response.FetchUserByIDResponse;
 
 public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAdapter.OrderViewHolder> implements Filterable  {
     private List<Orders> orderList;

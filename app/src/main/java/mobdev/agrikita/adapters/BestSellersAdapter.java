@@ -2,36 +2,25 @@ package mobdev.agrikita.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.models.products.Products;
-import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
-import mobdev.agrikita.pages.ProductDetailPage;
+import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 
 public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.ProductViewHolder> {
     private final List<Products> productList;
@@ -45,7 +34,7 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_best_sellers_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.best_sellers_adapter, parent, false);
         return new ProductViewHolder(view);
     }
 

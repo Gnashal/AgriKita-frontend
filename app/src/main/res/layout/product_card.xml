@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="200dp"
+    android:layout_width="220dp"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:padding="10dp">
+    android:elevation="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@android:color/white">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Seller Name -->
         <TextView
             android:id="@+id/productcard_seller_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/black"
+            android:baselineAligned="false"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Voltaire's Farm" />
+            android:layout_marginLeft="10dp"
+            android:text="Voltaire's Farm"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
         <!-- Product Image and Basic Info -->
         <LinearLayout
@@ -37,8 +47,8 @@
             <FrameLayout
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:clipToOutline="true"
-                android:background="@drawable/product_card_rounded_edges">
+                android:background="@drawable/product_card_rounded_edges"
+                android:clipToOutline="true">
 
                 <ImageView
                     android:id="@+id/productcard_product_image"
@@ -53,16 +63,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <!-- Rating -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="16dp"
@@ -74,9 +84,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:textSize="12sp"
+                        android:text="4.5"
                         android:textColor="@color/black"
-                        android:text="4.5" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <!-- Price -->
@@ -85,17 +95,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textSize="16sp"
+                    android:text="Php 25.00"
                     android:textColor="@color/black"
-                    android:text="Php 25.00" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <!-- Unit -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:text="Per Kilo"
                     android:textColor="@color/black"
-                    android:text="Per Kilo" />
+                    android:textSize="12sp" />
 
                 <!-- Category Tag -->
                 <TextView
@@ -106,52 +117,64 @@
                     android:background="@drawable/product_card_round_tag"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:textSize="12sp"
+                    android:text="Fruits"
                     android:textColor="@color/white"
-                    android:text="Fruits" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
         <!-- Product Name and Description -->
-        <TextView
-            android:id="@+id/productcard_product_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Tomatoes" />
+            android:orientation="vertical"
+            android:gravity="top">
 
-        <TextView
-            android:id="@+id/productcard_product_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="10sp"
-            android:textColor="@color/black"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="Fresh red tomatoes" />
+            <TextView
+                android:id="@+id/productcard_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Tomatoes"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/productcard_product_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Fresh red tomatoes"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
 
         <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/productcard_addtocart"
                 style="@style/ProductCardAddToCartButton"
-                android:text="Add to Cart" />
+                android:gravity="center"
+                android:text="Add to Cart"
+                android:textSize="7.4sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/productcard_buynow"
                 style="@style/ProductCardBuyNowButton"
-                android:text="Buy Now" />
+                android:text="Buy Now"
+                android:textSize="8sp" />
         </LinearLayout>
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
