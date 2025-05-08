@@ -55,6 +55,7 @@ import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.pages.addons.ShoppingCartPage;
 import mobdev.agrikita.pages.addons.WeatherForecast;
 import mobdev.agrikita.pages.marketplace.Marketplace;
+import mobdev.agrikita.pages.marketplace.ProductDetailPage;
 import mobdev.agrikita.pages.addons.Notification;
 import mobdev.agrikita.pages.shop.CreateShop;
 import mobdev.agrikita.pages.shop.InventoryManagement;
@@ -355,6 +356,13 @@ public class Home extends AppCompatActivity {
             public void onProductsFetched(List<Products> products) {
                 bestSellersList.clear();
                 bestSellersList.addAll(products);
+
+                bestSellersAdapter.setOnItemClickListener(product -> {
+                    Intent goToProductDetail = new Intent(Home.this, ProductDetailPage.class);
+                    goToProductDetail.putExtra("product_data", product); // Ensure Serializable or Parcelable
+                    startActivity(goToProductDetail);
+                });
+                
                 bestSellersAdapter.notifyDataSetChanged();
                 progressBarFeaturedProducts.setVisibility(View.GONE);// Notify adapter about data changes
             }

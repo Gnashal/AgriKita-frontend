@@ -73,6 +73,13 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
                 .load(product.getImageUrl())
                 .apply(requestOptions)
                 .into(holder.imageProduct);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null && holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
+                listener.onItemClick(productList.get(holder.getAdapterPosition()));
+            }
+        });
+
     }
 
     @Override
@@ -80,13 +87,14 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
         return productList.size();
     }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder {
+    public class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView productName, productPrice, productRating, freshLabel, shopName, productUnit;
         ImageView imageProduct;
         LinearLayout container;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
+
             productName = itemView.findViewById(R.id.textTitle);
             shopName = itemView.findViewById(R.id.textFarm);
             productPrice = itemView.findViewById(R.id.textPrice);
@@ -123,6 +131,16 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
             default:
                 return R.drawable.round_gray_background_latest;
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Products product);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
 }

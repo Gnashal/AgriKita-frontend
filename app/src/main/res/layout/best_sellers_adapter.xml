@@ -102,7 +102,7 @@
 
         <TextView
             android:id="@+id/textTitle"
-            android:layout_width="0dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="Organic Tomatoes"
             android:textColor="@color/black"
@@ -118,7 +118,7 @@
 
         <TextView
             android:id="@+id/textFarm"
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:text="From Green Harvest Farm"
             android:textColor="#757575"
