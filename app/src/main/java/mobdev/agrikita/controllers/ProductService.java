@@ -1,27 +1,22 @@
 package mobdev.agrikita.controllers;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.models.products.CreateProductRequest;
-import mobdev.agrikita.models.products.CreateProductResponse;
-import mobdev.agrikita.models.products.GetAllProductsResponse;
-import mobdev.agrikita.models.products.GetFeaturedProductsResponse;
-import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
+import mobdev.agrikita.models.products.request.CreateProductRequest;
+import mobdev.agrikita.models.products.response.CreateProductResponse;
+import mobdev.agrikita.models.products.response.GetAllProductsResponse;
+import mobdev.agrikita.models.products.response.GetFeaturedProductsResponse;
+import mobdev.agrikita.models.products.response.GetProductsByShopIDResponse;
 import mobdev.agrikita.models.products.Products;
-import mobdev.agrikita.models.products.UploadProductImageResponse;
-import okhttp3.MediaType;
+import mobdev.agrikita.models.products.response.UploadProductImageResponse;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

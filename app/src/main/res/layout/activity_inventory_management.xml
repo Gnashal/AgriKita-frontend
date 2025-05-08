@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F9F2E5"
     android:id="@+id/main"
-    tools:context=".pages.InventoryManagement">
+    tools:context=".pages.shop.InventoryManagement">
 
 
     <LinearLayout
@@ -15,7 +15,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/navbar"
             tools:layout="@layout/fragment_navbar"
-            android:name="mobdev.agrikita.pages.Navbar"
+            android:name="mobdev.agrikita.pages.addons.Navbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

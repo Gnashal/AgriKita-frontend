@@ -1,6 +1,6 @@
 package mobdev.agrikita.api;
 
-import mobdev.agrikita.models.order.GetOrdersByShopIDResponse;
+import mobdev.agrikita.models.order.response.GetOrdersByShopIDResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

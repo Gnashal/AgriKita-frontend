@@ -1,14 +1,13 @@
 package mobdev.agrikita.api;
 
-import mobdev.agrikita.models.user.FetchUserByIDResponse;
-import mobdev.agrikita.models.user.UpdatePasswordRequest;
-import mobdev.agrikita.models.user.UpdatePasswordResponse;
-import mobdev.agrikita.models.user.UpdateProfileImageResponse;
-import mobdev.agrikita.models.user.UpdateUserRequest;
-import mobdev.agrikita.models.user.UpdateUserResponse;
-import mobdev.agrikita.models.user.UserResponse;
+import mobdev.agrikita.models.user.response.FetchUserByIDResponse;
+import mobdev.agrikita.models.user.request.UpdatePasswordRequest;
+import mobdev.agrikita.models.user.response.UpdatePasswordResponse;
+import mobdev.agrikita.models.user.response.UpdateProfileImageResponse;
+import mobdev.agrikita.models.user.request.UpdateUserRequest;
+import mobdev.agrikita.models.user.response.UpdateUserResponse;
+import mobdev.agrikita.models.user.response.UserResponse;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

@@ -10,7 +10,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navbar"
         tools:layout="@layout/fragment_navbar"
-        android:name="mobdev.agrikita.pages.Navbar"
+        android:name="mobdev.agrikita.pages.addons.Navbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

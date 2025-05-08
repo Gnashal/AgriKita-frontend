@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.Map;
 
 import mobdev.agrikita.controllers.UserService;
+import mobdev.agrikita.models.user.response.UserResponse;
 
 public class CurrentUser {
     private static CurrentUser instance;
