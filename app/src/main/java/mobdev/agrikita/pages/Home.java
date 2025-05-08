@@ -349,6 +349,13 @@ public class Home extends AppCompatActivity {
             public void onProductsFetched(List<Products> products) {
                 bestSellersList.clear();
                 bestSellersList.addAll(products);
+
+                bestSellersAdapter.setOnItemClickListener(product -> {
+                    Intent goToProductDetail = new Intent(Home.this, ProductDetailPage.class);
+                    goToProductDetail.putExtra("product_data", product); // Ensure Serializable or Parcelable
+                    startActivity(goToProductDetail);
+                });
+                
                 bestSellersAdapter.notifyDataSetChanged();
                 progressBarFeaturedProducts.setVisibility(View.GONE);// Notify adapter about data changes
             }

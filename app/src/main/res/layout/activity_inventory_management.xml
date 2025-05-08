@@ -45,7 +45,7 @@
                     android:id="@+id/shopName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Cebu Farm"
+                    android:text="Loading..."
                     android:textSize="24sp"
                     android:textColor="#000000"
                     android:textStyle="bold"
@@ -61,7 +61,7 @@
                         android:id="@+id/shopDesc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Manage your products and orders"
+                        android:text="Loading..."
                         android:textSize="14sp"
                         android:textColor="#666666"
                         android:paddingEnd="8dp"
@@ -147,7 +147,8 @@
             android:id="@+id/containerProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/inventory_management_product_container"
             android:orientation="vertical"
             android:padding="16dp"
@@ -240,6 +241,15 @@
                 android:layout_marginTop="10dp"
                 android:background="#E0E0E0" />
 
+            <ProgressBar
+                android:id="@+id/progressBarProds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_gravity="center" />
+
             <!-- RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_inventory"
@@ -254,7 +264,8 @@
             android:id="@+id/containerOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical"
             android:background="@drawable/inventory_management_product_container"
             android:padding="16dp"
@@ -341,6 +352,15 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
                 android:background="#E0E0E0" />
+
+            <ProgressBar
+                android:id="@+id/progressBarShops"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_gravity="center" />
 
             <!-- RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView

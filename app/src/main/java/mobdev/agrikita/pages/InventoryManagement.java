@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class InventoryManagement extends AppCompatActivity {
     ProductService productService;
     OrderService orderService;
     ShopService shopService;
+    ProgressBar progressBarProds, progressBarShops;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -101,6 +103,12 @@ public class InventoryManagement extends AppCompatActivity {
         shopImg = findViewById(R.id.shopImage);
         shopName = findViewById(R.id.shopName);
         shopDesc = findViewById(R.id.shopDesc);
+
+        progressBarProds = findViewById(R.id.progressBarProds);
+        progressBarShops = findViewById(R.id.progressBarShops);
+
+        progressBarProds.setVisibility(View.VISIBLE);
+        progressBarShops.setVisibility(View.VISIBLE);
 
         SearchView searchViewProduct = findViewById(R.id.searchProductView);
         int searchTextId = searchViewProduct.getContext().getResources()
@@ -230,11 +238,13 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onOrdersFetched(List<Orders> orders) {
                 adapterOrders.updateData(orders);
+                progressBarShops.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Exception e) {
                 Toast.makeText(InventoryManagement.this, "Failed to fetch orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBarShops.setVisibility(View.GONE);
             }
         });
     }
@@ -245,11 +255,13 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onProductsFetched(List<Products> products) {
                 adapterProducts.updateData(products);
+                progressBarProds.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Toast.makeText(InventoryManagement.this, "Failed to fetch products: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                progressBarProds.setVisibility(View.GONE);
             }
         });
     }
