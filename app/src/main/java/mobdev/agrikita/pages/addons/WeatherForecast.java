@@ -30,8 +30,8 @@ public class WeatherForecast extends AppCompatActivity {
 
     private EditText location;
     private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
-            pressure, wind, sunriseTime, sunriseDesc, sunsetTime, sunsetDesc, countryName, weatherDesc;
-    private Button changeCountryBtn;
+            pressure, wind, sunriseTime, sunsetTime, countryName, weatherDesc,  farmersTipText;
+//    private Button changeCountryBtn;
     private SwipeRefreshLayout refreshBtn;
     private ImageView weatherIcon;
     private ProgressBar loadingSpinner;
@@ -65,24 +65,25 @@ public class WeatherForecast extends AppCompatActivity {
         pressure = findViewById(R.id.pressure);
         wind = findViewById(R.id.wind);
         sunriseTime = findViewById(R.id.sunriseTime);
-        sunriseDesc = findViewById(R.id.sunriseDesc);
         sunsetTime = findViewById(R.id.sunsetTime);
-        sunsetDesc = findViewById(R.id.sunsetDesc);
-        changeCountryBtn = findViewById(R.id.fetchWeatherButton);
+//        changeCountryBtn = findViewById(R.id.fetchWeatherButton);
         weatherIcon = findViewById(R.id.weatherIcon);
         weatherDesc = findViewById(R.id.weatherDescription);
         countryName = findViewById(R.id.countryName);
         refreshBtn = findViewById(R.id.swipeRefreshLayout);
         loadingSpinner = findViewById(R.id.loadingSpinner);
+        farmersTipText = findViewById(R.id.farmersTipText);
+
+
         showCurrentDate();
         fetchWeather();
-        changeCountryBtn.setOnClickListener(view -> {
-            String cityName = location.getText().toString();
-            if (!cityName.isEmpty()) {
-                Log.v("WeatherForecastFetch", "Fetching weather for: " + cityName);
-                fetchWeather();
-            }
-        });
+//        changeCountryBtn.setOnClickListener(view -> {
+//            String cityName = location.getText().toString();
+//            if (!cityName.isEmpty()) {
+//                Log.v("WeatherForecastFetch", "Fetching weather for: " + cityName);
+//                fetchWeather();
+//            }
+//        });
         refreshBtn.setOnRefreshListener(() -> {
             fetchWeather();
         });
@@ -98,7 +99,7 @@ public class WeatherForecast extends AppCompatActivity {
         runOnUiThread(() -> {
             findViewById(R.id.loadingOverlay).setVisibility(View.VISIBLE);
             loadingSpinner.setVisibility(View.VISIBLE);
-            changeCountryBtn.setEnabled(false);
+//            changeCountryBtn.setEnabled(false);
             location.setEnabled(false);
         });
         WeatherService.getInstance(this).fetchWeatherData(new WeatherService.WeatherCallback() {
@@ -107,7 +108,7 @@ public class WeatherForecast extends AppCompatActivity {
                 runOnUiThread(() -> {
                     findViewById(R.id.loadingOverlay).setVisibility(View.GONE);
                     loadingSpinner.setVisibility(View.GONE);
-                    changeCountryBtn.setEnabled(true);
+//                    changeCountryBtn.setEnabled(true);
                     location.setEnabled(true);
 
                     if (refreshBtn.isRefreshing()) {
@@ -128,6 +129,37 @@ public class WeatherForecast extends AppCompatActivity {
                 Toast.makeText(WeatherForecast.this, "Failed to fetch weather data.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    private String generateFarmerTip(String condition, int humidity) {
+        if (condition.contains("sunny")) {
+            if (humidity < 40) {
+                return "It's sunny and dry. Water crops well to prevent dehydration.";
+            } else {
+                return "Sunny with moderate humidity. Consider light watering.";
+            }
+        } else if (condition.contains("rain")) {
+            if (humidity > 70) {
+                return "Rainy and humid. No need to water; watch for plant diseases.";
+            } else {
+                return "Rain expected. Delay irrigation and monitor moisture.";
+            }
+        } else if (condition.contains("cloudy")) {
+            if (humidity > 60) {
+                return "Cloudy and humid. Provide ventilation in greenhouses.";
+            } else {
+                return "Cloudy with dry air. Light watering might be necessary.";
+            }
+        } else if (condition.contains("storm")) {
+            return "Storm alert! Secure your crops and farm equipment.";
+        } else if (condition.contains("snow")) {
+            return "Snowy conditions. Protect plants from frost and cold.";
+        } else {
+            if (humidity > 80) {
+                return "Very humid today. Watch out for mold or mildew.";
+            } else {
+                return "Check soil and forecast before working the fields.";
+            }
+        }
     }
 
     private void updateUI() {
@@ -172,11 +204,15 @@ public class WeatherForecast extends AppCompatActivity {
                 Temperature.setText(String.format("%.0f°", temperature));
                 maxTemp.setText(String.format("Max: %.0f°", maxTemperature));
                 minTemp.setText(String.format("Min: %.0f°", minTemperature));
-                humidity.setText(String.format("Humidity: %d%%", humidityVal));
-                pressure.setText(String.format("Pressure: %d hPa", pressureVal));
-                wind.setText(String.format("Wind: %.1f km/h", windSpeed));
+                humidity.setText(String.format("%d%%", humidityVal));
+                pressure.setText(String.format("%d hPa", pressureVal));
+                wind.setText(String.format("%.1f km/h", windSpeed));
                 sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
                 sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));
+
+                String tip = generateFarmerTip(mainCondition.toLowerCase(), humidityVal);
+                farmersTipText.setText(tip);
+
             } catch (JSONException e) {
                 Log.v("WeatherForecastFetch", "JSON parsing error", e);
             }
