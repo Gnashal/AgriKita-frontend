@@ -22,58 +22,52 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".adapters.FeaturedFarmsAdapter"
+            android:name=".pages.addons.Notification"
             android:exported="false" />
         <activity
-            android:name=".adapters.BestSellersAdapter"
+            android:name=".pages.shop.CreateShop"
             android:exported="false" />
         <activity
-            android:name=".pages.Notification"
+            android:name=".pages.marketplace.ProductDetailPage"
             android:exported="false" />
         <activity
-            android:name=".pages.CreateShop"
+            android:name=".pages.index.Profile"
             android:exported="false" />
         <activity
-            android:name=".pages.ProductDetailPage"
+            android:name=".pages.welcome.CreateNewPassword"
             android:exported="false" />
         <activity
-            android:name=".pages.Profile"
+            android:name=".pages.shop.CreateProduct"
             android:exported="false" />
         <activity
-            android:name=".pages.CreateNewPassword"
+            android:name=".pages.welcome.VerifyPhoneNumber"
             android:exported="false" />
         <activity
-            android:name=".pages.CreateProduct"
+            android:name=".pages.welcome.ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".pages.VerifyPhoneNumber"
+            android:name=".pages.welcome.SignUp"
             android:exported="false" />
         <activity
-            android:name=".pages.ForgotPassword"
+            android:name=".pages.welcome.Login"
             android:exported="false" />
         <activity
-            android:name=".pages.SignUp"
+            android:name=".pages.welcome.LandingPage"
             android:exported="false" />
         <activity
-            android:name=".pages.Login"
+            android:name=".pages.marketplace.Marketplace"
             android:exported="false" />
         <activity
-            android:name=".pages.LandingPage"
+            android:name=".pages.addons.ShoppingCartPage"
             android:exported="false" />
         <activity
-            android:name=".pages.Marketplace"
+            android:name=".pages.addons.WeatherForecast"
             android:exported="false" />
         <activity
-            android:name=".pages.ShoppingCartPage"
+            android:name=".pages.shop.InventoryManagement"
             android:exported="false" />
         <activity
-            android:name=".pages.WeatherForecast"
-            android:exported="false" />
-        <activity
-            android:name=".pages.InventoryManagement"
-            android:exported="false" />
-        <activity
-            android:name=".pages.Home"
+            android:name=".pages.index.Home"
             android:exported="false">
 
             <!-- <intent-filter> -->

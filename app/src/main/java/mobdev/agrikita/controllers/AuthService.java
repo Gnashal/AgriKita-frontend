@@ -7,10 +7,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import mobdev.agrikita.api.AuthServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
-import mobdev.agrikita.models.auth.ForgotPasswordRequest;
-import mobdev.agrikita.models.auth.ForgotPasswordResponse;
-import mobdev.agrikita.models.auth.SignupRequest;
-import mobdev.agrikita.models.auth.SignupResponse;
+import mobdev.agrikita.models.auth.request.ForgotPasswordRequest;
+import mobdev.agrikita.models.auth.response.ForgotPasswordResponse;
+import mobdev.agrikita.models.auth.request.SignupRequest;
+import mobdev.agrikita.models.auth.response.SignupResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

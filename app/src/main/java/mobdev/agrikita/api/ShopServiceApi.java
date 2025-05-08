@@ -1,8 +1,8 @@
 package mobdev.agrikita.api;
 
-import mobdev.agrikita.models.shop.CreateShopResponse;
-import mobdev.agrikita.models.shop.GetFeaturedShopsResponse;
-import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
+import mobdev.agrikita.models.shop.response.CreateShopResponse;
+import mobdev.agrikita.models.shop.response.GetFeaturedShopsResponse;
+import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;

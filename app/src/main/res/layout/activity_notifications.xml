@@ -6,17 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/agrikita_background"
-    tools:context=".pages.Notification">
+    tools:context=".pages.addons.Notification">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navbar"
+            tools:layout="@layout/fragment_navbar"
+            android:name="mobdev.agrikita.pages.addons.Navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"

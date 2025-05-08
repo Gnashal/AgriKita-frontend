@@ -1,15 +1,13 @@
 package mobdev.agrikita.controllers;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.auth.NewsApiResponse;
-import mobdev.agrikita.pages.Home;
+import mobdev.agrikita.models.auth.response.NewsApiResponse;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
