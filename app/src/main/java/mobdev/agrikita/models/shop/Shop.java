@@ -1,10 +1,14 @@
 package mobdev.agrikita.models.shop;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Shop {
     private String shopId;
     private String userId;
+    @SerializedName("ImageUrl")
     private String shopImgUrl;
     private String name;
+    @SerializedName("address")
     private String addr;
     private String zipcode;
     private String desc;

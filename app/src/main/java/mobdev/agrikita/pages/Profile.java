@@ -28,10 +28,12 @@ import androidx.core.view.WindowInsetsCompat;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ImageView;
 
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
@@ -95,6 +97,13 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
+
+        Window window = getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
+        View decorView = window.getDecorView();
+        WindowInsetsControllerCompat insetsController = new WindowInsetsControllerCompat(window, decorView);
+        insetsController.setAppearanceLightStatusBars(true);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

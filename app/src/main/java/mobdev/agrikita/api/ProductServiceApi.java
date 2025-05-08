@@ -3,6 +3,7 @@ package mobdev.agrikita.api;
 import mobdev.agrikita.models.products.CreateProductRequest;
 import mobdev.agrikita.models.products.CreateProductResponse;
 import mobdev.agrikita.models.products.GetAllProductsResponse;
+import mobdev.agrikita.models.products.GetFeaturedProductsResponse;
 import mobdev.agrikita.models.products.GetProductsByShopIDResponse;
 import mobdev.agrikita.models.products.UploadProductImageResponse;
 import okhttp3.MultipartBody;
@@ -29,4 +30,6 @@ public interface ProductServiceApi {
     @GET("service/product/get-all-products")
     Call<GetAllProductsResponse> getAllProducts(@Query("shopID") String shopID);
 
+    @GET("service/product/get-best-sellers")
+    Call<GetFeaturedProductsResponse> getBestSellers();
 }

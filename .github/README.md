@@ -2,7 +2,7 @@
 
 AgriKita is a mobile application built for farmers and vendors in rural areas to connect, sell, buy, and manage their agricultural produce and operations. This frontend is developed using **Java** and **XML** for native Android, designed with simplicity, accessibility, and purpose.
 
-![System Architecture](system_architecture_agrikita.png)
+![System Architecture](agrikita_sys_arch.png)
 
 ---
 

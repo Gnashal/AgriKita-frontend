@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -18,9 +18,15 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AgrikitaFrontendNight"
+        android:theme="@style/Theme.AgrikitaFrontend"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".adapters.FeaturedFarmsAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".adapters.BestSellersAdapter"
+            android:exported="false" />
         <activity
             android:name=".pages.Notification"
             android:exported="false" />
@@ -29,7 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".pages.ProductDetailPage"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".pages.Profile"
             android:exported="false" />
@@ -56,25 +62,26 @@
             android:exported="false" />
         <activity
             android:name=".pages.Marketplace"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".pages.ShoppingCartPage"
             android:exported="false" />
         <activity
             android:name=".pages.WeatherForecast"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".pages.InventoryManagement"
             android:exported="false" />
         <activity
             android:name=".pages.Home"
             android:exported="false">
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".MainActivity"

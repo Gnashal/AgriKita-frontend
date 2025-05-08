@@ -22,8 +22,8 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.models.products.Products;
 
 public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryManagementAdapter.ProductViewHolder> implements Filterable {
-    private List<Products> productList;
-    private List<Products> productListFull;
+    private final List<Products> productList;
+    private final List<Products> productListFull;
 
     public InventoryManagementAdapter(List<Products> productList) {
         this.productList = productList;
@@ -79,7 +79,7 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
         return productFilter;
     }
 
-    private Filter productFilter = new Filter() {
+    private final Filter productFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             List<Products> filteredList = new ArrayList<>();
