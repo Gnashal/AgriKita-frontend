@@ -19,6 +19,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.time.OffsetDateTime;
@@ -129,6 +131,7 @@ public class ProductDetailPage extends AppCompatActivity {
                 .load(prodPic)
                 .placeholder(R.drawable.agrikita_logo)
                 .error(R.drawable.agrikita_logo)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(40)))
                 .into(prod_display);
         // ===========================
 
@@ -150,6 +153,7 @@ public class ProductDetailPage extends AppCompatActivity {
                         .load(sellerPic)
                         .placeholder(R.drawable.agrikita_logo)
                         .error(R.drawable.agrikita_logo)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
                         .into(seller_pfp_display);
             }
 
@@ -169,7 +173,6 @@ public class ProductDetailPage extends AppCompatActivity {
         prod_quantit_to_buy.setText(String.valueOf(product.getQuantityToBuy()));
         prod_total_price.setText("₱ "+String.format("%.2f", getTotal(product)));
         prod_shipping_cost.setText(String.format("₱ "+"%.2f", getShipping(product)));
-        Toast.makeText(this, product.getProductName() + " Added", Toast.LENGTH_SHORT).show();
     }
 
     private void subMore_prod(Products product) {
@@ -178,7 +181,6 @@ public class ProductDetailPage extends AppCompatActivity {
             prod_quantit_to_buy.setText(String.valueOf(product.getQuantityToBuy()));
             prod_total_price.setText(String.format("₱ %.2f", getTotal(product)));
             prod_shipping_cost.setText(String.format("₱ %.2f", getShipping(product)));
-            Toast.makeText(this, product.getProductName() + " Subtracted", Toast.LENGTH_SHORT).show();
         }
     }
 
