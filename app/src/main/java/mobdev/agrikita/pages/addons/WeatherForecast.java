@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONException;
@@ -23,11 +25,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import mobdev.agrikita.adapters.NewsAdapter;
+import mobdev.agrikita.controllers.NewsController;
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.WeatherService;
+import mobdev.agrikita.models.auth.response.NewsApiResponse;
+import mobdev.agrikita.pages.index.Home;
 
 public class WeatherForecast extends AppCompatActivity {
-
+    private RecyclerView newsRecyclerView;
+    private NewsAdapter newsAdapter;
     private EditText location;
     private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
             pressure, wind, sunriseTime, sunsetTime, countryName, weatherDesc,  farmersTipText;
@@ -74,9 +81,14 @@ public class WeatherForecast extends AppCompatActivity {
         loadingSpinner = findViewById(R.id.loadingSpinner);
         farmersTipText = findViewById(R.id.farmersTipText);
 
+        newsRecyclerView = findViewById(R.id.newsRecyclerView);
+        newsAdapter = new NewsAdapter();
+        newsRecyclerView.setAdapter(newsAdapter);
+        newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         showCurrentDate();
         fetchWeather();
+        fetchEverythingNews();
 //        changeCountryBtn.setOnClickListener(view -> {
 //            String cityName = location.getText().toString();
 //            if (!cityName.isEmpty()) {
@@ -86,6 +98,7 @@ public class WeatherForecast extends AppCompatActivity {
 //        });
         refreshBtn.setOnRefreshListener(() -> {
             fetchWeather();
+            fetchEverythingNews();
         });
     }
 
@@ -217,5 +230,25 @@ public class WeatherForecast extends AppCompatActivity {
                 Log.v("WeatherForecastFetch", "JSON parsing error", e);
             }
         }
+    }
+
+    private void fetchEverythingNews() {
+        NewsController.getInstance(this).fetchNews(new NewsController.NewsCallback() {
+            @Override
+            public void onSuccess(NewsApiResponse response) {
+                runOnUiThread(() -> {
+                    if (response.getArticles() != null) {
+                        newsAdapter.setArticles(response.getArticles());
+                    } else {
+                        Toast.makeText(WeatherForecast.this, "No articles found", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(WeatherForecast.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 }
