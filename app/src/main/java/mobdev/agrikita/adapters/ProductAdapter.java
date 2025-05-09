@@ -101,7 +101,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView category, price, rating, seller_name;
+        TextView category, price, rating, seller_name, productName;
         ImageView productImage;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -112,6 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             rating = itemView.findViewById(R.id.productcard_product_rating);
             seller_name = itemView.findViewById(R.id.productcard_seller_name);
             productImage = itemView.findViewById(R.id.productcard_product_image);
+            productName = itemView.findViewById(R.id.pdp_product_name);
         }
     }
 }
