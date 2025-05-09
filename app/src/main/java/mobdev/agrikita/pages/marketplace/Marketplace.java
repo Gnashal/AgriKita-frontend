@@ -7,6 +7,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -39,6 +40,7 @@ public class Marketplace extends AppCompatActivity {
     List<Products> productList = new ArrayList<>();
     ProductAdapter adapter;
     ProductService productService;
+    ProgressBar loadingSpinner;
     LinearLayout categoryBtnContainer, paginationContainer;
     ImageButton backtoHomepage;
 
@@ -68,6 +70,7 @@ public class Marketplace extends AppCompatActivity {
         categoryBtnContainer = findViewById(R.id.mkpl_category_btn_container);
         paginationContainer = findViewById(R.id.mkpl_paginator_container);
         backtoHomepage = findViewById(R.id.backToHomapage);
+        loadingSpinner =findViewById(R.id.loading_spinner);
 
         // Initialize RecyclerView (formerly GridView)
         productGridView = findViewById(R.id.product_grid_view);
@@ -76,9 +79,14 @@ public class Marketplace extends AppCompatActivity {
         productService = new ProductService(this);
         String userID = CurrentUser.getInstance(this).getShopId();
 
+
+        loadingSpinner.setVisibility(View.VISIBLE);
+
         productService.getAllProducts(userID, new ProductService.ProductCallback(){
             @Override
             public void onProductsFetched(List<Products> products) {
+
+                loadingSpinner.setVisibility(View.GONE);
                 productList = products;
 
                 adapter = new ProductAdapter(Marketplace.this, productList);
@@ -99,6 +107,8 @@ public class Marketplace extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
+
+                loadingSpinner.setVisibility(View.GONE);
                 Toast.makeText(Marketplace.this, "Failed fetch data", Toast.LENGTH_LONG).show();
             }
         });

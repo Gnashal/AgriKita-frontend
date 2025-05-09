@@ -112,6 +112,17 @@
                 android:orientation="horizontal">
             </LinearLayout>
         </HorizontalScrollView>
+        <ProgressBar
+            android:id="@+id/loading_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- RecyclerView for products (instead of GridView) -->
         <androidx.recyclerview.widget.RecyclerView

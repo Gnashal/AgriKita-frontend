@@ -31,20 +31,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="20dp"
+            android:padding="10dp"
             android:background="@drawable/product_detail_background">
 
             <LinearLayout
                 android:id="@+id/pdp_back_to_mrktp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp"
+                android:padding="4dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
                     app:srcCompat="@drawable/back_to_marketplace_arrow" />
 
                 <TextView
@@ -53,96 +53,132 @@
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:textColor="@color/agrikita_green"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     android:text="Back to Marketplace"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:padding="6dp"
-                android:layout_margin="10dp"
+                android:layout_height="220dp"
+                android:padding="4dp"
+                android:layout_margin="6dp"
+                android:background="@drawable/pdp_image_border"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/pdp_prod_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="10dp"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/test_tomato" />
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:background="@drawable/product_card_rounded_edges"
-                android:orientation="vertical">
+                android:layout_margin="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/white">
 
-                <TextView
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="About the Seller"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:layout_height="wrap_content">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:orientation="horizontal">
+                    android:padding="16dp"
+                    android:background="#48994E"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/pdp_seller_pfp"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:srcCompat="@drawable/agrikita_logo" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="💡Know your seller!"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:paddingBottom="8dp" />
+
+
+                    <ProgressBar
+                        android:id="@+id/loading_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/pdp_seller_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TextView"
-                            android:textColor="@color/black"
-                            android:textSize="22sp" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/pdp_seller_pfp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginEnd="12dp"
+                            android:scaleType="centerCrop"
+                            android:padding="4dp"
+                            app:shapeAppearanceOverlay="@style/CircularImage"/>
 
-                        <TextView
-                            android:id="@+id/pdp_seller_start_date"
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray"
-                            android:text="TextView"
-                            android:textSize="18sp" />
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/pdp_seller_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/pdp_seller_start_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/pdp_seller_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:justificationMode="inter_word" />
+
                 </LinearLayout>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/pdp_seller_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:justificationMode="inter_word"
-                    android:textColor="@color/gray"
-                    android:textSize="14sp"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a mauris a lorem convallis commodo in non erat. Aenean suscipit congue tellus, et pulvinar velit aliquet sit amet. Integer sagittis neque id vehicula fermentum. Etiam euismod risus turpis. Mauris dignissim, mauris non ornare consectetur, "/>
 
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/pdp_product_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:background="@drawable/pdp_category_tag_background"
-                android:padding="14dp"
-                android:text="TextView"
-                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/round_green_background_latest"
+                android:padding="7dp"
+                android:textSize="12sp"
                 android:textAlignment="center"
                 android:textColor="@color/black" />
 
@@ -157,9 +193,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
-                    android:text="TextView"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -169,8 +205,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         app:srcCompat="@drawable/product_card_star" />
@@ -180,18 +216,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:text="TextView"
                         android:textColor="@color/gray"
-                        android:textSize="18sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_instockamt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:text="0 In Stock"
                         android:textColor="@color/gray"
-                        android:textSize="18sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
@@ -207,49 +241,51 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:text="TextView"
                         android:textColor="@color/agrikita_green"
-                        android:textSize="25sp" />
+                        android:textSize="15sp" />
 
                     <TextView
+                        android:id="@+id/unitMeasurement"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/gray"
-                        android:text="per kg"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"
                     android:text="Description"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/pdp_prod_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:paddingTop="10dp"
                     android:justificationMode="inter_word"
-                    android:textSize="20sp"
-                    android:textColor="@color/gray"
-                    android:text="Lorem ipsum dolor molestie vulputate odio nec dictum. Fusce sagittis viverra porttitor. Phasellus eget massa sit amet velit semper ultrices et id augue. Donec vitae ultricies ipsum. Duis non ligula molestie, bibendum sem sit amet, convallis eros. Ut pretium metus nulla, ut maximus ante ornare ut. Aenean vulputate est vulputate auctor suscipit. Donec lectus arcu, fringilla ut mattis at, ultrices et mauris. Nulla arcu justo, volutpat at eleifend at, viverra aliquam nibh. Duis aliquet lorem vitae molestie elementum. Aliquam gravida bibendum nunc, eget facilisis enim rutrum eu. Nullam felis sem, euismod quis accumsan vitae," />
+                    android:textSize="14sp"
+                    android:textColor="@color/gray"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
+                    android:textStyle="bold"
                     android:text="Product Details"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="16sp" />
 
                 <!--Product Origin-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -258,13 +294,13 @@
                         android:layout_marginRight="10dp"
                         android:text="Origin:"
                         android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_origin"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="20sp"
+                        android:textSize="14sp"
                         android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
@@ -273,7 +309,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:layout_marginTop="2dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -282,13 +318,13 @@
                         android:layout_marginRight="10dp"
                         android:text="Freshness:"
                         android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_freshness"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="20sp"
+                        android:textSize="14sp"
                         android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
@@ -297,7 +333,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:layout_marginTop="3dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -306,13 +342,13 @@
                         android:layout_marginRight="10dp"
                         android:text="Storage:"
                         android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/pdp_prod_storage"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="20sp"
+                        android:textSize="14sp"
                         android:textColor="@color/gray"
                         android:text="TextView" />
                 </LinearLayout>
@@ -329,48 +365,53 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="10dp"
                     android:text="Quantity"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/pdp_add_btn"
-                        style="@style/CounterButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="45dp"
                         android:text="+"
-                        android:textColor="@color/black" />
+                        android:backgroundTint="@color/agrikita_green"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/pdp_prod_quantity_to_buy"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="35dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
+                        android:gravity="center"
                         android:background="@drawable/pdp_prodquantity_counter_style"
-                        android:paddingLeft="80dp"
-                        android:paddingRight="80dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
                         android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="24sp" />
+                        android:textSize="16sp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/pdp_sub_btn"
-                        style="@style/CounterButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="45dp"
                         android:text="-"
-                        android:textColor="@color/black" />
+                        android:backgroundTint="#E05050"
+                        android:textColor="@color/white"/>
                 </LinearLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -382,7 +423,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="6dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -390,7 +430,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="6dp"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textColor="@color/gray"
                         android:text="SubTotal:" />
 
@@ -400,14 +440,13 @@
                         android:layout_height="wrap_content"
                         android:padding="6dp"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:text="0" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="6dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -415,7 +454,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="6dp"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textColor="@color/gray"
                         android:text="Shipping:" />
 
@@ -424,121 +463,145 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="6dp"
-                        android:textSize="20sp"
-                        android:textColor="@color/gray"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
                         android:text="0" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:padding="6dp"
-                    android:layout_margin="4dp"
-                    android:background="@drawable/pdp_details_styling"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/pdp_addtocart_btn"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
                         style="@style/pdp_ProductCardAddToCartButton"
+                        android:textSize="12sp"
                         android:text="Add to Cart" />
 
                     <ImageButton
                         android:id="@+id/pdp_heart_btn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        style="@style/WhiteOutlinedButton"
-                        app:srcCompat="@drawable/pdp_heart_icon" />
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:paddingStart="50dp"
+                        android:layout_weight="0.75"
+                        android:src="@drawable/heart"
+                        android:background="@null"
+                        android:scaleType="centerInside"/>
 
                     <ImageButton
                         android:id="@+id/pdp_share_btn"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        style="@style/WhiteOutlinedButton"
-                        app:srcCompat="@drawable/pdp_share_icon" />
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="0.75"
+                        android:src="@drawable/share"
+                        android:background="@null"
+                        android:scaleType="centerInside" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="6dp"
+                android:layout_height="195dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/pdp_details_styling"
+                android:layout_marginBottom="50dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:layout_margin="2dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="6dp"
-                        app:srcCompat="@drawable/pdp_fast_delivery_icon" />
+                    android:layout_margin="6dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="6dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="6dp"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:text="Fast and Reliable Shipping" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:padding="6dp"
+                            app:srcCompat="@drawable/delivery_truck" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="14sp"
-                            android:text="2-3 days delivery to Metro Manila" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Fast and Reliable Shipping"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="2-3 days delivery to Metro Manila"
+                                android:textColor="@color/gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="6dp"
-                        app:srcCompat="@drawable/pdp_protectedgoods_icon" />
+                    android:layout_margin="6dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="6dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="6dp"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            android:text="Freshness Guarantee" />
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:padding="6dp"
+                            app:srcCompat="@drawable/encrypted" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="14sp"
-                            android:text="Products verified for quality and freshness " />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="6dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Freshness Guarantee"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Products verified for quality and freshness"
+                                android:textColor="@color/gray"
+                                android:textSize="14sp" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
