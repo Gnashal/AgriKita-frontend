@@ -33,7 +33,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="10dp" >
+            android:gravity="center_vertical"
+            android:paddingLeft="10sp" >
+
+            <ImageButton
+                android:id="@+id/backToHomapage"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:backgroundTint="@android:color/transparent"
+                app:srcCompat="@drawable/back_to_home" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,16 +68,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="5dp"
+                android:padding="5sp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="5dp"
-                    android:padding="1dp"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
+                    android:layout_margin="5sp"
+                    android:padding="1sp"
                     android:background="@drawable/round_search_icon"
                     android:clipToOutline="true">
 
@@ -86,21 +94,21 @@
                     android:hint="What are you looking for?"
                     android:inputType="text"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textSize="15dp" />
             </LinearLayout>
         </FrameLayout>
 
         <!-- Category Filter -->
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="40sp"
             android:fillViewport="true">
 
             <LinearLayout
                 android:id="@+id/mkpl_category_btn_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="5dp"
+                android:padding="5sp"
                 android:orientation="horizontal">
             </LinearLayout>
         </HorizontalScrollView>
@@ -109,15 +117,15 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/product_grid_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp" />
+            android:paddingTop="10sp"
+            android:paddingBottom="10sp" />
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="40sp"
             android:fillViewport="true"
             android:layout_gravity="center_vertical"
             android:scrollbars="none">

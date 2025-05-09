@@ -3,6 +3,7 @@ package mobdev.agrikita.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -87,6 +90,7 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
                 .load(imageURL)
                 .placeholder(R.drawable.agrikita_logo)
                 .error(R.drawable.agrikita_logo)
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
                 .into(holder.coutprod_imgv);
 
         holder.add_btn.setOnClickListener(v -> {
