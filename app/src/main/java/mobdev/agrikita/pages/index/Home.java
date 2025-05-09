@@ -63,7 +63,7 @@ import mobdev.agrikita.pages.welcome.Login;
 import okhttp3.OkHttpClient;
 
 public class Home extends AppCompatActivity {
-    private TextView temperatureText, weatherDescriptionText, location, dateText;
+    private TextView temperatureText, weatherDescriptionText, location, dateText, farmersTipText;
     private ImageView profileButton, weatherIcon;
     private LinearLayout marketplaceLayout, ordersLayout, shopLayout, toWeather, cartLayout, profileLayout;
     private RecyclerView newsRecyclerView, bestSellersView, featuredShopsView;
@@ -125,6 +125,7 @@ public class Home extends AppCompatActivity {
         featuredShopsView = findViewById(R.id.featuredFarms);
         progressBarFeaturedProducts = findViewById(R.id.progressBarProds);
         getProgressBarFeaturedShops = findViewById(R.id.progressBarShops);
+        farmersTipText = findViewById(R.id.farmersTipText);
 
         progressBarFeaturedProducts.setVisibility(View.VISIBLE);
         getProgressBarFeaturedShops.setVisibility(View.VISIBLE);
@@ -200,6 +201,38 @@ public class Home extends AppCompatActivity {
             }
         });
     }
+
+    private String generateFarmerTip(String condition, int humidity) {
+        if (condition.contains("sunny")) {
+            if (humidity < 40) {
+                return "It's sunny and dry. Water crops well to prevent dehydration.";
+            } else {
+                return "Sunny with moderate humidity. Consider light watering.";
+            }
+        } else if (condition.contains("rain")) {
+            if (humidity > 70) {
+                return "Rainy and humid. No need to water; watch for plant diseases.";
+            } else {
+                return "Rain expected. Delay irrigation and monitor moisture.";
+            }
+        } else if (condition.contains("cloudy")) {
+            if (humidity > 60) {
+                return "Cloudy and humid. Provide ventilation in greenhouses.";
+            } else {
+                return "Cloudy with dry air. Light watering might be necessary.";
+            }
+        } else if (condition.contains("storm")) {
+            return "Storm alert! Secure your crops and farm equipment.";
+        } else if (condition.contains("snow")) {
+            return "Snowy conditions. Protect plants from frost and cold.";
+        } else {
+            if (humidity > 80) {
+                return "Very humid today. Watch out for mold or mildew.";
+            } else {
+                return "Check soil and forecast before working the fields.";
+            }
+        }
+    }
     private void updateUI() {
         String result = WeatherService.getInstance(this).getJsonWeatherString();
         if (result != null) {
@@ -208,8 +241,8 @@ public class Home extends AppCompatActivity {
 
                 JSONObject main = jsonObject.getJSONObject("main");
                 double temperature = main.getDouble("temp");
-                /*int humidityVal = main.getInt("humidity");
-                int pressureVal = main.getInt("pressure");*/
+                int humidityVal = main.getInt("humidity");
+                /*int pressureVal = main.getInt("pressure");*/
 
                 /*JSONObject windObj = jsonObject.getJSONObject("wind");
                 double windSpeed = windObj.getDouble("speed");*/
@@ -237,6 +270,9 @@ public class Home extends AppCompatActivity {
                 temperatureText.setText(String.format("%.0f°C", temperature));
                 location.setText(fullCountryName);
 
+
+                String tip = generateFarmerTip(mainCondition.toLowerCase(), humidityVal);
+                farmersTipText.setText(tip);
                 /*Temperature.setText(String.format("%.0f°", temperature));
                 maxTemp.setText(String.format("Max: %.0f°", maxTemperature));
                 minTemp.setText(String.format("Min: %.0f°", minTemperature));
