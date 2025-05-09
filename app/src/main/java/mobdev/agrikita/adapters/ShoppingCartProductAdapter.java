@@ -19,11 +19,14 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 
 public class ShoppingCartProductAdapter extends BaseAdapter {
     private Context context;
     private List<Products> productList;
+    ShopService shopService;
 
     public ShoppingCartProductAdapter(Context context, List<Products> productList) {
         this.context = context;
@@ -81,8 +84,21 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
         holder.coutprod_name.setText(singleProd.getProductName());
         holder.coutprod_price.setText("₱ "+String.format("%.2f", singleProd.getPrice() * singleProd.getQuantityToBuy()));
         holder.coutprod_perprice.setText("₱ "+String.format("%.2f", singleProd.getPrice()));
-        holder.coutprod_seller.setText(singleProd.getShopID());
         holder.coutprod_quantity.setText(String.valueOf(singleProd.getQuantityToBuy()));
+
+        shopService = new ShopService(context);
+
+        shopService.getShopById(singleProd.getShopID(), new ShopService.ShopCallback() {
+            @Override
+            public void onSuccess(GetShopByShopIDResponse shop) {
+                holder.coutprod_seller.setText(shop.getName());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                holder.coutprod_seller.setText("AgriKita Fetching");
+            }
+        });
 
         String imageURL = singleProd.getImageUrl();
 
