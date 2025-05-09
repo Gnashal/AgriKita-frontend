@@ -42,7 +42,7 @@ public class Marketplace extends AppCompatActivity {
     LinearLayout categoryBtnContainer, paginationContainer;
     ImageButton backtoHomepage;
 
-    private static final int PAGE_SIZE = 6;
+    private static final int PAGE_SIZE = 20;
     private int currentPage = 0;
     private List<Products> displayedList = new ArrayList<>();
 

@@ -59,11 +59,11 @@
             android:exported="false" />
         <activity
             android:name=".pages.marketplace.Marketplace"
-            android:exported="true" >
-             <intent-filter>
+            android:exported="false" >
+             <!--<intent-filter>
                  <action android:name="android.intent.action.MAIN" />
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+             </intent-filter>-->
         </activity>
         <activity
             android:name=".pages.addons.ShoppingCartPage"
@@ -84,11 +84,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -7,6 +7,7 @@ import java.io.File;
 
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.api.UserServiceApi;
+import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.response.FetchUserByIDResponse;
 import mobdev.agrikita.models.user.request.UpdatePasswordRequest;
 import mobdev.agrikita.models.user.response.UpdatePasswordResponse;
@@ -34,6 +35,7 @@ public class UserService {
             public void onResponse(retrofit2.Call<UserResponse> call, retrofit2.Response<UserResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body());
+                    Log.v("UserService", "User data fetched successfully: "+ response.body().toString());
                 } else {
                     callback.onFailure("Failed to fetch user data. Code: " + response.code());
                 }

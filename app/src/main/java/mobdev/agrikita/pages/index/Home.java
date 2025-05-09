@@ -372,17 +372,32 @@ public class Home extends AppCompatActivity {
                     .load(currentUser.getImageUrl())
                     .circleCrop()
                     .into(profileButton);
+        } else {
+            Glide.with(this)
+                    .load(R.drawable.profile)
+                    .circleCrop()
+                    .into(profileButton);
         }
     }
 
     private void saveToPrefs() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("UserID", CurrentUser.getInstance(this).getUid());
-        editor.putBoolean("HasShop", CurrentUser.getInstance(this).hasShop());
-        if (CurrentUser.getInstance(this).hasShop()) {
-            editor.putString("ShopID", CurrentUser.getInstance(this).getShopId());
+        CurrentUser currentUser = CurrentUser.getInstance(this);
+        Log.v("CurrentUser", "Fetched user: " + currentUser.toString());
+        editor.putString("UserID", currentUser.getUid());
+        if (currentUser.hasShop()) {
+            String shopId = currentUser.getShopId();
+            if (shopId != null) {
+                editor.putBoolean("HasShop", true);
+                editor.putString("ShopID", shopId);
+            } else {
+                editor.putBoolean("HasShop", false);
+            }
+        } else {
+            editor.putBoolean("HasShop", false);
         }
+
         editor.apply();
     }
 
