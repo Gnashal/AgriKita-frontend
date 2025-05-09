@@ -4,14 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#F9F2E5"
-    tools:context=".pages.Profile"
+    tools:context=".pages.index.Profile"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navbar"
         tools:layout="@layout/fragment_navbar"
-        android:name="mobdev.agrikita.pages.Navbar"
+        android:name="mobdev.agrikita.pages.addons.Navbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />

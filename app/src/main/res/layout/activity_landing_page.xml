@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F9F2E5"
-    tools:context=".pages.LandingPage"
+    tools:context=".pages.welcome.LandingPage"
     tools:ignore="ExtraText">
 
     <ImageView

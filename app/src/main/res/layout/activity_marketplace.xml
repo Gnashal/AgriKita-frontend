@@ -6,12 +6,12 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pages.Marketplace"
+    tools:context=".pages.marketplace.Marketplace"
     android:background="@color/agrikita_background">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navbar_added"
-        android:name="mobdev.agrikita.pages.Navbar"
+        android:name="mobdev.agrikita.pages.addons.Navbar"
         tools:layout="@layout/fragment_navbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

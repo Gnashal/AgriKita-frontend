@@ -1,16 +1,14 @@
 package mobdev.agrikita.controllers;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.List;
 
-import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.RetrofitClient;
 import mobdev.agrikita.api.ShopServiceApi;
-import mobdev.agrikita.models.shop.CreateShopResponse;
-import mobdev.agrikita.models.shop.GetFeaturedShopsResponse;
-import mobdev.agrikita.models.shop.GetShopByShopIDResponse;
+import mobdev.agrikita.models.shop.response.CreateShopResponse;
+import mobdev.agrikita.models.shop.response.GetFeaturedShopsResponse;
+import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 import mobdev.agrikita.models.shop.Shop;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
