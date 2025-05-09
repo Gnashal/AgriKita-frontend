@@ -438,9 +438,12 @@ public class Home extends AppCompatActivity {
         productService.getFeaturedProducts(new ProductService.ProductCallback() {
             @Override
             public void onProductsFetched(List<Products> products) {
-                // Clear existing products and add the new products to the list
+                // Clear the existing list before adding the new products
                 productsList.clear();
-                productsList.addAll(products);
+
+                // Add only the first 6 products to the list
+                int productCount = Math.min(products.size(), 6); // To handle cases where less than 6 products are fetched
+                productsList.addAll(products.subList(0, productCount));
 
                 // Notify the adapter that the data has been updated
                 productsAdapter.notifyDataSetChanged();
@@ -453,12 +456,11 @@ public class Home extends AppCompatActivity {
             public void onFailure(Throwable throwable) {
                 // Log the error if the data fetch fails
                 Log.e("ProductList", "Error fetching product", throwable);
-
-                // Hide the progress bar if an error occurs
                 progressBarFeaturedProducts.setVisibility(View.GONE);
             }
         });
     }
+
 
 
 }
