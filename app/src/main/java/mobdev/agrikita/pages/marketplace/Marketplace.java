@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class Marketplace extends AppCompatActivity {
     ProductService productService;
     ProgressBar loadingSpinner;
     LinearLayout categoryBtnContainer, paginationContainer;
-    ImageButton backtoHomepage;
+    ImageView backtoHomepage;
 
     private static final int PAGE_SIZE = 6;
     private int currentPage = 0;
@@ -69,7 +70,7 @@ public class Marketplace extends AppCompatActivity {
 
         categoryBtnContainer = findViewById(R.id.mkpl_category_btn_container);
         paginationContainer = findViewById(R.id.mkpl_paginator_container);
-        backtoHomepage = findViewById(R.id.backToHomapage);
+        backtoHomepage = findViewById(R.id.back_btn);
         loadingSpinner =findViewById(R.id.loading_spinner);
 
         // Initialize RecyclerView (formerly GridView)

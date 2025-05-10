@@ -1,7 +1,5 @@
 package mobdev.agrikita.pages.shop;
 
-import static java.security.AccessController.getContext;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -45,6 +43,7 @@ import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.response.UserResponse;
 import mobdev.agrikita.controllers.UserService;
+import mobdev.agrikita.pages.index.Home;
 
 public class InventoryManagement extends AppCompatActivity {
     private RecyclerView recyclerProductView;
@@ -58,7 +57,7 @@ public class InventoryManagement extends AppCompatActivity {
     LinearLayout layoutOrders;
 
     TextView tabProducts, shopName, shopDesc, emptyProductText, emptyOrderText;
-    ImageView shopImg;
+    ImageView shopImg, back_btn;
     LinearLayout tabOrders;
     Button createProduct;
     ProductService productService;
@@ -99,7 +98,7 @@ public class InventoryManagement extends AppCompatActivity {
 
         recyclerProductView = findViewById(R.id.recycler_view_inventory);
         recyclerOrderView = findViewById(R.id.recycler_view_order);
-
+        back_btn =findViewById(R.id.back_btn);
         createProduct = findViewById(R.id.addProductButton);
 
         shopImg = findViewById(R.id.shopImage);
@@ -238,6 +237,9 @@ public class InventoryManagement extends AppCompatActivity {
             intent.putExtra("product", product);
             startActivity(intent);
         });
+
+//        HomeNavigation
+        back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
     }
 
     private void fetchOrders(String shopId) {
