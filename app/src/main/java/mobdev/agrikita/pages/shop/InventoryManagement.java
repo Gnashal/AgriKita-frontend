@@ -56,7 +56,7 @@ public class InventoryManagement extends AppCompatActivity {
     LinearLayout layoutProducts;
     LinearLayout layoutOrders;
 
-    TextView tabProducts, shopName, shopDesc;
+    TextView tabProducts, shopName, shopDesc, emptyProductText, emptyOrderText;
     ImageView shopImg, back_btn;
     LinearLayout tabOrders;
     Button createProduct;
@@ -82,6 +82,9 @@ public class InventoryManagement extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        emptyProductText = findViewById(R.id.emptyProductText);
+        emptyOrderText = findViewById(R.id.emptyOrderText);
 
         productService = new ProductService(this);
         orderService = new OrderService(this);
@@ -150,7 +153,6 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse response) {
                 String shopId = user.getShopId();
-                Toast.makeText(InventoryManagement.this, "Shop ID" + shopId, Toast.LENGTH_SHORT).show();
                 fetchProducts(shopId);
                 fetchOrders(shopId);
                 fetchShopInfo(shopId);
@@ -230,6 +232,12 @@ public class InventoryManagement extends AppCompatActivity {
             }
         });
 
+        adapterProducts.setOnItemClickListener(product -> {
+            Intent intent = new Intent(InventoryManagement.this, ManageProducts.class);
+            intent.putExtra("product", product);
+            startActivity(intent);
+        });
+
 //        HomeNavigation
         back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
     }
@@ -239,6 +247,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onOrdersFetched(List<Orders> orders) {
                 adapterOrders.updateData(orders);
+                checkAdapterOrdersSize();
                 progressBarShops.setVisibility(View.GONE);
             }
 
@@ -256,6 +265,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onProductsFetched(List<Products> products) {
                 adapterProducts.updateData(products);
+                checkAdapterProductsSize();
                 progressBarProds.setVisibility(View.GONE);
             }
 
@@ -290,5 +300,25 @@ public class InventoryManagement extends AppCompatActivity {
                 Toast.makeText(InventoryManagement.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkAdapterOrdersSize() {
+        if (adapterOrders.getItemCount() == 0) {
+            emptyOrderText.setVisibility(View.VISIBLE);
+            recyclerOrderView.setVisibility(View.GONE);
+        } else {
+            emptyOrderText.setVisibility(View.GONE);
+            recyclerOrderView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkAdapterProductsSize() {
+        if (adapterProducts.getItemCount() == 0) {
+            emptyProductText.setVisibility(View.VISIBLE);
+            recyclerProductView.setVisibility(View.GONE);
+        } else {
+            emptyProductText.setVisibility(View.GONE);
+            recyclerProductView.setVisibility(View.VISIBLE);
+        }
     }
 }
