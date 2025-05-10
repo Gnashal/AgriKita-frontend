@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +32,7 @@ import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.response.UserResponse;
+import mobdev.agrikita.pages.index.Home;
 
 public class Marketplace extends AppCompatActivity {
 
@@ -37,7 +40,9 @@ public class Marketplace extends AppCompatActivity {
     List<Products> productList = new ArrayList<>();
     ProductAdapter adapter;
     ProductService productService;
+    ProgressBar loadingSpinner;
     LinearLayout categoryBtnContainer, paginationContainer;
+    ImageButton backtoHomepage;
 
     private static final int PAGE_SIZE = 6;
     private int currentPage = 0;
@@ -64,54 +69,56 @@ public class Marketplace extends AppCompatActivity {
 
         categoryBtnContainer = findViewById(R.id.mkpl_category_btn_container);
         paginationContainer = findViewById(R.id.mkpl_paginator_container);
+        backtoHomepage = findViewById(R.id.backToHomapage);
+        loadingSpinner =findViewById(R.id.loading_spinner);
 
         // Initialize RecyclerView (formerly GridView)
         productGridView = findViewById(R.id.product_grid_view);
         productGridView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         productService = new ProductService(this);
-        CurrentUser thisUser  = CurrentUser.getInstance(this);
+        String userID = CurrentUser.getInstance(this).getShopId();
 
-        thisUser.fetchUserData(CurrentUser.getInstance(this).getUid(), new UserService.FetchUserCallback() {
+
+        loadingSpinner.setVisibility(View.VISIBLE);
+
+        productService.getAllProducts(userID, new ProductService.ProductCallback(){
             @Override
-            public void onSuccess(UserResponse userResponse) {
-                String userID = thisUser.getUid();
+            public void onProductsFetched(List<Products> products) {
 
-                productService.getAllProducts(userID, new ProductService.ProductCallback(){
-                    @Override
-                    public void onProductsFetched(List<Products> products) {
-                        productList = products;
+                loadingSpinner.setVisibility(View.GONE);
+                productList = products;
 
-                        adapter = new ProductAdapter(Marketplace.this, productList);
-                        productGridView.setAdapter(adapter);
+                adapter = new ProductAdapter(Marketplace.this, productList);
+                productGridView.setAdapter(adapter);
 
-                        adapter.setOnItemClickListener(product -> {
-                            Intent go_to_product_detail = new Intent(Marketplace.this, ProductDetailPage.class);
+                adapter.setOnItemClickListener(product -> {
+                    Intent go_to_product_detail = new Intent(Marketplace.this, ProductDetailPage.class);
 
-                            go_to_product_detail.putExtra("product_data", product);
+                    go_to_product_detail.putExtra("product_data", product);
 
-                            startActivity(go_to_product_detail);
-                        });
-
-                        generateCategoryBtn();
-                        generatePaginationButtons();
-                        showPage(0);
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Toast.makeText(Marketplace.this, "Failed fetch data", Toast.LENGTH_LONG).show();
-                    }
+                    startActivity(go_to_product_detail);
                 });
+
+                generateCategoryBtn();
+                generatePaginationButtons();
+                showPage(0);
             }
 
             @Override
-            public void onFailure(String errorMessage) {
-                Toast.makeText(Marketplace.this, "Failed to fetch user uid: " + errorMessage, Toast.LENGTH_SHORT).show();
+            public void onFailure(Throwable t) {
+
+                loadingSpinner.setVisibility(View.GONE);
+                Toast.makeText(Marketplace.this, "Failed fetch data", Toast.LENGTH_LONG).show();
             }
         });
 
-
+        backtoHomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Marketplace.this, Home.class));
+            }
+        });
     }
 
     private void filterProductsByCategory(String category) {

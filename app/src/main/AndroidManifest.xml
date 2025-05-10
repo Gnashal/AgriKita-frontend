@@ -62,7 +62,8 @@
             android:exported="false" />
         <activity
             android:name=".pages.marketplace.Marketplace"
-            android:exported="false" />
+            android:exported="false" >
+        </activity>
         <activity
             android:name=".pages.addons.ShoppingCartPage"
             android:exported="false" />
@@ -75,11 +76,8 @@
         <activity
             android:name=".pages.index.Home"
             android:exported="false">
-
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
@@ -88,7 +86,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
