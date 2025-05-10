@@ -1,6 +1,7 @@
 package mobdev.agrikita.pages.addons;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +45,7 @@ public class WeatherForecast extends AppCompatActivity {
             predictionText;
 //    private Button changeCountryBtn;
     private SwipeRefreshLayout refreshBtn;
-    private ImageView weatherIcon;
+    private ImageView weatherIcon, back_btn;
     private ProgressBar loadingSpinner;
 
 
@@ -74,6 +75,7 @@ public class WeatherForecast extends AppCompatActivity {
         minTemp = findViewById(R.id.minTemp);
         humidity = findViewById(R.id.humidity);
         pressure = findViewById(R.id.pressure);
+        back_btn = findViewById(R.id.back_btn);
         wind = findViewById(R.id.wind);
         sunriseTime = findViewById(R.id.sunriseTime);
         sunsetTime = findViewById(R.id.sunsetTime);
@@ -92,6 +94,7 @@ public class WeatherForecast extends AppCompatActivity {
         showCurrentDate();
         fetchWeather();
         fetchEverythingNews();
+        back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
 //        changeCountryBtn.setOnClickListener(view -> {
 //            String cityName = location.getText().toString();
 //            if (!cityName.isEmpty()) {
