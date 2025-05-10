@@ -1,10 +1,12 @@
-package mobdev.agrikita.pages.addons;
+package mobdev.agrikita.pages.addons.address;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +17,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.adapters.AddressAdapter;
+import mobdev.agrikita.models.address.AddressList;
 
-public class Addresses extends AppCompatActivity {
-    ListView addressList;
-    ImageButton addAddress, backBtn;
+public class AddressPage extends AppCompatActivity {
+    private ListView addressListView;
+    private TextView noAddressText;
+    private ImageButton addAddress, backBtn;
+    private AddressAdapter addressAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +42,26 @@ public class Addresses extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        addressList = findViewById(R.id.address_list_view);
+        addressListView = findViewById(R.id.address_list_view);
         addAddress = findViewById(R.id.addNewAddress);
         backBtn = findViewById(R.id.backBtn);
+        noAddressText = findViewById(R.id.noAddressText);
+        addAddress.setOnClickListener(v -> startActivity(new Intent(this, AddAddress.class)));
+        backBtn.setOnClickListener(v -> finish());
+        setupView();
+
+    }
+
+    private void setupView() {
+        if (AddressList.getInstance().getAddresses().isEmpty()) {
+            noAddressText.setVisibility(View.VISIBLE);
+        } else {
+            noAddressText.setVisibility(View.GONE);
+            setupAdapter();
+        }
+    }
+    private void setupAdapter() {
+        addressAdapter = new AddressAdapter(this, AddressList.getInstance().getAddresses());
+        addressListView.setAdapter(addressAdapter);
     }
 }

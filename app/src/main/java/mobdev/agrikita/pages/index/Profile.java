@@ -41,6 +41,7 @@ import mobdev.agrikita.models.user.response.UpdateProfileImageResponse;
 import mobdev.agrikita.models.user.response.UpdateUserResponse;
 import mobdev.agrikita.models.user.response.UserResponse;
 import mobdev.agrikita.controllers.UserService;
+import mobdev.agrikita.pages.addons.address.AddressPage;
 import mobdev.agrikita.pages.welcome.Login;
 
 import android.widget.Spinner;
@@ -62,6 +63,7 @@ public class Profile extends AppCompatActivity {
     private LinearLayout profileLayout, securityLayout, preferencesLayout;
     private MaterialButton btnProfile, btnSecurity, btnPreferences, btnLogout, btnSaveChanges;
     private CurrentUser currentUser;
+    private Button toMyAddress;
 
     private UserService userService;
     /*Permissions and Image handling*/
@@ -130,6 +132,7 @@ public class Profile extends AppCompatActivity {
         securityLayout = findViewById(R.id.securityLayout);
         preferencesLayout = findViewById(R.id.preferencesLayout);
 
+        toMyAddress = findViewById(R.id.addressBtn);
         btnLogout = findViewById(R.id.logout_button);
         btnProfile = findViewById(R.id.btnProfile);
         btnSecurity = findViewById(R.id.btnSecurity);
@@ -165,6 +168,7 @@ public class Profile extends AppCompatActivity {
             updateButtonColors(btnPreferences);
         });
         btnSaveChanges.setOnClickListener(v -> updateUser());
+        toMyAddress.setOnClickListener(v -> startActivity(new Intent(Profile.this, AddressPage.class)));
 
         refresh.setOnRefreshListener(() -> {
             fetchUserData();
@@ -281,11 +285,6 @@ public class Profile extends AppCompatActivity {
                     .circleCrop()
                     .into(userProfilePicture);
 
-        }else {
-            Glide.with(this)
-                    .load(R.drawable.profile)
-                    .circleCrop()
-                    .into(userProfilePicture);
         }
     }
     private void fetchUserData() {

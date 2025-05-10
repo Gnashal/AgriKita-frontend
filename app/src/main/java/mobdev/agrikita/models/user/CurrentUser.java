@@ -16,9 +16,11 @@ public class CurrentUser {
     private String uid;
     private Map<String, Object> userData;
     private Map<String, Object> shopData;
+    private Context context;
 
     // Private constructor to enforce singleton
     private CurrentUser(Context context) {
+        this.context = context;
         userService = new UserService(context);
     }
 
@@ -91,7 +93,10 @@ public class CurrentUser {
     }
 
     public String getShopId() {
-        return shopData != null ? (String) shopData.get("id") : null;
+        if (shopData != null && shopData.get("id") instanceof String) {
+            return (String) shopData.get("id");
+        }
+        return null;
     }
 
     public void fetchUserData(String uid, final UserService.FetchUserCallback callback) {
@@ -100,6 +105,8 @@ public class CurrentUser {
             public void onSuccess(UserResponse userResponse) {
                 setUserData(userResponse.user);
                 setShopData(userResponse.shop);
+                Log.v("CurrentUser", "Shop data: " + CurrentUser.getInstance(context).getShopData());
+                Log.v("CurrentUser", "User data: " + CurrentUser.getInstance(context).getUserData());
                 setUid(uid);
                 Log.v("UserSetup", "User and shop data successfully set.");
                 if (callback != null) callback.onSuccess(userResponse);
