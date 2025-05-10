@@ -57,7 +57,7 @@ public class InventoryManagement extends AppCompatActivity {
     LinearLayout layoutProducts;
     LinearLayout layoutOrders;
 
-    TextView tabProducts, shopName, shopDesc;
+    TextView tabProducts, shopName, shopDesc, emptyProductText, emptyOrderText;
     ImageView shopImg;
     LinearLayout tabOrders;
     Button createProduct;
@@ -84,6 +84,9 @@ public class InventoryManagement extends AppCompatActivity {
             return insets;
         });
 
+        emptyProductText = findViewById(R.id.emptyProductText);
+        emptyOrderText = findViewById(R.id.emptyOrderText);
+
         productService = new ProductService(this);
         orderService = new OrderService(this);
         shopService = new ShopService(this);
@@ -105,7 +108,6 @@ public class InventoryManagement extends AppCompatActivity {
 
         progressBarProds = findViewById(R.id.progressBarProds);
         progressBarShops = findViewById(R.id.progressBarShops);
-
 
         progressBarProds.setVisibility(View.VISIBLE);
         progressBarShops.setVisibility(View.VISIBLE);
@@ -243,6 +245,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onOrdersFetched(List<Orders> orders) {
                 adapterOrders.updateData(orders);
+                checkAdapterOrdersSize();
                 progressBarShops.setVisibility(View.GONE);
             }
 
@@ -260,6 +263,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onProductsFetched(List<Products> products) {
                 adapterProducts.updateData(products);
+                checkAdapterProductsSize();
                 progressBarProds.setVisibility(View.GONE);
             }
 
@@ -294,5 +298,25 @@ public class InventoryManagement extends AppCompatActivity {
                 Toast.makeText(InventoryManagement.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkAdapterOrdersSize() {
+        if (adapterOrders.getItemCount() == 0) {
+            emptyOrderText.setVisibility(View.VISIBLE);
+            recyclerOrderView.setVisibility(View.GONE);
+        } else {
+            emptyOrderText.setVisibility(View.GONE);
+            recyclerOrderView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkAdapterProductsSize() {
+        if (adapterProducts.getItemCount() == 0) {
+            emptyProductText.setVisibility(View.VISIBLE);
+            recyclerProductView.setVisibility(View.GONE);
+        } else {
+            emptyProductText.setVisibility(View.GONE);
+            recyclerProductView.setVisibility(View.VISIBLE);
+        }
     }
 }
