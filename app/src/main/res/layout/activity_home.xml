@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/agrikita_homepage_bg"
-            android:layout_height="300dp">
+            android:layout_height="305dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -397,6 +397,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingStart="35dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rice_bg"
             android:paddingEnd="35dp">
 
             <!-- Common Style for Each Menu Item -->
@@ -591,7 +592,7 @@
                 android:id="@+id/bestSeller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp" />
 
 
         </LinearLayout>
