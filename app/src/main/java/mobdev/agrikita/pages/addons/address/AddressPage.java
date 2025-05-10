@@ -1,10 +1,11 @@
-package mobdev.agrikita.pages.addons;
+package mobdev.agrikita.pages.addons.address;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +16,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.adapters.AddressAdapter;
+import mobdev.agrikita.models.address.AddressList;
 
-public class Addresses extends AppCompatActivity {
-    ListView addressList;
+public class AddressPage extends AppCompatActivity {
+    ListView addressListView;
+    TextView noAddressText;
     ImageButton addAddress, backBtn;
+    AddressAdapter addressAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +42,19 @@ public class Addresses extends AppCompatActivity {
             return insets;
         });
 
-        addressList = findViewById(R.id.address_list_view);
+        addressListView = findViewById(R.id.address_list_view);
         addAddress = findViewById(R.id.addNewAddress);
         backBtn = findViewById(R.id.backBtn);
+        noAddressText = findViewById(R.id.noAddressText);
+
+
+        setupAdapter();
+
+    }
+
+    private void setupAdapter() {
+        AddressList addressList = new AddressList();
+        addressAdapter = new AddressAdapter(this, addressList.getAddresses());
+        addressListView.setAdapter(addressAdapter);
     }
 }
