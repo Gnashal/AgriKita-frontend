@@ -1,100 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:id="@+id/main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/agrikita_background"
-    android:orientation="vertical"
-    tools:context=".pages.addons.address.AddAddress">
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/navbar_added"
-        android:name="mobdev.agrikita.pages.addons.Navbar"
-        tools:layout="@layout/fragment_navbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    xmlns:tools="http://schemas.android.com/tools">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        tools:context=".pages.addons.address.AddAddress">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:layout_gravity="center"
-            android:contentDescription="Back Btn"
-            android:src="@drawable/back_to_homepage_arrow"
-            app:tint="@color/black" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="25dp"
-            android:layout_weight="0"
-            android:textColor="@color/black"
-            android:text="Add Address" />
-
-    </LinearLayout>
-
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navbar_added"
+            android:name="mobdev.agrikita.pages.addons.Navbar"
+            tools:layout="@layout/fragment_navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:padding="12dp"
-            android:layout_margin="12dp"
-            android:orientation="vertical" >
+            android:padding="16dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Name"
-                android:padding="8dp"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
-            <EditText
-                android:id="@+id/nameInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:backgroundTint="@color/black"
-                android:background="@drawable/bg_tag_outlined"
-                android:hint="Enter Name"
-                android:textSize="15dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Phone"
-                android:padding="8dp"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
-            <EditText
-                android:id="@+id/phoneInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:backgroundTint="@color/black"
-                android:background="@drawable/bg_tag_outlined"
-                android:hint="Enter Phone"
-                android:textSize="15dp" />
+                android:layout_weight="1"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:contentDescription="Back Btn"
+                android:src="@drawable/back_to_homepage_arrow"
+                app:tint="@color/black" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24dp"
-                android:padding="15dp"
                 android:textStyle="bold"
-                android:text="Address" />
+                android:textSize="25sp"
+                android:layout_weight="0"
+                android:textColor="@color/black"
+                android:text="Add Address" />
+
         </LinearLayout>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/product_card_bg"
+            android:padding="24dp"
+            android:layout_margin="16dp"
+            android:orientation="vertical">
+
+            <!-- Name -->
+            <TextView
+                android:text="Name"
+                style="@style/FormLabel"
+                android:textColor="@color/black"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/nameInput"
+                style="@style/FormInput"
+                android:hint="Enter Name"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Phone -->
+            <TextView
+                android:text="Phone Number"
+                style="@style/FormLabel"
+                android:textColor="@color/black"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/phoneInput"
+                style="@style/FormInput"
+                android:inputType="phone"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:hint="Enter Phone"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Address header -->
+            <TextView
+                android:text="Address"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- Region, Province -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+                <EditText
+                    android:id="@+id/regionInput"
+                    style="@style/FormInput"
+                    android:hint="Region"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_weight="1"/>
+                <Space android:layout_width="16dp" android:layout_height="wrap_content"/>
+                <EditText
+                    android:id="@+id/provinceInput"
+                    style="@style/FormInput"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:hint="Province"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <!-- City, Barangay -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+                <EditText
+                    android:id="@+id/cityInput"
+                    style="@style/FormInput"
+                    android:inputType="text"
+                    android:hint="City"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_weight="1"/>
+                <Space android:layout_width="16dp" android:layout_height="wrap_content"/>
+                <EditText
+                    android:id="@+id/barangayInput"
+                    style="@style/FormInput"
+                    android:inputType="text"
+                    android:hint="Barangay"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <!-- Street and Zip Code -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+                <EditText
+                    android:id="@+id/streetInput"
+                    style="@style/FormInput"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:hint="Street, Building, House No."
+                    android:textColorHint="@color/black"
+                    android:layout_weight="1"/>
+                <Space android:layout_width="16dp" android:layout_height="wrap_content"/>
+                <EditText
+                    android:id="@+id/zipCodeInput"
+                    style="@style/FormInput"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:hint="Zip Code"
+                    android:layout_weight="2"/>
+            </LinearLayout>
+
+            <!--Label buttons-->
+            <TextView
+                android:text="Label As:"
+                android:textColor="@color/black"
+                style="@style/FormLabel"
+                android:layout_marginBottom="8dp"/>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="24dp">
+
+                <ToggleButton
+                    android:id="@+id/workBtn"
+                    android:layout_margin="12dp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOn="Work"
+                    android:textOff="Work"
+                    android:background="@drawable/button_label_selector"
+                    android:checked="false" />
+
+                <!-- Home Toggle -->
+                <ToggleButton
+                    android:id="@+id/homeBtn"
+                    android:layout_margin="12dp"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_height="wrap_content"
+                    android:textOn="Home"
+                    android:textOff="Home"
+                    android:background="@drawable/button_label_selector"
+                    android:checked="false" />
+
+                <!-- Other Toggle -->
+                <ToggleButton
+                    android:id="@+id/otherBtn"
+                    android:layout_margin="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textOn="Other"
+                    android:textOff="Other"
+                    android:background="@drawable/button_label_selector"
+                    android:checked="false" />
+            </LinearLayout>
+
+            <!-- Default toggle -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp">
+                <TextView
+                    android:text="Set as Default Address"
+                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/defaultSwitch"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+            <!-- Submit Button -->
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/submitBtn"
+                android:text="Submit"
+                android:layout_marginTop="8dp"
+                android:padding="12dp"
+                android:textSize="18sp"
+                android:backgroundTint="@color/agrikita_green"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

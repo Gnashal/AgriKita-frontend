@@ -5,9 +5,16 @@ import java.util.List;
 
 public class AddressList {
     private List<Address> addresses;
+    private static AddressList instance;
 
     public AddressList() {
         this.addresses = new ArrayList<>();
+    }
+    public static AddressList getInstance() {
+        if (instance == null) {
+            instance = new AddressList();
+        }
+        return instance;
     }
 
     public void addAddress(Address address) {

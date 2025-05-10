@@ -381,11 +381,6 @@ public class Home extends AppCompatActivity {
                     .load(currentUser.getImageUrl())
                     .circleCrop()
                     .into(profileButton);
-        } else {
-            Glide.with(this)
-                    .load(R.drawable.profile)
-                    .circleCrop()
-                    .into(profileButton);
         }
     }
 
