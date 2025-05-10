@@ -24,6 +24,15 @@ import mobdev.agrikita.models.products.Products;
 public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryManagementAdapter.ProductViewHolder> implements Filterable {
     private final List<Products> productList;
     private final List<Products> productListFull;
+    public interface OnItemClickListener {
+        void onItemClick(Products product);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public InventoryManagementAdapter(List<Products> productList) {
         this.productList = productList;
@@ -54,6 +63,13 @@ public class InventoryManagementAdapter extends RecyclerView.Adapter<InventoryMa
                 .load(product.getImageUrl())
                 .apply(requestOptions)
                 .into(holder.imageProduct);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(product);
+            }
+        });
+
     }
 
     @Override

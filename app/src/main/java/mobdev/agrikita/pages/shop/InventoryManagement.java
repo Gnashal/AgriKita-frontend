@@ -1,5 +1,7 @@
 package mobdev.agrikita.pages.shop;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -104,6 +106,7 @@ public class InventoryManagement extends AppCompatActivity {
         progressBarProds = findViewById(R.id.progressBarProds);
         progressBarShops = findViewById(R.id.progressBarShops);
 
+
         progressBarProds.setVisibility(View.VISIBLE);
         progressBarShops.setVisibility(View.VISIBLE);
 
@@ -149,7 +152,6 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse response) {
                 String shopId = user.getShopId();
-                Toast.makeText(InventoryManagement.this, "Shop ID" + shopId, Toast.LENGTH_SHORT).show();
                 fetchProducts(shopId);
                 fetchOrders(shopId);
                 fetchShopInfo(shopId);
@@ -227,6 +229,12 @@ public class InventoryManagement extends AppCompatActivity {
                 Intent goToCreateProduct = new Intent(InventoryManagement.this, CreateProduct.class);
                 startActivity(goToCreateProduct);
             }
+        });
+
+        adapterProducts.setOnItemClickListener(product -> {
+            Intent intent = new Intent(InventoryManagement.this, ManageProducts.class);
+            intent.putExtra("product", product);
+            startActivity(intent);
         });
     }
 
