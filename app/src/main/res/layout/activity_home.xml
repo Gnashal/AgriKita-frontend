@@ -684,7 +684,6 @@
                 android:visibility="gone"
                 android:layout_gravity="center" />
 
-            <!-- Vertical Products RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/productsRecyclerView"
                 android:layout_width="match_parent"
