@@ -25,6 +25,9 @@
             android:name=".pages.shop.ManageProducts"
             android:exported="false" />
         <activity
+            android:name=".pages.addons.address.AddAddress"
+            android:exported="false" />
+        <activity
             android:name=".pages.addons.address.AddressPage"
             android:exported="false" />
         <activity

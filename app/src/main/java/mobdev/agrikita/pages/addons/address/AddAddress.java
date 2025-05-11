@@ -2,6 +2,7 @@ package mobdev.agrikita.pages.addons.address;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -17,8 +18,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.AddressController;
 import mobdev.agrikita.models.address.Address;
-import mobdev.agrikita.models.address.AddressList;
+import mobdev.agrikita.models.user.CurrentUser;
 
 public class AddAddress extends AppCompatActivity {
     EditText nameInput, phoneInput, regionInput, provinceInput, cityInput, barangayInput, streetInput, zipCodeInput;
@@ -90,6 +92,7 @@ public class AddAddress extends AppCompatActivity {
     }
 
     private void addAddress() {
+        String uid = CurrentUser.getInstance(this).getUid();
         String name = nameInput.getText().toString();
         String phone = phoneInput.getText().toString();
         String region = regionInput.getText().toString();
@@ -101,7 +104,12 @@ public class AddAddress extends AppCompatActivity {
         String label = determineLabel();
         boolean isDefault = isDefaultSw.isChecked();
         Address address = new Address(phone, name, isDefault, region, province, city, barangay, street, zipCode, label);
-        AddressList.getInstance().addAddress(address);
+        long ok = AddressController.getInstance(this).insertAddress(address, uid);
+        if (ok < 0) {
+            Log.v("SqliteAddress", "Failed to add address");
+        } else {
+            Toast.makeText(this, "Address Added Successfully", Toast.LENGTH_SHORT).show();
+        }
     }
     private String determineLabel() {
         if (workLabel.isChecked()) {

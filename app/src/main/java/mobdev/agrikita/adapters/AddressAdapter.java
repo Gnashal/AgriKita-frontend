@@ -1,17 +1,23 @@
 package mobdev.agrikita.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.AddressController;
 import mobdev.agrikita.models.address.Address;
+import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.pages.addons.address.AddressPage;
 
 public class AddressAdapter extends BaseAdapter {
     private Context context;
@@ -79,6 +85,18 @@ public class AddressAdapter extends BaseAdapter {
 
         holder.deleteBtn.setOnClickListener(v -> {
             addressList.remove(position);
+            long ok = AddressController.getInstance(context).deleteAddress(CurrentUser.getInstance(context).getUid(), address.getDbIndex());
+            if (ok < 0) {
+                Log.v("SqliteAddress", "Failed to delete address");
+            } else {
+               Toast.makeText(context, "You deleted an address", Toast.LENGTH_SHORT).show();
+            }
+            if (addressList.isEmpty()) {
+                context.startActivity(new Intent(context, AddressPage.class));
+                if (context instanceof android.app.Activity) {
+                    ((android.app.Activity) context).finish();
+                }
+            }
             notifyDataSetChanged();
         });
 

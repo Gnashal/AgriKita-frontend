@@ -2,6 +2,7 @@ package mobdev.agrikita.pages.addons.address;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
@@ -16,15 +17,21 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import java.util.List;
+
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.AddressAdapter;
+import mobdev.agrikita.controllers.AddressController;
+import mobdev.agrikita.models.address.Address;
 import mobdev.agrikita.models.address.AddressList;
+import mobdev.agrikita.models.user.CurrentUser;
 
 public class AddressPage extends AppCompatActivity {
     private ListView addressListView;
     private TextView noAddressText;
     private ImageButton addAddress, backBtn;
     private AddressAdapter addressAdapter;
+    private List<Address> addressList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +55,13 @@ public class AddressPage extends AppCompatActivity {
         noAddressText = findViewById(R.id.noAddressText);
         addAddress.setOnClickListener(v -> startActivity(new Intent(this, AddAddress.class)));
         backBtn.setOnClickListener(v -> finish());
+        addressList = AddressController.getInstance(this).getAddressesForUid(CurrentUser.getInstance(this).getUid());
         setupView();
 
     }
 
     private void setupView() {
-        if (AddressList.getInstance().getAddresses().isEmpty()) {
+        if (addressList.isEmpty()){
             noAddressText.setVisibility(View.VISIBLE);
         } else {
             noAddressText.setVisibility(View.GONE);
@@ -61,7 +69,9 @@ public class AddressPage extends AppCompatActivity {
         }
     }
     private void setupAdapter() {
-        addressAdapter = new AddressAdapter(this, AddressList.getInstance().getAddresses());
+        /*gets the addresses for the current user and sets the adapter*/
+        Log.v("AddressPageSqlite", "Fetched " + addressList.size() + " addresses");
+        addressAdapter = new AddressAdapter(this, addressList);
         addressListView.setAdapter(addressAdapter);
     }
 }

@@ -1,6 +1,7 @@
 package mobdev.agrikita.models.address;
 
 public class Address {
+    private long DbIndex;
     private String name;
     private String phone;
     private boolean isDefault;
@@ -24,6 +25,10 @@ public class Address {
         this.label = label;
         this.zipCode = zipCode;
         this.streetName = streetName;
+    }
+
+    public void setDbIndex(long dbIndex) {
+        this.DbIndex = dbIndex;
     }
 
     public void setName(String name) {
@@ -64,6 +69,10 @@ public class Address {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public long getDbIndex() {
+        return DbIndex;
     }
 
     public String getPhone() {
