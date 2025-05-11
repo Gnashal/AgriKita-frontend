@@ -438,7 +438,7 @@ public class Home extends AppCompatActivity {
             public void onProductsFetched(List<Products> products) {
                 productsList.clear();
 
-                int productCount = Math.min(products.size(), 6); // To handle cases where less than 6 products are fetched
+                int productCount = Math.min(products.size(), 15); // To handle cases where less than 6 products are fetched
                 productsList.addAll(products.subList(0, productCount));
                 progressBarProducts.setVisibility(View.GONE);
             }
