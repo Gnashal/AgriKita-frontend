@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.ShoppingCartProductAdapter;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.controllers.ShoppingCartController;
+import mobdev.agrikita.pages.index.Home;
 import mobdev.agrikita.pages.marketplace.Marketplace;
 
 public class ShoppingCartPage extends AppCompatActivity {
@@ -33,6 +35,7 @@ public class ShoppingCartPage extends AppCompatActivity {
     ShoppingCartProductAdapter adapter;
     MaterialButton shpc_togoCheckout, shpc_contshopping;
     TextView shpc_subtotal, shpc_shipping, shpc_total;
+    ImageView back_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,7 @@ public class ShoppingCartPage extends AppCompatActivity {
         shpc_subtotal = findViewById(R.id.shoppingcart_subtotal_display);
         shpc_shipping = findViewById(R.id.shoppingcart_shipping_display);
         shpc_total = findViewById(R.id.shoppingcart_total_display);
-
+        back_btn = findViewById(R.id.back_btn);
         // This part is for the list view
         shoppingCartList = findViewById(R.id.shoppingcart_list);
 
@@ -73,6 +76,7 @@ public class ShoppingCartPage extends AppCompatActivity {
         shpc_total.setText("₱ "+String.format("%.2f", getSubTotalCost(productList) + getShippingCost()));
 
         // Buttons Functionalities
+        back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
         shpc_togoCheckout.setOnClickListener(v -> goToCheckout());
         shpc_contshopping.setOnClickListener(v -> goToMarketplace());
     }

@@ -43,6 +43,7 @@ import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.response.UserResponse;
 import mobdev.agrikita.controllers.UserService;
+import mobdev.agrikita.pages.index.Home;
 
 public class InventoryManagement extends AppCompatActivity {
     private RecyclerView recyclerProductView;
@@ -55,8 +56,8 @@ public class InventoryManagement extends AppCompatActivity {
     LinearLayout layoutProducts;
     LinearLayout layoutOrders;
 
-    TextView tabProducts, shopName, shopDesc;
-    ImageView shopImg;
+    TextView tabProducts, shopName, shopDesc, emptyProductText, emptyOrderText;
+    ImageView shopImg, back_btn;
     LinearLayout tabOrders;
     Button createProduct;
     ProductService productService;
@@ -82,6 +83,9 @@ public class InventoryManagement extends AppCompatActivity {
             return insets;
         });
 
+        emptyProductText = findViewById(R.id.emptyProductText);
+        emptyOrderText = findViewById(R.id.emptyOrderText);
+
         productService = new ProductService(this);
         orderService = new OrderService(this);
         shopService = new ShopService(this);
@@ -94,7 +98,7 @@ public class InventoryManagement extends AppCompatActivity {
 
         recyclerProductView = findViewById(R.id.recycler_view_inventory);
         recyclerOrderView = findViewById(R.id.recycler_view_order);
-
+        back_btn =findViewById(R.id.back_btn);
         createProduct = findViewById(R.id.addProductButton);
 
         shopImg = findViewById(R.id.shopImage);
@@ -149,7 +153,6 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse response) {
                 String shopId = user.getShopId();
-                Toast.makeText(InventoryManagement.this, "Shop ID" + shopId, Toast.LENGTH_SHORT).show();
                 fetchProducts(shopId);
                 fetchOrders(shopId);
                 fetchShopInfo(shopId);
@@ -228,6 +231,15 @@ public class InventoryManagement extends AppCompatActivity {
                 startActivity(goToCreateProduct);
             }
         });
+
+        adapterProducts.setOnItemClickListener(product -> {
+            Intent intent = new Intent(InventoryManagement.this, ManageProducts.class);
+            intent.putExtra("product", product);
+            startActivity(intent);
+        });
+
+//        HomeNavigation
+        back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
     }
 
     private void fetchOrders(String shopId) {
@@ -235,6 +247,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onOrdersFetched(List<Orders> orders) {
                 adapterOrders.updateData(orders);
+                checkAdapterOrdersSize();
                 progressBarShops.setVisibility(View.GONE);
             }
 
@@ -252,6 +265,7 @@ public class InventoryManagement extends AppCompatActivity {
             @Override
             public void onProductsFetched(List<Products> products) {
                 adapterProducts.updateData(products);
+                checkAdapterProductsSize();
                 progressBarProds.setVisibility(View.GONE);
             }
 
@@ -286,5 +300,25 @@ public class InventoryManagement extends AppCompatActivity {
                 Toast.makeText(InventoryManagement.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkAdapterOrdersSize() {
+        if (adapterOrders.getItemCount() == 0) {
+            emptyOrderText.setVisibility(View.VISIBLE);
+            recyclerOrderView.setVisibility(View.GONE);
+        } else {
+            emptyOrderText.setVisibility(View.GONE);
+            recyclerOrderView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void checkAdapterProductsSize() {
+        if (adapterProducts.getItemCount() == 0) {
+            emptyProductText.setVisibility(View.VISIBLE);
+            recyclerProductView.setVisibility(View.GONE);
+        } else {
+            emptyProductText.setVisibility(View.GONE);
+            recyclerProductView.setVisibility(View.VISIBLE);
+        }
     }
 }

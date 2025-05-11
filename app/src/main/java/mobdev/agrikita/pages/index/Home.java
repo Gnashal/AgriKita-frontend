@@ -22,6 +22,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -41,7 +42,7 @@ import java.util.Locale;
 import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.BestSellersAdapter;
 import mobdev.agrikita.adapters.FeaturedFarmsAdapter;
-import mobdev.agrikita.adapters.NewsAdapter;
+import mobdev.agrikita.adapters.ProductAdapter;
 import mobdev.agrikita.controllers.NewsController;
 import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.controllers.ShopService;
@@ -63,25 +64,28 @@ import mobdev.agrikita.pages.welcome.Login;
 import okhttp3.OkHttpClient;
 
 public class Home extends AppCompatActivity {
-    private TextView temperatureText, weatherDescriptionText, location, dateText;
+    private TextView temperatureText, weatherDescriptionText, location, dateText, farmersTipText;
     private ImageView profileButton, weatherIcon;
     private LinearLayout marketplaceLayout, ordersLayout, shopLayout, toWeather, cartLayout, profileLayout;
-    private RecyclerView newsRecyclerView, bestSellersView, featuredShopsView;
-    private NewsAdapter newsAdapter;
+    private RecyclerView bestSellersView, featuredShopsView, productsRecyclerView;
     private SwipeRefreshLayout refresh;
     private ImageButton toNotifications;
-    private Button toMarketplace;
+    private Button toMarketplace, seeAllProducts;
 
     private UserService userService;
     private OkHttpClient client = new OkHttpClient();
     private BestSellersAdapter bestSellersAdapter;
     private FeaturedFarmsAdapter featuredFarmsAdapter;
+    private ProductAdapter productsAdapter;
     private List<Products> bestSellersList = new ArrayList<>();
     private List<Shop> featuredFarmsList = new ArrayList<>();
+    private List<Products> productsList = new ArrayList<>();
+
     ProductService productService;
     ShopService shopService;
     ProgressBar progressBarFeaturedProducts;
-    ProgressBar getProgressBarFeaturedShops;
+    ProgressBar progressBarFeaturedShops;
+    ProgressBar progressBarProducts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +108,11 @@ public class Home extends AppCompatActivity {
         productService = new ProductService(this);
         shopService = new ShopService(this);
 
-        /* Initialize */
+        /* Initialize Views */
         profileButton = findViewById(R.id.profileButton);
         toNotifications = findViewById(R.id.toNotifications);
         toMarketplace = findViewById(R.id.see_all_BestSellers);
+        seeAllProducts = findViewById(R.id.see_all_products);
         toWeather = findViewById(R.id.toWeatherForecast);
         location = findViewById(R.id.location);
         marketplaceLayout = findViewById(R.id.marketplaceLayout);
@@ -115,7 +120,6 @@ public class Home extends AppCompatActivity {
         shopLayout = findViewById(R.id.shopLayout);
         cartLayout = findViewById(R.id.cartLayout);
         profileLayout = findViewById(R.id.profileLayout);
-        newsRecyclerView = findViewById(R.id.newsRecyclerView);
         refresh = findViewById(R.id.swipeRefreshLayout);
         temperatureText = findViewById(R.id.temperatureText);
         weatherDescriptionText = findViewById(R.id.weatherDescriptionText);
@@ -123,53 +127,92 @@ public class Home extends AppCompatActivity {
         dateText = findViewById(R.id.dateText);
         bestSellersView = findViewById(R.id.bestSeller);
         featuredShopsView = findViewById(R.id.featuredFarms);
+
         progressBarFeaturedProducts = findViewById(R.id.progressBarProds);
-        getProgressBarFeaturedShops = findViewById(R.id.progressBarShops);
+        progressBarFeaturedShops = findViewById(R.id.progressBarShops);
+        progressBarProducts = findViewById(R.id.progressBarProducts);
+        farmersTipText = findViewById(R.id.farmersTipText);
 
+        /* Show loading indicators */
         progressBarFeaturedProducts.setVisibility(View.VISIBLE);
-        getProgressBarFeaturedShops.setVisibility(View.VISIBLE);
+        progressBarFeaturedShops.setVisibility(View.VISIBLE);
+        progressBarProducts.setVisibility(View.VISIBLE);
 
-        bestSellersView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        featuredShopsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        // Initialize the RecyclerView with GridLayoutManager (2 columns)
+        productsRecyclerView = findViewById(R.id.productsRecyclerView);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        productsRecyclerView.setLayoutManager(gridLayoutManager);
 
-        bestSellersAdapter = new BestSellersAdapter(this, bestSellersList);
-        bestSellersView.setAdapter(bestSellersAdapter);
+        /* Setup RecyclerViews */
+        setupBestSellersRecyclerView();
+        setupFeaturedFarmsRecyclerView();
+        setupProductsRecyclerView();
 
-        featuredFarmsAdapter = new FeaturedFarmsAdapter(this, featuredFarmsList);
-        featuredShopsView.setAdapter(featuredFarmsAdapter);
-
+        /* Fetch data */
         fetchBestSellers();
         fetchFeaturedFarms();
+        fetchShopProducts();
 
         userService = new UserService(this);
 
+        // Load user data if available
         if (CurrentUser.getInstance(this).getUserData() == null) {
             fetchUserData();
         } else {
             setProfilePic();
         }
+
+        // Setup weather data
         setupWeatherData();
 
+        /* Set click listeners */
         profileButton.setOnClickListener(v -> toProfile());
         toWeather.setOnClickListener(v -> toWeather());
+        seeAllProducts.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
 
+        // Handle swipe to refresh
         refresh.setOnRefreshListener(() -> {
             fetchUserData();
             setupWeatherData();
+            fetchBestSellers();
+            fetchFeaturedFarms();
+            fetchShopProducts();
             refresh.setRefreshing(false);
         });
 
-
-        setupRecyclerView();
+        // Setup section click listeners for other views
         setupSectionClickListeners();
-        fetchEverythingNews();
     }
 
-    private void setupRecyclerView() {
-        newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        newsAdapter = new NewsAdapter();
-        newsRecyclerView.setAdapter(newsAdapter);
+    private void setupBestSellersRecyclerView() {
+        bestSellersView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        bestSellersAdapter = new BestSellersAdapter(this, bestSellersList);
+        bestSellersView.setAdapter(bestSellersAdapter);
+
+        bestSellersAdapter.setOnItemClickListener(product -> {
+            Intent goToProductDetail = new Intent(Home.this, ProductDetailPage.class);
+            goToProductDetail.putExtra("product_data", product);
+            startActivity(goToProductDetail);
+        });
     }
+
+    private void setupFeaturedFarmsRecyclerView() {
+        featuredShopsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        featuredFarmsAdapter = new FeaturedFarmsAdapter(this, featuredFarmsList);
+        featuredShopsView.setAdapter(featuredFarmsAdapter);
+    }
+
+    private void setupProductsRecyclerView() {
+        productsAdapter = new ProductAdapter(this, productsList);
+        productsRecyclerView.setAdapter(productsAdapter);
+
+        productsAdapter.setOnItemClickListener(product -> {
+            Intent goToProductDetail = new Intent(Home.this, ProductDetailPage.class);
+            goToProductDetail.putExtra("product_data", product);
+            startActivity(goToProductDetail);
+        });
+    }
+
     private void setupWeatherData() {
         WeatherService.getInstance(this).getCurrentLocation(this, this::fetchWeatherData);
         showCurrentDate();
@@ -196,10 +239,42 @@ public class Home extends AppCompatActivity {
             public void onFailure(Exception e) {
                 Log.v("WeatherFetch", "Failed to fetch weather data: " + e.getMessage());
                 Toast.makeText(Home.this, "Network Error in fetching weather data", Toast.LENGTH_SHORT).show();
-
             }
         });
     }
+
+    private String generateFarmerTip(String condition, int humidity) {
+        if (condition.contains("sunny")) {
+            if (humidity < 40) {
+                return "It's sunny and dry. Water crops well to prevent dehydration.";
+            } else {
+                return "Sunny with moderate humidity. Consider light watering.";
+            }
+        } else if (condition.contains("rain")) {
+            if (humidity > 70) {
+                return "Rainy and humid. No need to water; watch for plant diseases.";
+            } else {
+                return "Rain expected. Delay irrigation and monitor moisture.";
+            }
+        } else if (condition.contains("cloudy")) {
+            if (humidity > 60) {
+                return "Cloudy and humid. Provide ventilation in greenhouses.";
+            } else {
+                return "Cloudy with dry air. Light watering might be necessary.";
+            }
+        } else if (condition.contains("storm")) {
+            return "Storm alert! Secure your crops and farm equipment.";
+        } else if (condition.contains("snow")) {
+            return "Snowy conditions. Protect plants from frost and cold.";
+        } else {
+            if (humidity > 80) {
+                return "Very humid today. Watch out for mold or mildew.";
+            } else {
+                return "Check soil and forecast before working the fields.";
+            }
+        }
+    }
+
     private void updateUI() {
         String result = WeatherService.getInstance(this).getJsonWeatherString();
         if (result != null) {
@@ -208,11 +283,7 @@ public class Home extends AppCompatActivity {
 
                 JSONObject main = jsonObject.getJSONObject("main");
                 double temperature = main.getDouble("temp");
-                /*int humidityVal = main.getInt("humidity");
-                int pressureVal = main.getInt("pressure");*/
-
-                /*JSONObject windObj = jsonObject.getJSONObject("wind");
-                double windSpeed = windObj.getDouble("speed");*/
+                int humidityVal = main.getInt("humidity");
 
                 JSONObject sys = jsonObject.getJSONObject("sys");
                 long sunrise = sys.getLong("sunrise");
@@ -237,39 +308,13 @@ public class Home extends AppCompatActivity {
                 temperatureText.setText(String.format("%.0f°C", temperature));
                 location.setText(fullCountryName);
 
-                /*Temperature.setText(String.format("%.0f°", temperature));
-                maxTemp.setText(String.format("Max: %.0f°", maxTemperature));
-                minTemp.setText(String.format("Min: %.0f°", minTemperature));
-                humidity.setText(String.format("Humidity: %d%%", humidityVal));
-                pressure.setText(String.format("Pressure: %d hPa", pressureVal));
-                wind.setText(String.format("Wind: %.1f km/h", windSpeed));
-                sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
-                sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));*/
+                String tip = generateFarmerTip(mainCondition.toLowerCase(), humidityVal);
+                farmersTipText.setText(tip);
 
             } catch (JSONException e) {
                 Log.v("WeatherFetch", "JSON parsing error", e);
             }
         }
-    }
-
-    private void fetchEverythingNews() {
-        NewsController.getInstance(this).fetchNews(new NewsController.NewsCallback() {
-            @Override
-            public void onSuccess(NewsApiResponse response) {
-                runOnUiThread(() -> {
-                    if (response.getArticles() != null) {
-                        newsAdapter.setArticles(response.getArticles());
-                    } else {
-                        Toast.makeText(Home.this, "No articles found", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String message) {
-                runOnUiThread(() -> Toast.makeText(Home.this, message, Toast.LENGTH_SHORT).show());
-            }
-        });
     }
 
     private void setupSectionClickListeners() {
@@ -289,6 +334,7 @@ public class Home extends AppCompatActivity {
         profileLayout.setOnClickListener(v -> toProfile());
         toNotifications.setOnClickListener(v -> startActivity(new Intent(this, Notification.class)));
         toMarketplace.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
+
     }
 
     private void toProfile() {
@@ -356,15 +402,8 @@ public class Home extends AppCompatActivity {
             public void onProductsFetched(List<Products> products) {
                 bestSellersList.clear();
                 bestSellersList.addAll(products);
-
-                bestSellersAdapter.setOnItemClickListener(product -> {
-                    Intent goToProductDetail = new Intent(Home.this, ProductDetailPage.class);
-                    goToProductDetail.putExtra("product_data", product); // Ensure Serializable or Parcelable
-                    startActivity(goToProductDetail);
-                });
-                
                 bestSellersAdapter.notifyDataSetChanged();
-                progressBarFeaturedProducts.setVisibility(View.GONE);// Notify adapter about data changes
+                progressBarFeaturedProducts.setVisibility(View.GONE);
             }
 
             @Override
@@ -382,15 +421,36 @@ public class Home extends AppCompatActivity {
                 featuredFarmsList.clear();
                 featuredFarmsList.addAll(shops);
                 featuredFarmsAdapter.notifyDataSetChanged();
-                getProgressBarFeaturedShops.setVisibility(View.GONE);
-
+                progressBarFeaturedShops.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(String errorMessage) {
                 Log.e("BestSellersActivity", "Error fetching best sellers" + errorMessage);
-                getProgressBarFeaturedShops.setVisibility(View.GONE);
+                progressBarFeaturedShops.setVisibility(View.GONE);
             }
         });
     }
+
+    private void fetchShopProducts() {
+        productService.getFeaturedProducts(new ProductService.ProductCallback() {
+            @Override
+            public void onProductsFetched(List<Products> products) {
+                productsList.clear();
+
+                int productCount = Math.min(products.size(), 15); // To handle cases where less than 6 products are fetched
+                productsList.addAll(products.subList(0, productCount));
+                progressBarProducts.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Log.e("ProductList", "Error fetching product", throwable);
+                progressBarProducts.setVisibility(View.GONE);
+            }
+        });
+    }
+
+
+
 }

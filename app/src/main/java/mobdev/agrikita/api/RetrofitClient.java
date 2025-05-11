@@ -30,6 +30,11 @@ public class RetrofitClient {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(chain -> {
                         Request originalRequest = chain.request();
+                        String url = originalRequest.url().toString();
+
+                        if (url.contains("/auth")) {
+                            return chain.proceed(originalRequest);
+                        }
                         Request.Builder builder = originalRequest.newBuilder();
 
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
