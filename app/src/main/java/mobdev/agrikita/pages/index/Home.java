@@ -334,6 +334,7 @@ public class Home extends AppCompatActivity {
         profileLayout.setOnClickListener(v -> toProfile());
         toNotifications.setOnClickListener(v -> startActivity(new Intent(this, Notification.class)));
         toMarketplace.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
+
     }
 
     private void toProfile() {
@@ -442,31 +443,20 @@ public class Home extends AppCompatActivity {
     }
 
     private void fetchShopProducts() {
-        // Show the progress bar while fetching the data
-        progressBarFeaturedProducts.setVisibility(View.VISIBLE);
-
         productService.getFeaturedProducts(new ProductService.ProductCallback() {
             @Override
             public void onProductsFetched(List<Products> products) {
-                // Clear the existing list before adding the new products
                 productsList.clear();
 
-                // Add only the first 6 products to the list
-                int productCount = Math.min(products.size(), 6); // To handle cases where less than 6 products are fetched
+                int productCount = Math.min(products.size(), 15); // To handle cases where less than 6 products are fetched
                 productsList.addAll(products.subList(0, productCount));
-
-                // Notify the adapter that the data has been updated
-                productsAdapter.notifyDataSetChanged();
-
-                // Hide the progress bar after the data is fetched
-                progressBarFeaturedProducts.setVisibility(View.GONE);
+                progressBarProducts.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                // Log the error if the data fetch fails
                 Log.e("ProductList", "Error fetching product", throwable);
-                progressBarFeaturedProducts.setVisibility(View.GONE);
+                progressBarProducts.setVisibility(View.GONE);
             }
         });
     }
