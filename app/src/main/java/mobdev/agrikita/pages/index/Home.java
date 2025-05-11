@@ -59,6 +59,7 @@ import mobdev.agrikita.pages.marketplace.ProductDetailPage;
 import mobdev.agrikita.pages.addons.Notification;
 import mobdev.agrikita.pages.shop.CreateShop;
 import mobdev.agrikita.pages.shop.InventoryManagement;
+import mobdev.agrikita.pages.shop.MyOrders;
 import mobdev.agrikita.pages.welcome.Login;
 import okhttp3.OkHttpClient;
 
@@ -311,7 +312,11 @@ public class Home extends AppCompatActivity {
     private void setupSectionClickListeners() {
         marketplaceLayout.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
 
-        ordersLayout.setOnClickListener(v -> Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show());
+//        ordersLayout.setOnClickListener(v -> Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show());
+        ordersLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MyOrders.class);
+            startActivity(intent);
+        });
 
         shopLayout.setOnClickListener(v -> {
             if (CurrentUser.getInstance(this).hasShop()) {
