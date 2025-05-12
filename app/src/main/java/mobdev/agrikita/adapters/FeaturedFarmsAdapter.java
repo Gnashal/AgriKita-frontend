@@ -17,11 +17,13 @@ import java.util.List;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ShopService;
+import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.shop.Shop;
 
 public class FeaturedFarmsAdapter extends RecyclerView.Adapter<FeaturedFarmsAdapter.ShopViewHolder> {
     private final List<Shop> shopList;
     ShopService shopService;
+    private FeaturedFarmsAdapter.OnItemClickListener listener;
 
     public FeaturedFarmsAdapter(Context context, List<Shop> shopList) {
         this.shopList = shopList;
@@ -51,12 +53,19 @@ public class FeaturedFarmsAdapter extends RecyclerView.Adapter<FeaturedFarmsAdap
                 .load(shop.getShopImgUrl())
                 .apply(requestOptions)
                 .into(holder.imageShop);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null && holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
+                listener.onItemClick(shopList.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return shopList.size();
     }
+
 
     public static class ShopViewHolder extends RecyclerView.ViewHolder {
         TextView shopName, shopLocation, shopRating;
@@ -67,7 +76,15 @@ public class FeaturedFarmsAdapter extends RecyclerView.Adapter<FeaturedFarmsAdap
             shopName = itemView.findViewById(R.id.textTitle);
             shopLocation = itemView.findViewById(R.id.textFarmLocation);
             shopRating = itemView.findViewById(R.id.rating);
-            imageShop = itemView.findViewById(R.id.imageProduct);
+            imageShop = itemView.findViewById(R.id.imageShop);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Shop product);
+    }
+
+    public void setOnItemClickListener(FeaturedFarmsAdapter.OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

@@ -13,20 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="233dp">
 
-        <!-- Tomato Image -->
-
-        <!-- "Fresh from Farm" Label -->
-
-        <!-- Product Name -->
-
-
-        <!-- Farm Name -->
-
         <ImageView
-            android:id="@+id/imageProduct"
+            android:id="@+id/imageShop"
             android:layout_width="0dp"
             android:layout_height="160dp"
-            android:contentDescription="Product_Best_Sellers_Img"
+            android:contentDescription="Featured_Farms_Img"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +65,7 @@
             android:orientation="horizontal"
             android:paddingTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/imageProduct">
+            app:layout_constraintTop_toTopOf="@id/imageShop">
 
             <ImageView
                 android:id="@+id/ratingStar"
@@ -110,7 +101,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageProduct" />
+            app:layout_constraintTop_toBottomOf="@id/imageShop" />
 
         <TextView
             android:id="@+id/textFarmLocation"

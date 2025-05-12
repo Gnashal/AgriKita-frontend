@@ -25,6 +25,9 @@
             android:name=".pages.addons.checkout.OrderConfirmation"
             android:exported="false" />
         <activity
+            android:name=".pages.shop.ShopDetailsPage"
+            android:exported="false" />
+        <activity
             android:name=".pages.shop.ManageProducts"
             android:exported="false" />
         <activity

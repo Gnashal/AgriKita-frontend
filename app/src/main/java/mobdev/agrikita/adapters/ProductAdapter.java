@@ -64,6 +64,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.category.setText(productItem.getCategory());
         holder.price.setText("₱ "+String.format("%.2f", productItem.getPrice()));
         holder.rating.setText(String.valueOf(productItem.getRating()));
+        holder.productName.setText(productItem.getProductName());
 
         shopService = new ShopService(context);
 
