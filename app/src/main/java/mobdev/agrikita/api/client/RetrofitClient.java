@@ -22,7 +22,7 @@ public class RetrofitClient {
     private static final String WIRELESS_URL = "http://192.168.68.115:4040/api/";
     private static final String LOCAL_URL  = "http://10.0.2.2:4040/api/";
     private static final String BACKEND_URL = "https://agrikita.leapcell.app/api/";
-    private static final String BASE_URL = WIRELESS_URL;
+    private static final String BASE_URL = BACKEND_URL;
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(Context context) {

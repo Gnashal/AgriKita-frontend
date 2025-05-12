@@ -10,25 +10,26 @@ public class OrderItem {
     @SerializedName("name")
     private String name;
     @SerializedName("price")
-    private double price;
+    private float price;
     @SerializedName("imageUrl")
     private String imageUrl;
     @SerializedName("quantity")
     private int quantity;
 
-    public OrderItem(String productID, String shopID, String name, double price, String imageUrl, int quantity){
+    public OrderItem(String productID, String shopID, String name, float price, String imageUrl, int quantity){
         this.productID = productID;
         this.shopID = shopID;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.quantity = quantity;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 

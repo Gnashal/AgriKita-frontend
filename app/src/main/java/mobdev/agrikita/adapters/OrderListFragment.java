@@ -1,13 +1,19 @@
 package mobdev.agrikita.adapters;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import mobdev.agrikita.controllers.OrderService;
+import mobdev.agrikita.models.user.CurrentUser;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.api.client.RetrofitClient;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,28 +76,30 @@ public class OrderListFragment extends Fragment {
     }
 
     private void fetchOrdersFromApi() {
-        String buyerId = getContext()
-                .getSharedPreferences("prefs", getContext().MODE_PRIVATE)
-                .getString("buyer_id", ""); // Replace this with your actual buyer ID logic
-
-        OrderServiceApi orderServiceApi = RetrofitClient.getClient(requireContext()).create(OrderServiceApi.class);
-        Call<GetOrdersByBuyerIDResponse> call = orderServiceApi.getOrdersByBuyerID(buyerId);
-
-        call.enqueue(new Callback<GetOrdersByBuyerIDResponse>() {
+        Context context = getContext();
+        if (context == null) return; // or show error
+        String buyerId = CurrentUser.getInstance(context).getUid();
+        Log.v("OrderListFragment", "Calling getOrdersByBuyerID for buyer: " + buyerId);
+        if (this.getContext() == null) {
+            Toast.makeText(getContext(), "Context is null", Toast.LENGTH_SHORT).show();
+            Log.v("OrderListFragment", "Context is null");
+            return;
+        };
+        OrderService.getInstance(this.getContext()).getOrdersByBuyerID(buyerId, new OrderService.OrderCallback() {
             @Override
-            public void onResponse(Call<GetOrdersByBuyerIDResponse> call, Response<GetOrdersByBuyerIDResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    if (!isAdded()) return;
-                    allOrders = response.body().getData();
-                    updateRecyclerView();
+            public void onOrdersFetched(List<Orders> orders) {
+                allOrders.clear();
+                allOrders.addAll(orders);
+                updateRecyclerView();
+            }
+            @Override
+            public void onFailure(Exception e) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Failed to fetch orders: ", Toast.LENGTH_SHORT).show();
+                    });
                 }
             }
-
-            @Override
-            public void onFailure(Call<GetOrdersByBuyerIDResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+        );
     }
 
     private void updateRecyclerView() {
@@ -99,47 +107,5 @@ public class OrderListFragment extends Fragment {
             adapter.updateData(filterOrdersByStatus(allOrders, status));
         }
     }
-
-
-
-
-//    private List<Orders> generateSampleOrders() {
-//        List<Orders> list = new ArrayList<>();
-//
-//        list.add(createOrder("ORD-2025-001", "2025-04-16", 0, "Delivered"));
-//        list.add(createOrder("ORD-2025-002", "2025-04-20", 0, "In Transit"));
-//        list.add(createOrder("ORD-2025-003", "2025-04-21", 0, "Processing"));
-//        list.add(createOrder("ORD-2025-004", "2025-04-22", 0, "Delivered"));
-//        list.add(createOrder("ORD-2025-005", "2025-04-23", 0, "In Transit"));
-//
-//        return list;
-//    }
-//
-//    private Orders createOrder(String id, String createdAt, int total, String status) {
-//        Orders order = new Orders(id, createdAt, total, status);
-//
-//        // Use reflection or a custom subclass if the fields are private and no setters exist.
-//        try {
-//            java.lang.reflect.Field fId = Orders.class.getDeclaredField("orderIDid");
-//            java.lang.reflect.Field fCreatedAt = Orders.class.getDeclaredField("createdAt");
-//            java.lang.reflect.Field fTotal = Orders.class.getDeclaredField("total");
-//            java.lang.reflect.Field fStatus = Orders.class.getDeclaredField("status");
-//
-//            fId.setAccessible(true);
-//            fCreatedAt.setAccessible(true);
-//            fTotal.setAccessible(true);
-//            fStatus.setAccessible(true);
-//
-//            fId.set(order, id);
-//            fCreatedAt.set(order, createdAt);
-//            fTotal.set(order, total);
-//            fStatus.set(order, status);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return order;
-//    }
 
 }

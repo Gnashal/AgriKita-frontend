@@ -13,10 +13,9 @@ import retrofit2.http.Query;
 public interface OrderServiceApi {
     @GET("service/order/fetch-orders-by-shop")
     Call<GetOrdersByShopIDResponse> getOrdersByShopID(@Query("shopID") String shopID);
-
     @POST("service/order/create-order")
     Call<CreateOrderResponse> createOrder(@Body CreateOrderRequest createOrderRequest);
     @GET("service/order/fetch-orders-by-buyer")
-    Call<GetOrdersByBuyerIDResponse> getOrdersByBuyerID(@Query("buyerID") String buyerID);
+    Call<GetOrdersByBuyerIDResponse> getOrdersByBuyerID(@Query("buyer_id") String buyerID);
 
 }
