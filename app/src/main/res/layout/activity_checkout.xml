@@ -1,238 +1,268 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
-
-    <LinearLayout
+    android:layout_height="wrap_content"
+    android:id="@+id/main"
+    tools:context=".pages.addons.Checkout"
+    android:orientation="vertical">
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navbar"
+        tools:layout="@layout/fragment_navbar"
+        android:name="mobdev.agrikita.pages.addons.Navbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        <!-- Shipping Information Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shipping Information"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:paddingBottom="8dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="First Name" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Last Name" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Address" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="City" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Province" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Postal Code" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Phone Number" />
-
-        <!-- Payment Method Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Payment Method"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
-
-        <RadioGroup
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- GCash Option -->
+            <!-- Shipping Information Section -->
             <LinearLayout
-                android:layout_width="129dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="@color/blue"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="8dp">
-
-                <RadioButton
-                    android:id="@+id/radio_gcash"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="@android:color/white" />
-
+                android:orientation="horizontal">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:text="GCash"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:text="Shipping Information"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingBottom="8dp" />
+                <CheckBox
+                    android:id="@+id/defaultCheckbox"
+                    android:layout_weight="0.3"
+                    android:text="Default"
+                    android:textColor="@color/agrikita_green"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <!-- Maya Option -->
-            <LinearLayout
-                android:layout_width="130dp"
+            </LinearLayout>
+            <EditText
+                android:id="@+id/firstNameField"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/agrikita_green"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="8dp">
+                android:hint="First Name" />
+
+            <EditText
+                android:id="@+id/lastNameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Last Name" />
+
+            <EditText
+                android:id="@+id/cityField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="City" />
+
+            <EditText
+                android:id="@+id/provinceField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Province" />
+
+            <EditText
+                android:id="@+id/postCodeField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Postal Code" />
+
+            <EditText
+                android:id="@+id/phoneNumberField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone Number" />
+
+            <!-- Payment Method Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment Method"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- GCash Option -->
+                <LinearLayout
+                    android:layout_width="129dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/blue"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <RadioButton
+                        android:id="@+id/radio_gcash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:text="GCash"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Maya Option -->
+                <LinearLayout
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/agrikita_green"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <RadioButton
+                        android:id="@+id/radio_maya"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@android:color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:text="Maya"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </RadioGroup>
+
+            <!-- Logistics Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logistics"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <RadioButton
-                    android:id="@+id/radio_maya"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="@android:color/white" />
+                    android:text="LBC" />
 
-                <TextView
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:text="Maya"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </RadioGroup>
+                    android:text="Lalamove" />
 
-        <!-- Logistics Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logistics"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick up" />
+            </RadioGroup>
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
+            <!-- Order Summary Section -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="LBC" />
+                android:text="Order Summary"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp" />
 
-            <RadioButton
+            <LinearLayout
+                android:id="@+id/order_summary_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="16dp" />
+
+            <TextView
+                android:id="@+id/subtotal_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subtotal: ₱0"
+                android:paddingTop="8dp" />
+
+            <TextView
+                android:id="@+id/shipping_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shipping: ₱0"
+                android:paddingTop="4dp" />
+
+            <TextView
+                android:id="@+id/total_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total: ₱0"
+                android:textStyle="bold"
+                android:paddingTop="8dp" />
+
+            <!-- Payment Details Section -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lalamove" />
+                android:text="Payment Details"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp" />
 
-            <RadioButton
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/card_number"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pick up" />
-        </RadioGroup>
+                android:hint="Card Number"
+                android:inputType="number" />
 
-        <!-- Order Summary Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Order Summary"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+            <EditText
+                android:id="@+id/cardholder_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cardholder Name" />
 
-        <LinearLayout
-            android:id="@+id/order_summary_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp" />
+            <EditText
+                android:id="@+id/expiration_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Expiration Date (MM/YY)"
+                android:inputType="date" />
 
-        <TextView
-            android:id="@+id/subtotal_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Subtotal: ₱0"
-            android:paddingTop="8dp" />
+            <EditText
+                android:id="@+id/cvv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="CVV"
+                android:inputType="numberPassword" />
 
-        <TextView
-            android:id="@+id/shipping_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Shipping: ₱0"
-            android:paddingTop="4dp" />
+            <!-- Proceed to Payment Button -->
+            <Button
+                android:id="@+id/proceed_to_payment_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Proceed to Payment"
+                android:backgroundTint="@color/agrikita_green"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/total_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Total: ₱0"
-            android:textStyle="bold"
-            android:paddingTop="8dp" />
-
-        <!-- Payment Details Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Payment Details"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
-
-        <EditText
-            android:id="@+id/card_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Card Number"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/cardholder_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cardholder Name" />
-
-        <EditText
-            android:id="@+id/expiration_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Expiration Date (MM/YY)"
-            android:inputType="date" />
-
-        <EditText
-            android:id="@+id/cvv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="CVV"
-            android:inputType="numberPassword" />
-
-        <!-- Proceed to Payment Button -->
-        <Button
-            android:id="@+id/proceed_to_payment_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Proceed to Payment"
-            android:backgroundTint="@color/agrikita_green"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="16dp" />
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

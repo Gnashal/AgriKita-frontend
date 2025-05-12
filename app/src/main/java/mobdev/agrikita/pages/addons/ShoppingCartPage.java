@@ -70,10 +70,11 @@ public class ShoppingCartPage extends AppCompatActivity {
 
         shoppingCartList.setAdapter(adapter);
 
-
-        shpc_subtotal.setText("₱ "+String.format("%.2f", getSubTotalCost(productList)));
-        shpc_shipping.setText("₱ "+String.format("%.2f", getShippingCost()));
-        shpc_total.setText("₱ "+String.format("%.2f", getSubTotalCost(productList) + getShippingCost()));
+        double subtotal = getSubTotalCost(productList);
+        double shipping = getShippingCost(subtotal);
+        shpc_subtotal.setText("₱ "+String.format("%.2f", subtotal));
+        shpc_shipping.setText("₱ "+String.format("%.2f", shipping));
+        shpc_total.setText("₱ "+String.format("%.2f", subtotal + shipping));
 
         // Buttons Functionalities
         back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
@@ -91,8 +92,8 @@ public class ShoppingCartPage extends AppCompatActivity {
         startActivity(new Intent(ShoppingCartPage.this, Marketplace.class));
     }
 
-    private double getShippingCost() {
-        return 100.00;
+    private double getShippingCost(double subTotal){
+        return subTotal * 0.07;
     }
 
     private double getSubTotalCost(List<Products> productList) {
