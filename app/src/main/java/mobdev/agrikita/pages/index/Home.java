@@ -43,23 +43,22 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.BestSellersAdapter;
 import mobdev.agrikita.adapters.FeaturedFarmsAdapter;
 import mobdev.agrikita.adapters.ProductAdapter;
-import mobdev.agrikita.controllers.NewsController;
 import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.controllers.WeatherService;
-import mobdev.agrikita.models.auth.response.NewsApiResponse;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.shop.Shop;
 import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.models.user.response.UserResponse;
 import mobdev.agrikita.controllers.UserService;
-import mobdev.agrikita.pages.addons.ShoppingCartPage;
+import mobdev.agrikita.pages.addons.checkout.ShoppingCartPage;
 import mobdev.agrikita.pages.addons.WeatherForecast;
 import mobdev.agrikita.pages.marketplace.Marketplace;
 import mobdev.agrikita.pages.marketplace.ProductDetailPage;
 import mobdev.agrikita.pages.addons.Notification;
 import mobdev.agrikita.pages.shop.CreateShop;
 import mobdev.agrikita.pages.shop.InventoryManagement;
+import mobdev.agrikita.pages.shop.MyOrders;
 import mobdev.agrikita.pages.shop.ShopDetailsPage;
 import mobdev.agrikita.pages.welcome.Login;
 import okhttp3.OkHttpClient;
@@ -327,7 +326,11 @@ public class Home extends AppCompatActivity {
     private void setupSectionClickListeners() {
         marketplaceLayout.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
 
-        ordersLayout.setOnClickListener(v -> Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show());
+//        ordersLayout.setOnClickListener(v -> Toast.makeText(this, "My Orders clicked", Toast.LENGTH_SHORT).show());
+        ordersLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MyOrders.class);
+            startActivity(intent);
+        });
 
         shopLayout.setOnClickListener(v -> {
             if (CurrentUser.getInstance(this).hasShop()) {

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F1E8"
+    android:orientation="vertical">
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navbar"
+        tools:layout="@layout/fragment_navbar"
+        android:name="mobdev.agrikita.pages.addons.Navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+        <!-- Title -->
+        <TextView
+            android:id="@+id/confirmationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirmed!"
+            android:textSize="24sp"
+            android:textColor="#2E7D32"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Checkmark Icon -->
+        <ImageView
+            android:id="@+id/checkmarkIcon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_check_circle"
+            android:contentDescription="Checkmark"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Success Message -->
+        <TextView
+            android:id="@+id/successMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your order was placed\nsuccessfully :)"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Order Number Box -->
+        <LinearLayout
+            android:id="@+id/orderBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white_bg"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:elevation="4dp"
+            android:layout_marginBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your order reference is: "
+                    android:textColor="#000000"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/orderNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#89712672186"
+                    android:textColor="@color/agrikita_green"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/emailNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You will receive the order\nconfirmation email shortly"
+                android:textSize="14sp"
+                android:textColor="#555555"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- Thank You Text -->
+        <TextView
+            android:id="@+id/thankYouText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thank you for shopping with us!"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Return Home Button -->
+        <Button
+            android:id="@+id/returnHomeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Return Home"
+            android:backgroundTint="#2E7D32"
+            android:textColor="@color/white"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+

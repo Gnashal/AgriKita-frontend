@@ -39,7 +39,7 @@ import mobdev.agrikita.pages.marketplace.ProductDetailPage;
 
 public class ShopDetailsPage extends AppCompatActivity {
     ImageView back_btn, shopImg;
-    TextView title, location, rating;
+    TextView title, location, rating, emptyProductText;
     Shop selectedShop;
     ProductService productService;
     RecyclerView productsRecyclerView;
@@ -69,6 +69,7 @@ public class ShopDetailsPage extends AppCompatActivity {
         title = findViewById(R.id.textTitle);
         location = findViewById(R.id.textFarmLocation);
         rating = findViewById(R.id.rating);
+        emptyProductText = findViewById(R.id.emptyProductText);
 
 //        RecyclerView
         productsRecyclerView = findViewById(R.id.productsRecyclerView);
@@ -123,6 +124,8 @@ public class ShopDetailsPage extends AppCompatActivity {
                     adapterProducts.notifyDataSetChanged();
                 }
 
+                checkAdapterProductsSize();
+
                 adapterProducts.setOnItemClickListener(product -> {
                     Intent go_to_product_detail = new Intent(ShopDetailsPage.this, ProductDetailPage.class);
                     go_to_product_detail.putExtra("product_data", product);
@@ -137,5 +140,15 @@ public class ShopDetailsPage extends AppCompatActivity {
                 progressBarProds.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void checkAdapterProductsSize() {
+        if (adapterProducts.getItemCount() == 0) {
+            emptyProductText.setVisibility(View.VISIBLE);
+            productsRecyclerView.setVisibility(View.GONE);
+        } else {
+            emptyProductText.setVisibility(View.GONE);
+            productsRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package mobdev.agrikita.api;
+package mobdev.agrikita.api.client;
 
 import android.content.Context;
 import android.content.Intent;

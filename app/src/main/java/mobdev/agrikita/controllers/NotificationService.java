@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import mobdev.agrikita.api.NotificationApi;
-import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.api.client.RetrofitClient;
 import mobdev.agrikita.models.notifications.Notifications;
 import retrofit2.Callback;
 

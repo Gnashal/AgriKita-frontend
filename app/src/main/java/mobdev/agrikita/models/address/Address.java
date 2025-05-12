@@ -1,15 +1,24 @@
 package mobdev.agrikita.models.address;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Address {
     private long DbIndex;
     private String name;
+    @SerializedName("buyer_phone")
     private String phone;
     private boolean isDefault;
+    @SerializedName("region")
     private String region;
+    @SerializedName("province")
     private String province;
+    @SerializedName("city")
     private String city;
+
     private String barangay;
+    @SerializedName("street_address")
     private String streetName;
+    @SerializedName("postal_code")
     private String zipCode;
     private String label;
 

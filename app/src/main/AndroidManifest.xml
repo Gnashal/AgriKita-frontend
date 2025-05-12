@@ -22,6 +22,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".pages.addons.checkout.OrderConfirmation"
+            android:exported="false" />
+        <activity
             android:name=".pages.shop.ShopDetailsPage"
             android:exported="false" />
         <activity
@@ -70,7 +73,7 @@
             android:name=".pages.marketplace.Marketplace"
             android:exported="false"></activity>
         <activity
-            android:name=".pages.addons.ShoppingCartPage"
+            android:name=".pages.addons.checkout.ShoppingCartPage"
             android:exported="false" />
         <activity
             android:name=".pages.addons.WeatherForecast"
@@ -79,10 +82,18 @@
             android:name=".pages.shop.InventoryManagement"
             android:exported="false" />
         <activity
+            android:name=".pages.shop.MyOrders"
+            android:exported="false">
+<!--         <intent-filter>-->
+<!--         <action android:name="android.intent.action.MAIN" />-->
+<!--         <category android:name="android.intent.category.LAUNCHER" />-->
+<!--         </intent-filter>-->
+    </activity>
+        <activity
             android:name=".pages.index.Home"
             android:exported="false" />
         <activity
-            android:name=".pages.addons.Checkout"
+            android:name=".pages.addons.checkout.Checkout"
             android:exported="false" /> <!-- <intent-filter> -->
         <!-- <action android:name="android.intent.action.MAIN" /> -->
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->

@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 
 import mobdev.agrikita.R;
-import mobdev.agrikita.models.auth.response.NewsApiResponse;
+import mobdev.agrikita.models.news.NewsApiResponse;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;

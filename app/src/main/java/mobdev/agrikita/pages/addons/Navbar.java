@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.pages.addons.checkout.ShoppingCartPage;
 import mobdev.agrikita.pages.index.Home;
 import mobdev.agrikita.pages.index.Profile;
 
@@ -22,6 +23,7 @@ public class Navbar extends Fragment {
     public Navbar() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
