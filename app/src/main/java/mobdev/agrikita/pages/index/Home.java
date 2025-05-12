@@ -339,6 +339,7 @@ public class Home extends AppCompatActivity {
         profileLayout.setOnClickListener(v -> toProfile());
         toNotifications.setOnClickListener(v -> startActivity(new Intent(this, Notification.class)));
         toMarketplace.setOnClickListener(v -> startActivity(new Intent(this, Marketplace.class)));
+
     }
 
     private void toProfile() {
@@ -392,11 +393,21 @@ public class Home extends AppCompatActivity {
     private void saveToPrefs() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("UserID", CurrentUser.getInstance(this).getUid());
-        editor.putBoolean("HasShop", CurrentUser.getInstance(this).hasShop());
-        if (CurrentUser.getInstance(this).hasShop()) {
-            editor.putString("ShopID", CurrentUser.getInstance(this).getShopId());
+        CurrentUser currentUser = CurrentUser.getInstance(this);
+        Log.v("CurrentUser", "Fetched user: " + currentUser.toString());
+        editor.putString("UserID", currentUser.getUid());
+        if (currentUser.hasShop()) {
+            String shopId = currentUser.getShopId();
+            if (shopId != null) {
+                editor.putBoolean("HasShop", true);
+                editor.putString("ShopID", shopId);
+            } else {
+                editor.putBoolean("HasShop", false);
+            }
+        } else {
+            editor.putBoolean("HasShop", false);
         }
+
         editor.apply();
     }
 
@@ -437,31 +448,20 @@ public class Home extends AppCompatActivity {
     }
 
     private void fetchShopProducts() {
-        // Show the progress bar while fetching the data
-        progressBarFeaturedProducts.setVisibility(View.VISIBLE);
-
         productService.getFeaturedProducts(new ProductService.ProductCallback() {
             @Override
             public void onProductsFetched(List<Products> products) {
-                // Clear the existing list before adding the new products
                 productsList.clear();
 
-                // Add only the first 6 products to the list
-                int productCount = Math.min(products.size(), 6); // To handle cases where less than 6 products are fetched
+                int productCount = Math.min(products.size(), 15); // To handle cases where less than 6 products are fetched
                 productsList.addAll(products.subList(0, productCount));
-
-                // Notify the adapter that the data has been updated
-                productsAdapter.notifyDataSetChanged();
-
-                // Hide the progress bar after the data is fetched
-                progressBarFeaturedProducts.setVisibility(View.GONE);
+                progressBarProducts.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                // Log the error if the data fetch fails
                 Log.e("ProductList", "Error fetching product", throwable);
-                progressBarFeaturedProducts.setVisibility(View.GONE);
+                progressBarProducts.setVisibility(View.GONE);
             }
         });
     }

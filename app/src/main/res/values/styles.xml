@@ -148,5 +148,29 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="FormLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FormInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@drawable/bg_tag_outlined</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="ChipButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@drawable/bg_tag_outlined</item>
+        <item name="android:textColor">@color/agrikita_green</item>
+    </style>
+
 
 </resources>

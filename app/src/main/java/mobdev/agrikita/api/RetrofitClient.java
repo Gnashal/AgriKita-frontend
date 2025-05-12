@@ -41,7 +41,7 @@ public class RetrofitClient {
 
                         if (user != null) {
                              try {
-                                String idToken = Tasks.await(user.getIdToken(true)).getToken(); // force refresh
+                                String idToken = Tasks.await(user.getIdToken(true)).getToken(); 
 
                                 if (idToken != null && !idToken.isEmpty()) {
                                     builder.addHeader("Authorization", "Bearer " + idToken);

@@ -65,20 +65,20 @@
                         android:id="@+id/location_img"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/addressTxt"
-                        app:layout_constraintEnd_toStartOf="@+id/addressTxt"
+                        app:layout_constraintBottom_toBottomOf="@+id/addressBtn"
+                        app:layout_constraintEnd_toStartOf="@+id/addressBtn"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/addressTxt"
+                        app:layout_constraintTop_toTopOf="@+id/addressBtn"
                         app:srcCompat="@drawable/location_pic" />
 
                     <ImageView
                         android:id="@+id/wallet_img"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/paymentTxt"
-                        app:layout_constraintEnd_toStartOf="@+id/paymentTxt"
+                        app:layout_constraintBottom_toBottomOf="@+id/paymentBtn"
+                        app:layout_constraintEnd_toStartOf="@+id/paymentBtn"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/paymentTxt"
+                        app:layout_constraintTop_toTopOf="@+id/paymentBtn"
                         app:srcCompat="@drawable/wallet_img" />
 
                     <ImageView
@@ -108,20 +108,20 @@
                         android:id="@+id/myOrders_img"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/myOrdersTxt"
-                        app:layout_constraintEnd_toStartOf="@+id/myOrdersTxt"
+                        app:layout_constraintBottom_toBottomOf="@+id/myOrdersBtn"
+                        app:layout_constraintEnd_toStartOf="@+id/myOrdersBtn"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/myOrdersTxt"
+                        app:layout_constraintTop_toTopOf="@+id/myOrdersBtn"
                         app:srcCompat="@drawable/security_pic" />
 
                     <ImageView
                         android:id="@+id/personInfo_img"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/personalInfoTxt"
-                        app:layout_constraintEnd_toStartOf="@+id/personalInfoTxt"
+                        app:layout_constraintBottom_toBottomOf="@+id/personalInfoBtn"
+                        app:layout_constraintEnd_toStartOf="@+id/personalInfoBtn"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/personalInfoTxt"
+                        app:layout_constraintTop_toTopOf="@+id/personalInfoBtn"
                         app:srcCompat="@drawable/user_pic" />
 
                     <TextView
@@ -173,8 +173,8 @@
                         tools:layout_editor_absoluteX="0dp" />
 
 
-                    <TextView
-                        android:id="@+id/personalInfoTxt"
+                    <Button
+                        android:id="@+id/personalInfoBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
@@ -183,53 +183,73 @@
                         android:text="Personal Information"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
+                        android:background="@android:color/transparent"
+                        android:elevation="0dp"
+                        android:padding="0dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:textAllCaps="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.49"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button"
                         app:layout_constraintVertical_bias="0.012" />
 
-                    <TextView
-                        android:id="@+id/myOrdersTxt"
+                    <Button
+                        android:id="@+id/myOrdersBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="112dp"
                         android:text="My Orders"
                         android:textColor="@color/black"
+                        android:background="@android:color/transparent"
+                        android:elevation="0dp"
+                        android:padding="0dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:textAllCaps="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.375"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button"
                         app:layout_constraintVertical_bias="0.401" />
 
-                    <TextView
-                        android:id="@+id/addressTxt"
+                    <Button
+                        android:id="@+id/addressBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="72dp"
                         android:text="Addresses"
                         android:textColor="@color/black"
+                        android:background="@android:color/transparent"
+                        android:elevation="0dp"
+                        android:padding="0dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:textAllCaps="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.371"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button"
                         app:layout_constraintVertical_bias="0.598" />
 
-                    <TextView
-                        android:id="@+id/paymentTxt"
+                    <Button
+                        android:id="@+id/paymentBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="32dp"
                         android:text="Payment Methods"
                         android:textColor="@color/black"
+                        android:background="@android:color/transparent"
+                        android:elevation="0dp"
+                        android:padding="0dp"
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:textAllCaps="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.446"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button"
                         app:layout_constraintVertical_bias="0.834" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
