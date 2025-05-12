@@ -1,8 +1,6 @@
-package mobdev.agrikita.models.auth.response;
+package mobdev.agrikita.models.news;
 
 import java.util.List;
-
-import mobdev.agrikita.models.news.Article;
 
 public class NewsApiResponse {
     private List<Article> articles;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.api.ProductServiceApi;
-import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.api.client.RetrofitClient;
 import mobdev.agrikita.models.products.request.CreateProductRequest;
 import mobdev.agrikita.models.products.response.CreateProductResponse;
 import mobdev.agrikita.models.products.response.GetAllProductsResponse;

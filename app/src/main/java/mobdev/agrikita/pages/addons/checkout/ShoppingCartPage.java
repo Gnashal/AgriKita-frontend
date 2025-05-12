@@ -1,4 +1,4 @@
-package mobdev.agrikita.pages.addons;
+package mobdev.agrikita.pages.addons.checkout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,13 +29,14 @@ import mobdev.agrikita.pages.index.Home;
 import mobdev.agrikita.pages.marketplace.Marketplace;
 
 public class ShoppingCartPage extends AppCompatActivity {
+    private ListView shoppingCartList;
+    private List<Products> productList;
+    private ShoppingCartProductAdapter adapter;
+    private MaterialButton shpc_togoCheckout, shpc_contshopping;
+    private TextView shpc_subtotal, shpc_shipping, shpc_total;
+    private ImageView back_btn;
 
-    ListView shoppingCartList;
-    List<Products> productList;
-    ShoppingCartProductAdapter adapter;
-    MaterialButton shpc_togoCheckout, shpc_contshopping;
-    TextView shpc_subtotal, shpc_shipping, shpc_total;
-    ImageView back_btn;
+    private double subtotal, shipping, total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,21 +71,31 @@ public class ShoppingCartPage extends AppCompatActivity {
 
         shoppingCartList.setAdapter(adapter);
 
-        double subtotal = getSubTotalCost(productList);
-        double shipping = getShippingCost(subtotal);
+        subtotal = getSubTotalCost(productList);
+        shipping = getShippingCost(subtotal);
+        total = subtotal + shipping;
         shpc_subtotal.setText("₱ "+String.format("%.2f", subtotal));
         shpc_shipping.setText("₱ "+String.format("%.2f", shipping));
-        shpc_total.setText("₱ "+String.format("%.2f", subtotal + shipping));
+        shpc_total.setText("₱ "+String.format("%.2f", total));
 
         // Buttons Functionalities
         back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
-        shpc_togoCheckout.setOnClickListener(v -> goToCheckout());
+        shpc_togoCheckout.setOnClickListener(v -> {
+            if (productList.isEmpty()) {
+                Toast.makeText(this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
+            } else {
+                goToCheckout();
+            }
+        });
         shpc_contshopping.setOnClickListener(v -> goToMarketplace());
     }
 
     private void goToCheckout() {
-        Toast.makeText(this, "Going Checkout", Toast.LENGTH_SHORT).show();
-//        startActivity(new Intent(ShoppingCartPage.this, ));
+        Intent intent = new Intent(this, Checkout.class);
+        intent.putExtra("subtotal", subtotal);
+        intent.putExtra("shipping", shipping);
+        intent.putExtra("total", total);
+        startActivity(intent);
     }
 
     private void goToMarketplace() {
@@ -93,7 +104,9 @@ public class ShoppingCartPage extends AppCompatActivity {
     }
 
     private double getShippingCost(double subTotal){
-        return subTotal * 0.07;
+        if (subTotal > 100) {
+            return subTotal * 0.07;
+        } else return 0;
     }
 
     private double getSubTotalCost(List<Products> productList) {

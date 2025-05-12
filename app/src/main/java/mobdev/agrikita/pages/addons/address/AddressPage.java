@@ -23,7 +23,6 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.AddressAdapter;
 import mobdev.agrikita.controllers.AddressController;
 import mobdev.agrikita.models.address.Address;
-import mobdev.agrikita.models.address.AddressList;
 import mobdev.agrikita.models.user.CurrentUser;
 
 public class AddressPage extends AppCompatActivity {

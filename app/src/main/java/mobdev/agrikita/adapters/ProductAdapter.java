@@ -1,19 +1,16 @@
 package mobdev.agrikita.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
@@ -21,8 +18,6 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
-import mobdev.agrikita.pages.addons.ShoppingCartPage;
-import mobdev.agrikita.controllers.ShoppingCartController;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
@@ -65,6 +60,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Products productItem = productList.get(position);
 
+        holder.productName.setText(productItem.getProductName());
         holder.category.setText(productItem.getCategory());
         holder.price.setText("₱ "+String.format("%.2f", productItem.getPrice()));
         holder.rating.setText(String.valueOf(productItem.getRating()));

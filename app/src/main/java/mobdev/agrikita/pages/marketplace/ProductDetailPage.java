@@ -32,7 +32,7 @@
     import mobdev.agrikita.models.products.Products;
     import mobdev.agrikita.controllers.ShoppingCartController;
     import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
-    import mobdev.agrikita.pages.addons.ShoppingCartPage;
+    import mobdev.agrikita.pages.addons.checkout.ShoppingCartPage;
 
     public class ProductDetailPage extends AppCompatActivity {
 
@@ -194,7 +194,9 @@
 
         private void goToShoppingCart(Products product) {
             ShoppingCartController.getInstance().addToCart(product);
-            startActivity(new Intent(ProductDetailPage.this, ShoppingCartPage.class));
+            Toast.makeText(this, "Added to Cart", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, Marketplace.class));
+            finish();
         }
 
         private double getTotal(Products product) {

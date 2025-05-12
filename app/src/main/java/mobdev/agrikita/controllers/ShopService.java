@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
-import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.api.client.RetrofitClient;
 import mobdev.agrikita.api.ShopServiceApi;
 import mobdev.agrikita.models.shop.response.CreateShopResponse;
 import mobdev.agrikita.models.shop.response.GetFeaturedShopsResponse;

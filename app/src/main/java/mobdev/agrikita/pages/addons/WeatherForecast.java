@@ -1,6 +1,5 @@
 package mobdev.agrikita.pages.addons;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +32,7 @@ import mobdev.agrikita.adapters.NewsAdapter;
 import mobdev.agrikita.controllers.NewsController;
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.WeatherService;
-import mobdev.agrikita.models.auth.response.NewsApiResponse;
+import mobdev.agrikita.models.news.NewsApiResponse;
 import mobdev.agrikita.pages.index.Home;
 
 public class WeatherForecast extends AppCompatActivity {
