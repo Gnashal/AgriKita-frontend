@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/agrikita_background"
-    tools:context=".pages.addons.ShoppingCartPage">
+    tools:context=".pages.addons.checkout.ShoppingCartPage">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navbar_added"
@@ -93,6 +93,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:padding="15dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -174,6 +175,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/shoppingcart_to_go_checkout"
+                        android:backgroundTint="@color/agrikita_green"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Proceed to Checkout" />

@@ -1,20 +1,21 @@
 package mobdev.agrikita.models.order.response;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 import mobdev.agrikita.models.order.Orders;
 
 public class GetOrdersByBuyerIDResponse {
-    private boolean success;
-    private String message;
+    @SerializedName("error")
+    private String error;
+    @SerializedName("orders")
     private List<Orders> data;
 
-    public boolean isSuccess() {
-        return success;
-    }
+
 
     public String getMessage() {
-        return message;
+        return error;
     }
 
     public List<Orders> getData() {

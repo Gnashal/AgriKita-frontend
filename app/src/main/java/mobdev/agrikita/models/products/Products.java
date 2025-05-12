@@ -19,7 +19,7 @@ public class Products implements Serializable {
     private String productName;
 
     @SerializedName("price")
-    private double price;
+    private float price;
 
     @SerializedName("measuringUnit")
     private String measuringUnit;
@@ -60,7 +60,7 @@ public class Products implements Serializable {
     private int quantityToBuy = 1;
 
     // Constructor
-    public Products(String productID, String shopID, String imageUrl, String productName, double price,
+    public Products(String productID, String shopID, String imageUrl, String productName, float price,
                     String measuringUnit, String category, int stockQuantity, String originLocation,
                     String freshnessRate, String storage, String description, boolean isOrganic,
                     boolean isFeatured, String rating, String status, String createdAt) {
@@ -100,7 +100,7 @@ public class Products implements Serializable {
         return productName;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 

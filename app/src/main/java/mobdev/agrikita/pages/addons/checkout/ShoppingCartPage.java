@@ -1,4 +1,4 @@
-package mobdev.agrikita.pages.addons;
+package mobdev.agrikita.pages.addons.checkout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,14 +28,16 @@ import mobdev.agrikita.controllers.ShoppingCartController;
 import mobdev.agrikita.pages.index.Home;
 import mobdev.agrikita.pages.marketplace.Marketplace;
 
-public class ShoppingCartPage extends AppCompatActivity {
+public class ShoppingCartPage extends AppCompatActivity
+        implements ShoppingCartProductAdapter.CartUpdateListener{
+    private ListView shoppingCartList;
+    private List<Products> productList;
+    private ShoppingCartProductAdapter adapter;
+    private MaterialButton shpc_togoCheckout, shpc_contshopping;
+    private TextView shpc_subtotal, shpc_shipping, shpc_total;
+    private ImageView back_btn;
 
-    ListView shoppingCartList;
-    List<Products> productList;
-    ShoppingCartProductAdapter adapter;
-    MaterialButton shpc_togoCheckout, shpc_contshopping;
-    TextView shpc_subtotal, shpc_shipping, shpc_total;
-    ImageView back_btn;
+    private double subtotal, shipping, total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +68,35 @@ public class ShoppingCartPage extends AppCompatActivity {
         shoppingCartList = findViewById(R.id.shoppingcart_list);
 
         productList = ShoppingCartController.getInstance().getCartItems();
-        adapter = new ShoppingCartProductAdapter(this, productList);
+        adapter = new ShoppingCartProductAdapter(this, productList, this);
 
         shoppingCartList.setAdapter(adapter);
 
-
-        shpc_subtotal.setText("₱ "+String.format("%.2f", getSubTotalCost(productList)));
-        shpc_shipping.setText("₱ "+String.format("%.2f", getShippingCost()));
-        shpc_total.setText("₱ "+String.format("%.2f", getSubTotalCost(productList) + getShippingCost()));
+        subtotal = getSubTotalCost(productList);
+        shipping = getShippingCost(subtotal);
+        total = subtotal + shipping;
+        shpc_subtotal.setText("₱ "+String.format("%.2f", subtotal));
+        shpc_shipping.setText("₱ "+String.format("%.2f", shipping));
+        shpc_total.setText("₱ "+String.format("%.2f", total));
 
         // Buttons Functionalities
         back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
-        shpc_togoCheckout.setOnClickListener(v -> goToCheckout());
+        shpc_togoCheckout.setOnClickListener(v -> {
+            if (productList.isEmpty()) {
+                Toast.makeText(this, "Your cart is empty!", Toast.LENGTH_SHORT).show();
+            } else {
+                goToCheckout();
+            }
+        });
         shpc_contshopping.setOnClickListener(v -> goToMarketplace());
     }
 
     private void goToCheckout() {
-        Toast.makeText(this, "Going Checkout", Toast.LENGTH_SHORT).show();
-//        startActivity(new Intent(ShoppingCartPage.this, ));
+        Intent intent = new Intent(this, Checkout.class);
+        intent.putExtra("subtotal", subtotal);
+        intent.putExtra("shipping", shipping);
+        intent.putExtra("total", total);
+        startActivity(intent);
     }
 
     private void goToMarketplace() {
@@ -91,8 +104,10 @@ public class ShoppingCartPage extends AppCompatActivity {
         startActivity(new Intent(ShoppingCartPage.this, Marketplace.class));
     }
 
-    private double getShippingCost() {
-        return 100.00;
+    private double getShippingCost(double subTotal){
+        if (subTotal > 100) {
+            return subTotal * 0.07;
+        } else return 0;
     }
 
     private double getSubTotalCost(List<Products> productList) {
@@ -105,4 +120,27 @@ public class ShoppingCartPage extends AppCompatActivity {
         
         return totalHere;
     }
+    private void updateCartTotals() {
+        subtotal = getSubTotalCost(productList);
+        shipping = getShippingCost(subtotal);
+        total = subtotal + shipping;
+
+        shpc_subtotal.setText("₱ "+String.format("%.2f", subtotal));
+        shpc_shipping.setText("₱ "+String.format("%.2f", shipping));
+        shpc_total.setText("₱ "+String.format("%.2f", total));
+    }
+
+    @Override
+    public void onQuantityChanged() {
+        updateCartTotals();
+    }
+
+    @Override
+    public void onItemRemoved(int position) {
+        updateCartTotals();
+        if (productList.isEmpty()) {
+            Toast.makeText(this, "Your cart is now empty", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

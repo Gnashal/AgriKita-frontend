@@ -7,25 +7,15 @@ import java.util.List;
 
 
 public class Orders implements Serializable {
-
-    public Orders(String id, String createdAt, int total, String status) {
-        this.orderID = id;
-        this.createdAt = createdAt;
-        this.total = total;
-        this.status = status;
-    }
-
     @SerializedName("orderID")
     private String orderID;
 
-    @SerializedName("shopID")
-    private String shopID;
 
-    @SerializedName("buyerID")
+    @SerializedName("id")
     private String buyerID;
 
     @SerializedName("total")
-    private int total;
+    private float  total;
 
     @SerializedName("createdAt")
     private String createdAt;
@@ -36,11 +26,18 @@ public class Orders implements Serializable {
     @SerializedName("items")
     private List<OrderItem> items;
 
+
+    public Orders(String id, String createdAt, float total, String status) {
+        this.orderID = id;
+        this.createdAt = createdAt;
+        this.total = total;
+        this.status = status;
+    }
+
     // === Core Getters ===
     public String getOrderId() { return orderID; }
-    public String getShopID() { return shopID; }
     public String getBuyerID() { return buyerID; }
-    public int getTotal() { return total; }
+    public float  getTotal() { return total; }
     public String getCreatedAt() { return createdAt; }
     public String getStatus() { return status; }
     public List<OrderItem> getItems() { return items; }
@@ -80,7 +77,7 @@ public class Orders implements Serializable {
         private String name;
 
         @SerializedName("price")
-        private int price;
+        private float price;
 
         @SerializedName("imageUrl")
         private String imageUrl;
@@ -92,7 +89,7 @@ public class Orders implements Serializable {
         public String getProductID() { return productID; }
         public String getShopID() { return shopID; }
         public String getName() { return name; }
-        public int getPrice() { return price; }
+        public float getPrice() { return price; }
         public String getImageUrl() { return imageUrl; }
         public int getQuantity() { return quantity; }
 

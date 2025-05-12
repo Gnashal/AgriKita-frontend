@@ -3,6 +3,7 @@ package mobdev.agrikita.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import mobdev.agrikita.models.order.OrderItem;
 import mobdev.agrikita.models.products.Products;
 
 public class ShoppingCartController {
@@ -30,5 +31,29 @@ public class ShoppingCartController {
 
     public void clearTheCart() {
         cart.clear();
+    }
+
+    public List<OrderItem> convertAndClearCart() {
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        // Convert each Products item to OrderItem
+        for (Products product : cart) {
+            OrderItem orderItem = new OrderItem(
+                    product.getProductID(),
+                    product.getShopID(),
+                    product.getProductName(),
+                    product.getPrice(),
+                    product.getImageUrl(),
+                    product.getQuantityToBuy()
+            );
+            orderItems.add(orderItem);
+        }
+
+        clearTheCart();
+
+        return orderItems;
+    }
+    public void removeItemFromCart(int position) {
+        cart.remove(position);
     }
 }

@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import mobdev.agrikita.api.AuthServiceApi;
-import mobdev.agrikita.api.RetrofitClient;
+import mobdev.agrikita.api.client.RetrofitClient;
 import mobdev.agrikita.models.auth.request.ForgotPasswordRequest;
 import mobdev.agrikita.models.auth.response.ForgotPasswordResponse;
 import mobdev.agrikita.models.auth.request.SignupRequest;

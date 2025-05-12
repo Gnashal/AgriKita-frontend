@@ -20,6 +20,7 @@ import mobdev.agrikita.pages.addons.BuyAgainDialog;
 
 import mobdev.agrikita.models.order.Orders;
 import mobdev.agrikita.pages.shop.OrderDetailsBottomSheet;
+import mobdev.agrikita.utils.DateUtil;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
@@ -52,21 +53,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         Orders order = orderList.get(position);
 
         if (order == null) return; // Safeguard
-
+        String readableDate = DateUtil.formatOrderDate(order.getOrderDate());
         holder.tvOrderId.setText(order.getOrderId());
-        holder.tvOrderDate.setText("Ordered on " + order.getOrderDate());
+        holder.tvOrderDate.setText("Ordered on " + readableDate);
         holder.tvItems.setText("Items (" + order.getItemCount() + ")");
         holder.tvDetails.setText(order.getItemDetails());
         holder.tvTotal.setText("₱" + order.getTotal());
         holder.tvStatus.setText(order.getStatus());
 
-        switch (order.getStatus().toLowerCase()) {
-            case "delivered":
+        switch (order.getStatus()) {
+            case "Delivered":
                 holder.tvStatus.setTextColor(Color.parseColor("#000000"));
                 holder.imageView.setImageResource(R.drawable.delivered_check);
                 holder.btnBuyAgain.setVisibility(View.VISIBLE);
                 break;
-            case "processing":
+            case "Pending":
                 holder.tvStatus.setTextColor(Color.parseColor("#000000"));
                 holder.imageView.setImageResource(R.drawable.box);
                 holder.btnBuyAgain.setVisibility(View.GONE);

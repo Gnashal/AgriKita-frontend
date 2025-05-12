@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class OrdersPagerAdapter extends FragmentStateAdapter {
 
-    private final String[] statuses = {"All", "Processing", "In Transit", "Delivered"};
+    private final String[] statuses = {"All", "Pending", "In Transit", "Delivered"};
 
     public OrdersPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
