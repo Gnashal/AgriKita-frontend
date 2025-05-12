@@ -1,12 +1,15 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@color/agrikita_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/rounded_corner_background">
 
         <!-- Shipping Information Section -->
         <TextView
@@ -15,42 +18,71 @@
             android:text="Shipping Information"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:textColor="@color/agrikita_dark_green" />
 
         <EditText
+            android:id="@+id/first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="First Name" />
+            android:hint="First Name"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last Name" />
+            android:hint="Last Name"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Address" />
+            android:hint="Address"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="City" />
+            android:hint="City"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/province"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Province" />
+            android:hint="Province"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/postal_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Postal Code" />
+            android:hint="Postal Code"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone Number" />
+            android:hint="Phone Number"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- Payment Method Section -->
         <TextView
@@ -59,8 +91,8 @@
             android:text="Payment Method"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:textColor="@color/agrikita_dark_green" />
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -69,13 +101,13 @@
 
             <!-- GCash Option -->
             <LinearLayout
-                android:layout_width="129dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:background="@color/blue"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="12dp">
 
                 <RadioButton
                     android:id="@+id/radio_gcash"
@@ -95,12 +127,12 @@
 
             <!-- Maya Option -->
             <LinearLayout
-                android:layout_width="130dp"
+                android:layout_width="129dp"
                 android:layout_height="wrap_content"
                 android:background="@color/agrikita_green"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="12dp">
 
                 <RadioButton
                     android:id="@+id/radio_maya"
@@ -127,7 +159,8 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:textColor="@color/agrikita_dark_green" />
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -157,7 +190,8 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:textColor="@color/agrikita_dark_green" />
 
         <LinearLayout
             android:id="@+id/order_summary_container"
