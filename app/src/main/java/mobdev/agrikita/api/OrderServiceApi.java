@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import mobdev.agrikita.models.order.response.GetOrdersByBuyerIDResponse;
 import retrofit2.http.Query;
 
 public interface OrderServiceApi {
@@ -15,4 +16,7 @@ public interface OrderServiceApi {
 
     @POST("service/order/create-order")
     Call<CreateOrderResponse> createOrder(@Body CreateOrderRequest createOrderRequest);
+    @GET("service/order/fetch-orders-by-buyer")
+    Call<GetOrdersByBuyerIDResponse> getOrdersByBuyerID(@Query("buyerID") String buyerID);
+
 }

@@ -67,7 +67,7 @@ public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAd
             }
         });
 
-        holder.textOrderID.setText(orders.getId());
+        holder.textOrderID.setText(orders.getOrderId());
         holder.textDate.setText(cleanedDate);
         holder.textQuantity.setText(String.valueOf(orders.getTotal()));
     }
@@ -103,7 +103,7 @@ public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAd
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
                 for (Orders item : orderListFull) {
-                    if (item.getId().toLowerCase().contains(filterPattern) ||
+                    if (item.getOrderId().toLowerCase().contains(filterPattern) ||
                             item.getBuyerID().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
