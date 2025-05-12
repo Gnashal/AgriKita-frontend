@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#808080</color>
     <color name="light_gray">#c1d2e3</color>
+    <color name="blue">#0074D9</color>
+    
 
     <!--  Agri-kita Colors  -->
     <color name="agrikita_dark_green">#00490C</color>
