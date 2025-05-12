@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="32dp"
     android:layout_marginEnd="32dp"
+    android:backgroundTint="@color/white"
     card_view:cardCornerRadius="8dp"
     card_view:cardElevation="8dp"
     android:layout_margin="16dp">
@@ -53,6 +54,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Delivered"
+                    android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="italic"
                     card_view:layout_constraintBottom_toBottomOf="parent"
@@ -89,6 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#DDD"
+            android:backgroundTint="@color/gray"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp" />
 
@@ -118,6 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#DDD"
+            android:backgroundTint="@color/gray"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp" />
 

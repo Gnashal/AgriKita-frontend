@@ -33,6 +33,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         this.fragmentManager = fragmentManager;
     }
 
+    public void updateData(List<Orders> newOrders) {
+        this.orderList = newOrders;
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
