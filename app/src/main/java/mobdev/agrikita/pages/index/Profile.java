@@ -281,6 +281,11 @@ public class Profile extends AppCompatActivity {
                     .circleCrop()
                     .into(userProfilePicture);
 
+        }else {
+            Glide.with(this)
+                    .load(R.drawable.profile)
+                    .circleCrop()
+                    .into(userProfilePicture);
         }
     }
     private void fetchUserData() {

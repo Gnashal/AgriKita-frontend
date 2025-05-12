@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/agrikita_homepage_bg"
-            android:layout_height="250dp">
+            android:layout_height="305dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,11 +64,11 @@
 
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -116,8 +116,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="#AE3E3E3E"
             android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <!-- Left Box -->
             <LinearLayout
@@ -211,7 +215,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginTop="10dp"
                     android:text="16 ℃"
                     android:textColor="@color/white"
                     android:textSize="18dp" />
@@ -224,159 +227,55 @@
                     android:text="Cloudy Day!"
                     android:textColor="#C3C3C3"
                     android:textSize="14dp" />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="35dp"
-            android:paddingEnd="35dp">
-
-            <!-- Common Style for Each Menu Item -->
-            <LinearLayout
-                android:id="@+id/profileLayout"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/white_icon_bg"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:padding="4dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/user"
-                    app:tint="@android:color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Profile"
-                    android:textColor="@android:color/black"
-                    android:textSize="9sp" />
-            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/marketplaceLayout"
-                android:layout_width="40dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:background="@drawable/white_icon_bg"
-                android:orientation="vertical"
-                android:padding="4dp">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/market"
-                    app:tint="@android:color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Title Row: Icon and Label -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Market"
-                    android:textColor="@android:color/black"
-                    android:textSize="9sp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="10dp"
+                        android:contentDescription="Tip Icon"
+                        android:src="@drawable/lightbulb"
+                        app:tint="#2E7D32" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Farmer’s Tip!"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Tip Content Below -->
+                <TextView
+                    android:id="@+id/farmersTipText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:paddingStart="35dp"
+                    android:text="This is the farmer tip content."
+                    android:gravity="start" />
+
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/cartLayout"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:clickable="true"
-                android:layout_weight="1"
-                android:background="@drawable/white_icon_bg"
-                android:orientation="vertical"
-                android:padding="4dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/shopping_cart"
-                    app:tint="@android:color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Cart"
-                    android:textColor="@android:color/black"
-                    android:textSize="9sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ordersLayout"
-                android:layout_width="40dp"
-                android:clickable="true"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/white_icon_bg"
-                android:orientation="vertical"
-                android:padding="4dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/clipboard"
-                    app:tint="@android:color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Orders"
-                    android:textColor="@android:color/black"
-                    android:textSize="9sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/shopLayout"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:clickable="true"
-                android:layout_weight="1"
-                android:background="@drawable/white_icon_bg"
-                android:orientation="vertical"
-                android:padding="4dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/store"
-                    app:tint="@android:color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="My Shop"
-                    android:textColor="@android:color/black"
-                    android:textSize="9sp" />
-            </LinearLayout>
         </LinearLayout>
 
         <!-- Container for the three buttons -->
@@ -493,6 +392,158 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="35dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rice_bg"
+            android:paddingEnd="35dp">
+
+            <!-- Common Style for Each Menu Item -->
+            <LinearLayout
+                android:id="@+id/profileLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/user"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Profile"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/marketplaceLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/market"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Market"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cartLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/shopping_cart"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Cart"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ordersLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/clipboard"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Orders"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shopLayout"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/white_icon_bg"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/store"
+                    app:tint="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="My Shop"
+                    android:textColor="@android:color/black"
+                    android:textSize="9sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/white"
@@ -528,6 +579,8 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+
+
             <ProgressBar
                 android:id="@+id/progressBarProds"
                 android:layout_width="wrap_content"
@@ -539,7 +592,7 @@
                 android:id="@+id/bestSeller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp" />
 
 
         </LinearLayout>
@@ -582,25 +635,24 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/featuredFarms"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="500dp" />
 
 
         </LinearLayout>
-
-            <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/white"
             android:orientation="vertical">
 
+            <!-- Header Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:weightSum="1"
-                android:layout_marginBottom="20dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
@@ -608,25 +660,41 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:text="Latest News"
+                    android:text="🛍️ Shop Products"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/see_all_products"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:background="@android:color/transparent"
+                    android:text="See All"
+                    android:textColor="#2C6B2F"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-
-            <!-- RecyclerView for News Items -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/newsRecyclerView"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progressBarProducts"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
-                android:paddingBottom="16dp"/>
-            </LinearLayout>
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:clipToPadding="false"/>
         </LinearLayout>
+
+
+    </LinearLayout>
     </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

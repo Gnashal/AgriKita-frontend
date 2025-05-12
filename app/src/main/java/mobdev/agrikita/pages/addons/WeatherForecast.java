@@ -1,5 +1,7 @@
 package mobdev.agrikita.pages.addons;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONException;
@@ -21,19 +25,27 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
+import mobdev.agrikita.adapters.NewsAdapter;
+import mobdev.agrikita.controllers.NewsController;
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.WeatherService;
+import mobdev.agrikita.models.auth.response.NewsApiResponse;
+import mobdev.agrikita.pages.index.Home;
 
 public class WeatherForecast extends AppCompatActivity {
-
+    private RecyclerView newsRecyclerView;
+    private NewsAdapter newsAdapter;
     private EditText location;
     private TextView currentDate, conditionText, Temperature, maxTemp, minTemp, humidity,
-            pressure, wind, sunriseTime, sunsetTime, countryName, weatherDesc,  farmersTipText;
+            pressure, wind, sunriseTime, sunsetTime, countryName, weatherDesc,  farmersTipText,
+            predictionText;
 //    private Button changeCountryBtn;
     private SwipeRefreshLayout refreshBtn;
-    private ImageView weatherIcon;
+    private ImageView weatherIcon, back_btn;
     private ProgressBar loadingSpinner;
 
 
@@ -63,20 +75,26 @@ public class WeatherForecast extends AppCompatActivity {
         minTemp = findViewById(R.id.minTemp);
         humidity = findViewById(R.id.humidity);
         pressure = findViewById(R.id.pressure);
+        back_btn = findViewById(R.id.back_btn);
         wind = findViewById(R.id.wind);
         sunriseTime = findViewById(R.id.sunriseTime);
         sunsetTime = findViewById(R.id.sunsetTime);
 //        changeCountryBtn = findViewById(R.id.fetchWeatherButton);
         weatherIcon = findViewById(R.id.weatherIcon);
-        weatherDesc = findViewById(R.id.weatherDescription);
         countryName = findViewById(R.id.countryName);
         refreshBtn = findViewById(R.id.swipeRefreshLayout);
         loadingSpinner = findViewById(R.id.loadingSpinner);
         farmersTipText = findViewById(R.id.farmersTipText);
-
+        predictionText = findViewById(R.id.predictionText);
+        newsRecyclerView = findViewById(R.id.newsRecyclerView);
+        newsAdapter = new NewsAdapter();
+        newsRecyclerView.setAdapter(newsAdapter);
+        newsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         showCurrentDate();
         fetchWeather();
+        fetchEverythingNews();
+        back_btn.setOnClickListener(v -> startActivity(new Intent(this, Home.class)));
 //        changeCountryBtn.setOnClickListener(view -> {
 //            String cityName = location.getText().toString();
 //            if (!cityName.isEmpty()) {
@@ -86,6 +104,7 @@ public class WeatherForecast extends AppCompatActivity {
 //        });
         refreshBtn.setOnRefreshListener(() -> {
             fetchWeather();
+            fetchEverythingNews();
         });
     }
 
@@ -130,37 +149,76 @@ public class WeatherForecast extends AppCompatActivity {
             }
         });
     }
-    private String generateFarmerTip(String condition, int humidity) {
-        if (condition.contains("sunny")) {
-            if (humidity < 40) {
-                return "It's sunny and dry. Water crops well to prevent dehydration.";
-            } else {
-                return "Sunny with moderate humidity. Consider light watering.";
-            }
-        } else if (condition.contains("rain")) {
-            if (humidity > 70) {
-                return "Rainy and humid. No need to water; watch for plant diseases.";
-            } else {
-                return "Rain expected. Delay irrigation and monitor moisture.";
-            }
-        } else if (condition.contains("cloudy")) {
-            if (humidity > 60) {
-                return "Cloudy and humid. Provide ventilation in greenhouses.";
-            } else {
-                return "Cloudy with dry air. Light watering might be necessary.";
-            }
-        } else if (condition.contains("storm")) {
-            return "Storm alert! Secure your crops and farm equipment.";
-        } else if (condition.contains("snow")) {
-            return "Snowy conditions. Protect plants from frost and cold.";
-        } else {
-            if (humidity > 80) {
-                return "Very humid today. Watch out for mold or mildew.";
-            } else {
-                return "Check soil and forecast before working the fields.";
+
+    private static final Map<String, String> predictionMap = new HashMap<>();
+    static {
+        predictionMap.put("sunny", "◉ Clear skies expected with plenty of sunshine throughout the day.");
+        predictionMap.put("rain", "◉ Rainfall is expected. Carry an umbrella and plan for wet conditions.");
+        predictionMap.put("cloudy", "◉ Overcast skies with little to no direct sunlight.");
+        predictionMap.put("storm", "◉ Severe weather warning: Thunderstorms are likely. Stay indoors.");
+        predictionMap.put("snow", "◉ Snowfall expected. Prepare for cold temperatures and slippery roads.");
+        predictionMap.put("wind", "◉ Windy conditions anticipated. Secure loose objects outdoors.");
+        predictionMap.put("fog", "◉ Foggy conditions may reduce visibility. Drive carefully.");
+    }
+
+    private String generatePredictionStatement(String condition) {
+        condition = condition.toLowerCase();
+        for (String key : predictionMap.keySet()) {
+            if (condition.contains(key)) {
+                return predictionMap.get(key);
             }
         }
+        return "◉ Mixed weather patterns today. Stay updated with local forecasts.";
     }
+
+
+    private static final Map<String, Map<String, String>> farmerTipMap = new HashMap<>();
+    static {
+        // Sunny
+        Map<String, String> sunnyMap = new HashMap<>();
+        sunnyMap.put("low", "◉ It's sunny and dry. Water crops well to prevent dehydration.");
+        sunnyMap.put("high", "◉ Sunny with moderate humidity. Consider light watering.");
+        farmerTipMap.put("sunny", sunnyMap);
+
+        // Rain
+        Map<String, String> rainMap = new HashMap<>();
+        rainMap.put("low", "◉ Rain expected. Delay irrigation and monitor moisture.");
+        rainMap.put("high", "◉ Rainy and humid. No need to water; watch for plant diseases.");
+        farmerTipMap.put("rain", rainMap);
+
+        // Cloudy
+        Map<String, String> cloudyMap = new HashMap<>();
+        cloudyMap.put("low", "◉ Cloudy with dry air. Light watering might be necessary.");
+        cloudyMap.put("high", "◉ Cloudy and humid. Provide ventilation in greenhouses.");
+        farmerTipMap.put("cloudy", cloudyMap);
+
+        // Storm
+        farmerTipMap.put("storm", Map.of("any", "◉ Storm alert! Secure your crops and farm equipment."));
+
+        // Snow
+        farmerTipMap.put("snow", Map.of("any", "◉ Snowy conditions. Protect plants from frost and cold."));
+    }
+
+    private String generateFarmerTip(String condition, int humidity) {
+        condition = condition.toLowerCase();
+        for (String key : farmerTipMap.keySet()) {
+            if (condition.contains(key)) {
+                Map<String, String> tips = farmerTipMap.get(key);
+                if (tips.containsKey("any")) {
+                    return tips.get("any");
+                }
+                return humidity > 60 ? tips.get("high") : tips.get("low");
+            }
+        }
+
+        // Default case
+        if (humidity > 80) {
+            return "◉ Very humid today. Watch out for mold or mildew.";
+        } else {
+            return "◉ Check soil and forecast before working the fields.";
+        }
+    }
+
 
     private void updateUI() {
         String result = WeatherService.getInstance(this).getJsonWeatherString();
@@ -198,7 +256,6 @@ public class WeatherForecast extends AppCompatActivity {
                 }
 
                 conditionText.setText(description);
-                weatherDesc.setText(mainCondition);
                 countryName.setText(fullCountryName);
 
                 Temperature.setText(String.format("%.0f°", temperature));
@@ -210,12 +267,33 @@ public class WeatherForecast extends AppCompatActivity {
                 sunriseTime.setText(android.text.format.DateFormat.format("hh:mm a", sunrise * 1000));
                 sunsetTime.setText(android.text.format.DateFormat.format("hh:mm a", sunset * 1000));
 
-                String tip = generateFarmerTip(mainCondition.toLowerCase(), humidityVal);
+                String tip = generateFarmerTip(mainCondition, humidityVal);
+                String predict = generatePredictionStatement(mainCondition);
                 farmersTipText.setText(tip);
-
+                predictionText.setText(predict);
             } catch (JSONException e) {
                 Log.v("WeatherForecastFetch", "JSON parsing error", e);
             }
         }
+    }
+
+    private void fetchEverythingNews() {
+        NewsController.getInstance(this).fetchNews(new NewsController.NewsCallback() {
+            @Override
+            public void onSuccess(NewsApiResponse response) {
+                runOnUiThread(() -> {
+                    if (response.getArticles() != null) {
+                        newsAdapter.setArticles(response.getArticles());
+                    } else {
+                        Toast.makeText(WeatherForecast.this, "No articles found", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(WeatherForecast.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 }

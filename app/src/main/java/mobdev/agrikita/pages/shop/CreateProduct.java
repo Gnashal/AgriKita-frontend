@@ -343,7 +343,7 @@ public class CreateProduct extends AppCompatActivity {
             return false;
         }
         if (Objects.requireNonNull(productOriginField.getText()).toString().trim().isEmpty()) {
-            freshnessDropdown.setError("Origin field is required");
+            productOriginField.setError("Origin field is required");
             return false;
         }
         if (freshnessDropdown.getText().toString().trim().isEmpty()) {
@@ -351,11 +351,11 @@ public class CreateProduct extends AppCompatActivity {
             return false;
         }
         if (Objects.requireNonNull(productStorageField.getText()).toString().trim().isEmpty()) {
-            freshnessDropdown.setError("Storage field is required");
+            productStorageField.setError("Storage field is required");
             return false;
         }
         if (Objects.requireNonNull(productDescField.getText()).toString().trim().isEmpty()) {
-            freshnessDropdown.setError("Product description field is required");
+            productDescField.setError("Product description field is required");
             return false;
         }
 
