@@ -60,6 +60,7 @@ import mobdev.agrikita.pages.marketplace.ProductDetailPage;
 import mobdev.agrikita.pages.addons.Notification;
 import mobdev.agrikita.pages.shop.CreateShop;
 import mobdev.agrikita.pages.shop.InventoryManagement;
+import mobdev.agrikita.pages.shop.ShopDetailsPage;
 import mobdev.agrikita.pages.welcome.Login;
 import okhttp3.OkHttpClient;
 
@@ -200,6 +201,12 @@ public class Home extends AppCompatActivity {
         featuredShopsView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         featuredFarmsAdapter = new FeaturedFarmsAdapter(this, featuredFarmsList);
         featuredShopsView.setAdapter(featuredFarmsAdapter);
+
+        featuredFarmsAdapter.setOnItemClickListener(shop -> {
+            Intent goToShopDetail = new Intent(Home.this, ShopDetailsPage.class);
+            goToShopDetail.putExtra("shop_data", shop);
+            startActivity(goToShopDetail);
+        });
     }
 
     private void setupProductsRecyclerView() {

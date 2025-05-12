@@ -25,6 +25,7 @@ import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
 public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.ProductViewHolder> {
     private final List<Products> productList;
     ShopService shopService;
+    private OnItemClickListener listener;
 
     public BestSellersAdapter(Context context, List<Products> productList) {
         this.productList = productList;
@@ -136,8 +137,6 @@ public class BestSellersAdapter extends RecyclerView.Adapter<BestSellersAdapter.
     public interface OnItemClickListener {
         void onItemClick(Products product);
     }
-
-    private OnItemClickListener listener;
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
