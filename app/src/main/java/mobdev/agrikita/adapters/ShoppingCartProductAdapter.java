@@ -19,15 +19,22 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.ShoppingCartController;
 import mobdev.agrikita.models.products.Products;
 
 public class ShoppingCartProductAdapter extends BaseAdapter {
+    public interface CartUpdateListener {
+        void onQuantityChanged();
+        void onItemRemoved(int position);
+    }
     private Context context;
     private List<Products> productList;
+    private CartUpdateListener listener;
 
-    public ShoppingCartProductAdapter(Context context, List<Products> productList) {
+    public ShoppingCartProductAdapter(Context context, List<Products> productList, CartUpdateListener listener) {
         this.context = context;
         this.productList = productList;
+        this.listener = listener;
     }
 
     @Override
@@ -96,18 +103,28 @@ public class ShoppingCartProductAdapter extends BaseAdapter {
         holder.add_btn.setOnClickListener(v -> {
             singleProd.setQuantityToBuy(singleProd.getQuantityToBuy() + 1);
             notifyDataSetChanged();
+            if (listener != null) {
+                listener.onQuantityChanged();
+            }
         });
 
         holder.sub_btn.setOnClickListener(v -> {
             if (singleProd.getQuantityToBuy() > 1) {
                 singleProd.setQuantityToBuy(singleProd.getQuantityToBuy() - 1);
                 notifyDataSetChanged();
+                if (listener != null) {
+                    listener.onQuantityChanged();
+                }
             }
         });
 
         holder.remove_btn.setOnClickListener(v -> {
             productList.remove(position);
+            ShoppingCartController.getInstance().removeItemFromCart(position);
             notifyDataSetChanged();
+            if (listener != null) {
+                listener.onItemRemoved(position);
+            }
         });
 
         return convertView;

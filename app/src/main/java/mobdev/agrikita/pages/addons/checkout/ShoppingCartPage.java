@@ -28,7 +28,8 @@ import mobdev.agrikita.controllers.ShoppingCartController;
 import mobdev.agrikita.pages.index.Home;
 import mobdev.agrikita.pages.marketplace.Marketplace;
 
-public class ShoppingCartPage extends AppCompatActivity {
+public class ShoppingCartPage extends AppCompatActivity
+        implements ShoppingCartProductAdapter.CartUpdateListener{
     private ListView shoppingCartList;
     private List<Products> productList;
     private ShoppingCartProductAdapter adapter;
@@ -67,7 +68,7 @@ public class ShoppingCartPage extends AppCompatActivity {
         shoppingCartList = findViewById(R.id.shoppingcart_list);
 
         productList = ShoppingCartController.getInstance().getCartItems();
-        adapter = new ShoppingCartProductAdapter(this, productList);
+        adapter = new ShoppingCartProductAdapter(this, productList, this);
 
         shoppingCartList.setAdapter(adapter);
 
@@ -119,4 +120,27 @@ public class ShoppingCartPage extends AppCompatActivity {
         
         return totalHere;
     }
+    private void updateCartTotals() {
+        subtotal = getSubTotalCost(productList);
+        shipping = getShippingCost(subtotal);
+        total = subtotal + shipping;
+
+        shpc_subtotal.setText("₱ "+String.format("%.2f", subtotal));
+        shpc_shipping.setText("₱ "+String.format("%.2f", shipping));
+        shpc_total.setText("₱ "+String.format("%.2f", total));
+    }
+
+    @Override
+    public void onQuantityChanged() {
+        updateCartTotals();
+    }
+
+    @Override
+    public void onItemRemoved(int position) {
+        updateCartTotals();
+        if (productList.isEmpty()) {
+            Toast.makeText(this, "Your cart is now empty", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

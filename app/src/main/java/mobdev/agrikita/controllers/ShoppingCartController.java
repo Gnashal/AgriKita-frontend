@@ -53,4 +53,7 @@ public class ShoppingCartController {
 
         return orderItems;
     }
+    public void removeItemFromCart(int position) {
+        cart.remove(position);
+    }
 }
