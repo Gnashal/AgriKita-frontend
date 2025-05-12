@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff4e4">
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navbar"
+        tools:layout="@layout/fragment_navbar"
+        android:name="mobdev.agrikita.pages.addons.Navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:backgroundTint="@color/white"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="#5eac5a"
+        app:tabSelectedTextColor="@color/black"
+        app:tabTextColor="@android:color/darker_gray" />
+<!--        app:tabBackground="@drawable/tab_background_selector"-->
+
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerOrders"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
