@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_margin="10dp">
 
-    <!-- Seller name outside and above the card -->
+    <!-- Seller name above card -->
     <TextView
         android:id="@+id/productcard_seller_name"
         android:layout_width="wrap_content"
@@ -17,134 +17,103 @@
         android:textSize="12sp"
         android:textStyle="bold"
         android:layout_marginBottom="4dp"
-        android:layout_marginStart="4dp"
-        android:maxLines="1"
-        android:ellipsize="end" />
+        android:layout_marginStart="4dp" />
 
-    <!-- Product Card -->
+    <!-- Card with image on top -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
         app:cardBackgroundColor="@android:color/white">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!-- Product image with badge -->
+            <FrameLayout
+                android:id="@+id/image_container"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/product_card_rounded_edges"
+                android:clipToOutline="true">
+
+                <ImageView
+                    android:id="@+id/productcard_product_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/agrikita_logo" />
+
+                <!-- Badge Tag -->
+                <TextView
+                    android:id="@+id/productcard_product_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/product_card_round_tag"
+                    android:padding="4dp"
+                    android:text="✔ Harvested Today"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <!-- Name, Rating, Price -->
             <LinearLayout
+                android:layout_below="@id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="6sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:padding="8dp">
 
+                <!-- Product Name -->
                 <TextView
                     android:id="@+id/pdp_product_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Product Name"
+                    android:text="test img compress 3"
                     android:textColor="@color/black"
-                    android:textSize="10sp"
-                    android:textStyle="bold"/>
-                <!-- Product Detail -->
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:ellipsize="end" />
+
+                <!-- Rating -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="4dp">
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_vertical">
 
-                    <!-- Product Image -->
-                    <FrameLayout
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@drawable/product_card_rounded_edges"
-                        android:clipToOutline="true">
-
-                        <ImageView
-                            android:id="@+id/productcard_product_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/agrikita_logo" />
-                    </FrameLayout>
-
-                    <!-- Price and Rating -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="5dp">
-
-                        <!-- Rating -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                app:srcCompat="@drawable/product_card_star" />
-
-                            <TextView
-                                android:id="@+id/productcard_product_rating"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
-                                android:text="5"
-                                android:textColor="@color/agrikita_coin_yellow"
-                                android:textSize="8sp" />
-                        </LinearLayout>
-
-                        <!-- Price -->
-                        <TextView
-                            android:id="@+id/productcard_product_price"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Php 69.69"
-                            android:textColor="@color/black"
-                            android:textSize="10sp"
-                            android:textStyle="bold" />
-
-                        <!-- Unit -->
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Per Kilo"
-                            android:textColor="#616161"
-                            android:textSize="8sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Category Tag -->
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        app:srcCompat="@drawable/product_card_star" />
 
                     <TextView
-                        android:id="@+id/productcard_product_category"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:layout_weight="1"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/product_card_round_tag"
-                        android:padding="2sp"
-                        android:layout_gravity="center"
-                        android:text="Hello"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="12dp" />
+                        android:id="@+id/productcard_product_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:layout_marginStart="4dp"
+                        android:textColor="@color/agrikita_coin_yellow"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- Price -->
+                <TextView
+                    android:id="@+id/productcard_product_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₱24312.00 Kg"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp" />
 
             </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
