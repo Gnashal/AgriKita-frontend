@@ -7,11 +7,11 @@ import java.util.List;
 
 
 public class Orders implements Serializable {
-    @SerializedName("orderID")
+    @SerializedName("id")
     private String orderID;
 
 
-    @SerializedName("id")
+    @SerializedName("buyerID")
     private String buyerID;
 
     @SerializedName("total")

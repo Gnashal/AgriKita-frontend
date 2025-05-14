@@ -37,6 +37,8 @@ import java.util.Objects;
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ImagePickerUtil;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.products.request.CreateProductRequest;
+import mobdev.agrikita.models.user.CurrentUser;
 import mobdev.agrikita.pages.addons.Navbar;
 
 public class ManageProducts extends AppCompatActivity {
@@ -203,12 +205,14 @@ public class ManageProducts extends AppCompatActivity {
         });
 
         updateButton.setOnClickListener(v -> {
-            if (!validateInputs()) return;
+//            if (!validateInputs()) return;
+
+
 
             updateButton.setEnabled(false);
             updateButton.setText("Loading...");
 
-
+            handleUpdateProduct(product.getImageUrl());
 
             resetSubmitButton();
         });
@@ -271,14 +275,6 @@ public class ManageProducts extends AppCompatActivity {
 
         reselectBtn.setVisibility(View.GONE);
         Glide.with(this).clear(productImage);
-    }
-
-    public void updateProduct(View view) {
-        Toast.makeText(ManageProducts.this, "Update Clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    public void deleteProduct(View view) {
-        Toast.makeText(ManageProducts.this, "Delete Clicked", Toast.LENGTH_SHORT).show();
     }
 
     void setDropdownToValue(AutoCompleteTextView dropdown, String value) {
@@ -355,5 +351,45 @@ public class ManageProducts extends AppCompatActivity {
         } catch (NumberFormatException e) {
             return 0; // Default to 0 if it's empty or not a number
         }
+    }
+
+    private void handleUpdateProduct(String imageUrl) {
+        CurrentUser user = CurrentUser.getInstance(this);
+        String shopId = user.getShopId();
+        String name = nameField.getText().toString().trim();
+        String unit = unitDropdown.getText().toString().trim();
+        String category = categoryDropdown.getText().toString().trim();
+        String freshness = freshnessDropdown.getText().toString().trim();
+        int quantity = Integer.parseInt(stockField.getText().toString().trim());
+        float price = Float.parseFloat(priceField.getText().toString().trim());
+        String origin = Objects.requireNonNull(locationField.getText()).toString().trim();
+        String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
+        String description = Objects.requireNonNull(descriptionField.getText()).toString().trim();
+        boolean isOrganic = organicSwitch.isChecked();
+        boolean isFeatured = featuredSwitch.isChecked();
+
+        // Log the product details
+        Log.d("VALID_INPUT", "Shop ID: " + shopId);
+        Log.d("VALID_INPUT", "Product Image Url: " + imageUrl);
+        Log.d("VALID_INPUT", "Product Name: " + name);
+        Log.d("VALID_INPUT", "Unit: " + unit);
+        Log.d("VALID_INPUT", "Category: " + category);
+        Log.d("VALID_INPUT", "Freshness: " + freshness);
+        Log.d("VALID_INPUT", "Quantity: " + quantity);
+        Log.d("VALID_INPUT", "Price: " + price);
+        Log.d("VALID_INPUT", "Origin Location: " + origin);
+        Log.d("VALID_INPUT", "Storage Info: " + storage);
+        Log.d("VALID_INPUT", "Description: " + description);
+        Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
+        Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+
+//        CreateProductRequest prodRequest = new CreateProductRequest(shopId, imageUrl,
+//                name, price, unit, category, quantity, origin, freshness,
+//                storage, description, isOrganic, isFeatured, "available"
+//        );
+//        productService.updateProduct(prodRequest);
+
+        Intent goBack = new Intent(ManageProducts.this, InventoryManagement.class);
+        startActivity(goBack);
     }
 }
