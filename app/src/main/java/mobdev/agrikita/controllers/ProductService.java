@@ -10,11 +10,13 @@ import java.util.List;
 import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.client.RetrofitClient;
 import mobdev.agrikita.models.products.request.CreateProductRequest;
+import mobdev.agrikita.models.products.request.RateProductRequest;
 import mobdev.agrikita.models.products.response.CreateProductResponse;
 import mobdev.agrikita.models.products.response.GetAllProductsResponse;
 import mobdev.agrikita.models.products.response.GetFeaturedProductsResponse;
 import mobdev.agrikita.models.products.response.GetProductsByShopIDResponse;
 import mobdev.agrikita.models.products.Products;
+import mobdev.agrikita.models.products.response.RateProductResponse;
 import mobdev.agrikita.models.products.response.UploadProductImageResponse;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -151,6 +153,31 @@ public class ProductService {
                 callback.onFailure(t);
             }
         });
+    }
+
+    public void rateProduct(RateProductRequest request, RateCallback callback) {
+        Call<RateProductResponse> call = serviceProductsApi.rateProducts(request);
+
+        call.enqueue(new Callback<RateProductResponse>() {
+            @Override
+            public void onResponse(Call<RateProductResponse> call, Response<RateProductResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().getMessage());
+                } else {
+                    callback.onFailure(new Exception("Failed to submit review"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RateProductResponse> call, Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
+
+    public interface RateCallback {
+        void onSuccess(String message);
+        void onFailure(Throwable t);
     }
 
     public interface UploadCallback {

@@ -1,17 +1,21 @@
     package mobdev.agrikita.pages.marketplace;
 
+    import android.content.Context;
     import android.content.Intent;
     import android.os.Bundle;
+    import android.view.LayoutInflater;
     import android.view.View;
     import android.view.Window;
     import android.widget.ImageButton;
     import android.widget.ImageView;
     import android.widget.LinearLayout;
     import android.widget.ProgressBar;
+    import android.widget.RatingBar;
     import android.widget.TextView;
     import android.widget.Toast;
 
     import androidx.activity.EdgeToEdge;
+    import androidx.appcompat.app.AlertDialog;
     import androidx.appcompat.app.AppCompatActivity;
     import androidx.core.content.ContextCompat;
     import androidx.core.graphics.Insets;
@@ -24,13 +28,21 @@
     import com.bumptech.glide.request.RequestOptions;
     import com.google.android.material.button.MaterialButton;
 
+    import java.time.OffsetDateTime;
+    import java.time.format.DateTimeFormatter;
 
     import mobdev.agrikita.R;
+    import mobdev.agrikita.controllers.ProductService;
     import mobdev.agrikita.controllers.ShopService;
     import mobdev.agrikita.models.products.Products;
     import mobdev.agrikita.controllers.ShoppingCartController;
+    import mobdev.agrikita.models.products.request.RateProductRequest;
+    import mobdev.agrikita.models.products.response.RateProductResponse;
     import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
     import mobdev.agrikita.pages.addons.checkout.ShoppingCartPage;
+    import retrofit2.Call;
+    import retrofit2.Callback;
+    import retrofit2.Response;
     import mobdev.agrikita.utils.DateUtil;
 
     public class ProductDetailPage extends AppCompatActivity {
@@ -44,8 +56,9 @@
         ProgressBar loadingSpinner;
 
         MaterialButton prod_addMore_btn, prod_subMore_btn, prod_addToCart_btn;
-        ImageButton prod_heart_btn, prod_share_btn;
-
+        ImageButton prod_share_btn;
+        LinearLayout prod_rate_btn;
+        ProductService productService;
         ShopService shopService;
         Products selectedProd;
 
@@ -92,21 +105,20 @@
             prod_addMore_btn = findViewById(R.id.pdp_add_btn);
             prod_subMore_btn= findViewById(R.id.pdp_sub_btn);
             prod_addToCart_btn = findViewById(R.id.pdp_addtocart_btn);
-            prod_heart_btn = findViewById(R.id.pdp_heart_btn);
+            prod_rate_btn = findViewById(R.id.pdp_rate_btn);
             prod_share_btn = findViewById(R.id.pdp_share_btn);
             prod_unit_measurement = findViewById(R.id.unitMeasurement);
             loadingSpinner = findViewById(R.id.loading_spinner);
 
             selectedProd = (Products) getIntent().getSerializableExtra("product_data");
+            productService = new ProductService(this);
 
             back_to_marketplace.setOnClickListener(v -> goToMarketPlace());
 
             prod_addMore_btn.setOnClickListener(v -> buyMore_prod(selectedProd));
             prod_subMore_btn.setOnClickListener(v -> subMore_prod(selectedProd));
             prod_addToCart_btn.setOnClickListener(v -> goToShoppingCart(selectedProd));
-            prod_heart_btn.setOnClickListener(v -> {
-                Toast.makeText(this, "Added to Favorites", Toast.LENGTH_SHORT).show();
-            });
+
             prod_share_btn.setOnClickListener(v -> {
                 Toast.makeText(this, "Pick platform to share", Toast.LENGTH_SHORT).show();
             });
@@ -172,6 +184,26 @@
                     Toast.makeText(ProductDetailPage.this, "Failed fetching data", Toast.LENGTH_LONG).show();
                 }
             });
+
+            prod_rate_btn.setOnClickListener(v -> {
+                View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_rating, null);
+                RatingBar ratingBar = dialogView.findViewById(R.id.dialog_rating_bar);
+
+                new AlertDialog.Builder(this)
+                        .setView(dialogView)
+                        .setPositiveButton("Submit", (dialog, which) -> {
+                            float rating = ratingBar.getRating();
+                            String prodID = selectedProd.getProductID();
+
+                            if(!prodID.isEmpty()){
+                                sendRatingToServer(prodID, rating);
+                            }
+
+                            Toast.makeText(this, "Rated: " + rating + ", " + prodID, Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
         }
 
         private void goToMarketPlace() {
@@ -219,6 +251,22 @@
             result += 11.11 * product.getQuantityToBuy();
 
             return result;
+        }
+
+        private void sendRatingToServer(String productID, float rating) {
+            RateProductRequest request = new RateProductRequest(productID, rating);
+
+            productService.rateProduct(request, new ProductService.RateCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    Toast.makeText(ProductDetailPage.this, message, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    Toast.makeText(ProductDetailPage.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
     }
