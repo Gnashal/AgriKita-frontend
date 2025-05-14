@@ -486,15 +486,33 @@
                         android:textSize="12sp"
                         android:text="Add to Cart" />
 
-                    <ImageButton
-                        android:id="@+id/pdp_heart_btn"
+                    <LinearLayout
+                        android:id="@+id/pdp_rate_btn"
                         android:layout_width="0dp"
                         android:layout_height="35dp"
-                        android:paddingStart="50dp"
                         android:layout_weight="0.75"
-                        android:src="@drawable/heart"
-                        android:background="@null"
-                        android:scaleType="centerInside"/>
+                        android:orientation="horizontal"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="0dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/product_card_star"
+                            android:background="@null"
+                            android:scaleType="centerInside"/>
+
+                        <TextView
+                            android:id="@+id/rate_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rate"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:paddingStart="4dp"
+                            android:paddingEnd="4dp"/>
+                    </LinearLayout>
 
                     <ImageButton
                         android:id="@+id/pdp_share_btn"
