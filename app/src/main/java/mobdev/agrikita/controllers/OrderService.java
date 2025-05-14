@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.api.OrderServiceApi;
@@ -45,7 +46,12 @@ public class OrderService {
             public void onResponse(Call<GetOrdersByShopIDResponse> call, Response<GetOrdersByShopIDResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Orders> orders = response.body().getOrders();
-                    Log.d("OrderService", "Retrieved " + orders.size() + " orders.");
+                    if (orders != null) {
+                        Log.d("OrderService", "Retrieved " + orders.size() + " orders.");
+                    } else {
+                        Log.d("OrderService", "No orders found for this shop.");
+                        orders = new ArrayList<>();
+                    }
                     callback.onOrdersFetched(orders);
                 } else {
                     Log.e("OrderService", "Fetch failed: " + response.code() + " - " + response.message());
