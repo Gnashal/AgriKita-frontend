@@ -1,16 +1,19 @@
 package mobdev.agrikita.api;
 
 import mobdev.agrikita.models.products.request.CreateProductRequest;
+import mobdev.agrikita.models.products.request.RateProductRequest;
 import mobdev.agrikita.models.products.response.CreateProductResponse;
 import mobdev.agrikita.models.products.response.GetAllProductsResponse;
 import mobdev.agrikita.models.products.response.GetFeaturedProductsResponse;
 import mobdev.agrikita.models.products.response.GetProductsByShopIDResponse;
+import mobdev.agrikita.models.products.response.RateProductResponse;
 import mobdev.agrikita.models.products.response.UploadProductImageResponse;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
@@ -32,4 +35,7 @@ public interface ProductServiceApi {
 
     @GET("service/product/get-best-sellers")
     Call<GetFeaturedProductsResponse> getBestSellers();
+
+    @PATCH("service/product/review-product")
+    Call<RateProductResponse> rateProducts(@Body RateProductRequest request);
 }
