@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp"
-        android:clipToOutline="true"
+        android:padding="2dp"
+        android:clipToOutline="false"
         android:background="@drawable/shopcart_prod_card"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,20 +62,40 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/deleteBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/agrikita_green"
+                    android:layout_gravity="center"
+                    android:textSize="15sp"
+                    android:background="@android:color/transparent"
+                    android:padding="0dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:textAllCaps="false"
+                    android:layout_weight="1"
+                    android:text="Delete" />
                 <FrameLayout
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent">
 
                 </FrameLayout>
 
-                <TextView
+                <Button
                     android:id="@+id/notifcard_markasread"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/agrikita_green"
-                    android:textAlignment="viewEnd"
+                    android:layout_gravity="center"
                     android:textSize="15sp"
+                    android:background="@android:color/transparent"
+                    android:padding="0dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:textAllCaps="false"
+                    android:layout_weight="1"
                     android:text="Mark as Read" />
             </LinearLayout>
         </LinearLayout>

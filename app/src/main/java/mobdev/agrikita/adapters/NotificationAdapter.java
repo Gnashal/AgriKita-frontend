@@ -5,12 +5,14 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import mobdev.agrikita.R;
+import mobdev.agrikita.models.notifications.NotificationList;
 import mobdev.agrikita.models.notifications.Notifications;
 
 public class NotificationAdapter extends BaseAdapter {
@@ -18,9 +20,9 @@ public class NotificationAdapter extends BaseAdapter {
     private Context context;
     private List<Notifications> notificationsList;
 
-    public NotificationAdapter(Context context, List<Notifications> notificationsList) {
+    public NotificationAdapter(Context context) {
         this.context = context;
-        this.notificationsList = notificationsList;
+        this.notificationsList = NotificationList.getInstance().getNotifications();
     }
 
     @Override
@@ -50,7 +52,8 @@ public class NotificationAdapter extends BaseAdapter {
         TextView notifTitle = convertView.findViewById(R.id.notifcard_title);
         TextView notifContent = convertView.findViewById(R.id.notifcard_content);
         TextView notifDate = convertView.findViewById(R.id.notifcard_date);
-        TextView notifMarkAllAsRead = convertView.findViewById(R.id.notifcard_markasread);
+        Button notifMarkAllAsRead = convertView.findViewById(R.id.notifcard_markasread);
+        Button deleteBtn = convertView.findViewById(R.id.deleteBtn);
 
         notifTitle.setText(notifData.getTitle());
         notifContent.setText(notifData.getContent());
@@ -64,16 +67,17 @@ public class NotificationAdapter extends BaseAdapter {
             notifMarkAllAsRead.setVisibility(View.VISIBLE);
         }
 
-        notifMarkAllAsRead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                notifData.setRead_status(true);
+        notifMarkAllAsRead.setOnClickListener(v -> {
+            notifData.setRead_status(true);
+            NotificationList.getInstance().markAsRead(position);
+            notifIndicator.setBackgroundColor(Color.TRANSPARENT);
+            notifMarkAllAsRead.setVisibility(View.GONE);
 
-                notifIndicator.setBackgroundColor(Color.TRANSPARENT);
-                notifMarkAllAsRead.setVisibility(View.GONE);
-
-                notifyDataSetChanged();
-            }
+            notifyDataSetChanged();
+        });
+        deleteBtn.setOnClickListener(v -> {
+            NotificationList.getInstance().remove(position);
+            notifyDataSetChanged();
         });
 
         return convertView;

@@ -13,13 +13,13 @@ public class Notifications implements Serializable {
     private String content;
 
     @SerializedName("create_at")
-    private String date;
+    private String createdAt;
     private boolean read_status = false;
 
     public Notifications(String title, String content, String date, boolean read_status) {
         this.title = title;
         this.content = content;
-        this.date = date;
+        this.createdAt = date;
         this.read_status = read_status;
     }
 
@@ -40,11 +40,11 @@ public class Notifications implements Serializable {
     }
 
     public String getDate() {
-        return date;
+        return createdAt;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.createdAt = date;
     }
 
     public boolean isRead_status() {

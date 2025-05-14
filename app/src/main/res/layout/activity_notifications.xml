@@ -28,46 +28,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:padding="12dp"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/notif_back_btn"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:background="@drawable/pdp_details_styling"
                 android:backgroundTint="@color/agrikita_background"
-                app:srcCompat="@drawable/back_to_marketplace_arrow" />
+                app:srcCompat="@drawable/back_to_home" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:layout_marginRight="10dp"
                 android:textAlignment="viewEnd"
                 android:textSize="35sp"
                 android:textColor="@color/black"
                 android:text="Notifications" />
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/pdp_details_styling"
-                android:backgroundTint="@color/agrikita_background"
-                app:srcCompat="@drawable/notification" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <!--  "# new"    -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/notif_new_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/notifGreen"
-                android:text="Button" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/notif_markallasread_btn"

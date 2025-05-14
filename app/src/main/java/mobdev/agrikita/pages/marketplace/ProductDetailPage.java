@@ -24,8 +24,6 @@
     import com.bumptech.glide.request.RequestOptions;
     import com.google.android.material.button.MaterialButton;
 
-    import java.time.OffsetDateTime;
-    import java.time.format.DateTimeFormatter;
 
     import mobdev.agrikita.R;
     import mobdev.agrikita.controllers.ShopService;
@@ -33,6 +31,7 @@
     import mobdev.agrikita.controllers.ShoppingCartController;
     import mobdev.agrikita.models.shop.response.GetShopByShopIDResponse;
     import mobdev.agrikita.pages.addons.checkout.ShoppingCartPage;
+    import mobdev.agrikita.utils.DateUtil;
 
     public class ProductDetailPage extends AppCompatActivity {
 
@@ -48,6 +47,7 @@
         ImageButton prod_heart_btn, prod_share_btn;
 
         ShopService shopService;
+        Products selectedProd;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@
             prod_unit_measurement = findViewById(R.id.unitMeasurement);
             loadingSpinner = findViewById(R.id.loading_spinner);
 
-            Products selectedProd = (Products) getIntent().getSerializableExtra("product_data");
+            selectedProd = (Products) getIntent().getSerializableExtra("product_data");
 
             back_to_marketplace.setOnClickListener(v -> goToMarketPlace());
 
@@ -148,8 +148,7 @@
                 @Override
                 public void onSuccess(GetShopByShopIDResponse shop) {
                     loadingSpinner.setVisibility(View.GONE);
-                    OffsetDateTime dateTime = OffsetDateTime.parse(shop.getCreatedAt());
-                    String reformattedDate = dateTime.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+                    String reformattedDate = DateUtil.formatOrderDate(shop.getCreatedAt());
                     seller_name.setText(shop.getName());
                     seller_description.setText(shop.getDescription());
                     seller_startdate.setText(reformattedDate);
@@ -167,15 +166,22 @@
                 @Override
                 public void onError(String errorMessage) {
                     loadingSpinner.setVisibility(View.GONE);
-                    seller_name.setText("Juan");
-                    seller_description.setText("From the next mountain");
-                    seller_startdate.setText("June 12, 1898");
+                    seller_name.setText("FAIL");
+                    seller_description.setText("FAIL");
+                    seller_startdate.setText("FAIL");
                     Toast.makeText(ProductDetailPage.this, "Failed fetching data", Toast.LENGTH_LONG).show();
                 }
             });
         }
 
-        private void goToMarketPlace() { startActivity(new Intent(this, Marketplace.class)); }
+        private void goToMarketPlace() {
+            if (selectedProd.getQuantityToBuy() > 0) {
+                startActivity(new Intent(this, Marketplace.class));
+            } else {
+                Toast.makeText(this, "Product Quantity is 0", Toast.LENGTH_SHORT).show();
+            }
+
+        }
         private void buyMore_prod(Products product) {
             product.setQuantityToBuy(product.getQuantityToBuy() + 1);
             prod_quantit_to_buy.setText(String.valueOf(product.getQuantityToBuy()));
