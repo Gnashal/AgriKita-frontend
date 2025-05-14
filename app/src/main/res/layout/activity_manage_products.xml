@@ -617,7 +617,6 @@
                         android:backgroundTint="#D32F2F"
                         android:textColor="#FFFFFF"
                         android:layout_marginEnd="8dp"
-                        android:onClick="deleteProduct"
                         tools:ignore="HardcodedText" />
 
                     <Button
@@ -639,7 +638,6 @@
                         android:text="Update"
                         android:backgroundTint="#388E3C"
                         android:textColor="#FFFFFF"
-                        android:onClick="updateProduct"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
 
