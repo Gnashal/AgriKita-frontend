@@ -54,8 +54,6 @@ public class Notification extends AppCompatActivity {
 
         go_back = findViewById(R.id.notif_back_btn);
         notif_view =  findViewById(R.id.notif_list_view);
-
-        notif_new = findViewById(R.id.notif_new_btn);
         notif_markallasread = findViewById(R.id.notif_markallasread_btn);
 
 

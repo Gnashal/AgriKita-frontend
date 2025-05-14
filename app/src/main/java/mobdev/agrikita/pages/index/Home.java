@@ -110,7 +110,6 @@ public class Home extends AppCompatActivity {
 
         productService = new ProductService(this);
         shopService = new ShopService(this);
-        NotificationService.getInstance(this);
         /* Initialize Views */
         profileButton = findViewById(R.id.profileButton);
         toNotifications = findViewById(R.id.toNotifications);
@@ -376,7 +375,9 @@ public class Home extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse userResponse) {
                 CurrentUser.getInstance(getBaseContext()).setUid(uid);
-                saveToPrefs();
+                saveToPrefs(() -> {
+                    NotificationService.getInstance(getBaseContext());
+                });
                 runOnUiThread(() -> setProfilePic());
             }
 
@@ -403,7 +404,7 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    private void saveToPrefs() {
+    private void saveToPrefs(Runnable r) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         CurrentUser currentUser = CurrentUser.getInstance(this);
@@ -422,6 +423,7 @@ public class Home extends AppCompatActivity {
         }
 
         editor.apply();
+        r.run();
     }
 
     private void fetchBestSellers() {

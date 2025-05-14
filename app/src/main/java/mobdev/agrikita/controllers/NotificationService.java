@@ -55,7 +55,7 @@ public class NotificationService {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(chain -> {
                     Request request = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer "+ token)
+                            .addHeader("Authorization", "Bearer " + token)
                             .build();
                     return chain.proceed(request);
                 })
@@ -68,8 +68,7 @@ public class NotificationService {
         webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
-                webSocket.send("Connected, server!");
-                Log.d("WebSocket", "Connected");
+                Log.d("WebSocket", "Connected: " + response.message());
             }
 
             @Override
@@ -79,6 +78,9 @@ public class NotificationService {
                     Gson gson = new Gson();
                     Notifications notification = gson.fromJson(text, Notifications.class);
                     NotificationList.getInstance().add(notification);
+                    if (listener != null) {
+                        listener.onNewNotification();
+                    }
                 } catch (Exception e) {
                     Log.e("WebSocket", "Failed to parse message", e);
                 }
@@ -87,12 +89,20 @@ public class NotificationService {
             @Override
             public void onFailure(WebSocket webSocket, Throwable t, Response response) {
                 Log.e("WebSocket", "Connection failed", t);
+                if (response != null) {
+                    Log.e("WebSocket", "Failure response: " + response.toString());
+                }
             }
 
             @Override
             public void onClosing(WebSocket webSocket, int code, String reason) {
+                Log.d("WebSocket", "Closing: " + reason + ", Code: " + code);
                 webSocket.close(1000, null);
-                Log.d("WebSocket", "Closing: " + reason);
+            }
+
+            @Override
+            public void onClosed(WebSocket webSocket, int code, String reason) {
+                Log.d("WebSocket", "Closed: " + reason + ", Code: " + code);
             }
         });
     }
