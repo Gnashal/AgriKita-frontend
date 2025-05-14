@@ -246,9 +246,10 @@ public class InventoryManagement extends AppCompatActivity {
         orderService.getOrdersByShopID(shopId, new OrderService.OrderCallback() {
             @Override
             public void onOrdersFetched(List<Orders> orders) {
-                adapterOrders.updateData(orders);
-                checkAdapterOrdersSize();
-                progressBarShops.setVisibility(View.GONE);
+                checkAdapterOrdersSize(orders, () -> {
+                    adapterOrders.updateData(orders);
+                    progressBarShops.setVisibility(View.GONE);
+                });
             }
 
             @Override
@@ -264,9 +265,10 @@ public class InventoryManagement extends AppCompatActivity {
         productService.getProductsByShopID(shopId, new ProductService.ProductCallback() {
             @Override
             public void onProductsFetched(List<Products> products) {
-                adapterProducts.updateData(products);
-                checkAdapterProductsSize();
-                progressBarProds.setVisibility(View.GONE);
+                checkAdapterProductsSize(products, () -> {
+                    adapterProducts.updateData(products);
+                    progressBarProds.setVisibility(View.GONE);
+                });
             }
 
             @Override
@@ -302,23 +304,25 @@ public class InventoryManagement extends AppCompatActivity {
         });
     }
 
-    private void checkAdapterOrdersSize() {
-        if (adapterOrders.getItemCount() == 0) {
+    private void checkAdapterOrdersSize(List<Orders> orders, Runnable r) {
+        if (orders.isEmpty()) {
             emptyOrderText.setVisibility(View.VISIBLE);
             recyclerOrderView.setVisibility(View.GONE);
         } else {
             emptyOrderText.setVisibility(View.GONE);
             recyclerOrderView.setVisibility(View.VISIBLE);
         }
+        r.run();
     }
 
-    private void checkAdapterProductsSize() {
-        if (adapterProducts.getItemCount() == 0) {
+    private void checkAdapterProductsSize(List<Products> products, Runnable r) {
+        if (products.isEmpty()) {
             emptyProductText.setVisibility(View.VISIBLE);
             recyclerProductView.setVisibility(View.GONE);
         } else {
             emptyProductText.setVisibility(View.GONE);
             recyclerProductView.setVisibility(View.VISIBLE);
         }
+        r.run();
     }
 }
