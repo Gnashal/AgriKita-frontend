@@ -70,16 +70,22 @@ public class OrderService {
     }
     public void getOrdersByBuyerID(String buyerID, final OrderCallback callback) {
         Call<GetOrdersByBuyerIDResponse> call = serviceOrdersApi.getOrdersByBuyerID(buyerID);
-        Log.v("OrderService", "function reached");
+        Log.v("OrderService", "Function reached");
+
         call.enqueue(new Callback<GetOrdersByBuyerIDResponse>() {
             @Override
             public void onResponse(Call<GetOrdersByBuyerIDResponse> call, Response<GetOrdersByBuyerIDResponse> response) {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     List<Orders> orders = response.body().getData();
-                    Log.v("OrderService", "Raw JSON response: " + response.body().toString());
+                    if (orders != null) {
+                        Log.v("OrderService", "Orders fetched: " + orders.size());
+                    } else {
+                        Log.v("OrderService", "No orders found for this buyer.");
+                        orders = new ArrayList<>();
+                    }
                     callback.onOrdersFetched(orders);
                 } else {
-                    Log.v("OrderService", "Raw JSON response: " + response.body().toString());
+                    Log.v("OrderService", "Null or unsuccessful response.");
                     Log.e("OrderService", "Fetch failed: " + response.code() + " - " + response.message());
                     Toast.makeText(context, "Failed to fetch orders: " + response.message(), Toast.LENGTH_SHORT).show();
                     callback.onFailure(new Exception("Failed to fetch orders: " + response.message()));
@@ -94,6 +100,7 @@ public class OrderService {
             }
         });
     }
+
 
     public void createOrder(CreateOrderRequest request, final CreateOrderCallback callback) {
         if (request == null || request.getItems() == null || request.getItems().isEmpty()) {

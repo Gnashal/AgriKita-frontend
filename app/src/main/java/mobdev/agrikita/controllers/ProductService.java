@@ -120,21 +120,27 @@ public class ProductService {
             public void onResponse(Call<GetAllProductsResponse> call, Response<GetAllProductsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Products> productsList = response.body().getProducts();
-                    Log.d("Product_Service", "Success: "+ response.body().getMessage());
+                    if (productsList != null) {
+                        Log.d("Product_Service", "Fetched " + productsList.size() + " products. Message: " + response.body().getMessage());
+                    } else {
+                        Log.d("Product_Service", "No products found. Returning empty list.");
+                        productsList = new ArrayList<>();
+                    }
                     callback.onProductsFetched(productsList);
                 } else {
-                    Log.e("Product_Service", "Failed to Fetch all products");
-                    callback.onFailure(new Exception("Failed to fetch products"));
+                    Log.e("Product_Service", "Failed to fetch products. Response code: " + response.code());
+                    callback.onFailure(new Exception("Failed to fetch products: " + response.message()));
                 }
             }
 
             @Override
             public void onFailure(Call<GetAllProductsResponse> call, Throwable t) {
-                Log.e("Product_Service", "Failed to Fetch all products", t);
+                Log.e("Product_Service", "Network error while fetching products", t);
                 callback.onFailure(t);
             }
         });
     }
+
 
     public void getFeaturedProducts(ProductCallback callback) {
         Call<GetFeaturedProductsResponse> call = serviceProductsApi.getBestSellers();
@@ -144,21 +150,27 @@ public class ProductService {
             public void onResponse(Call<GetFeaturedProductsResponse> call, Response<GetFeaturedProductsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Products> featuredProductsList = response.body().getProducts();
-                    Log.d("Product_Service", "Success: " + response.body().getMessage());
+                    if (featuredProductsList != null) {
+                        Log.d("Product_Service", "Success: " + response.body().getMessage() + " | Count: " + featuredProductsList.size());
+                    } else {
+                        Log.d("Product_Service", "No featured products found.");
+                        featuredProductsList = new ArrayList<>();
+                    }
                     callback.onProductsFetched(featuredProductsList);
                 } else {
-                    Log.e("Product_Service", "Failed to Fetch featured products");
-                    callback.onFailure(new Exception("Failed to fetch featured products"));
+                    Log.e("Product_Service", "Failed to fetch featured products. Code: " + response.code() + " | Message: " + response.message());
+                    callback.onFailure(new Exception("Failed to fetch featured products: " + response.message()));
                 }
             }
 
             @Override
             public void onFailure(Call<GetFeaturedProductsResponse> call, Throwable t) {
-                Log.e("Product_Service", "Failed to Fetch featured products", t);
+                Log.e("Product_Service", "Network error while fetching featured products", t);
                 callback.onFailure(t);
             }
         });
     }
+
 
     public void rateProduct(RateProductRequest request, RateCallback callback) {
         Call<RateProductResponse> call = serviceProductsApi.rateProducts(request);
