@@ -1,7 +1,9 @@
 package mobdev.agrikita.controllers;
 
 import android.content.Context;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import mobdev.agrikita.api.client.RetrofitClient;
@@ -82,18 +84,28 @@ public class ShopService {
             @Override
             public void onResponse(Call<GetFeaturedShopsResponse> call, Response<GetFeaturedShopsResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body().getShops());
+                    List<Shop> shops = response.body().getShops();
+                    if (shops != null) {
+                        Log.d("ShopService", "Retrieved " + shops.size() + " featured shops.");
+                    } else {
+                        Log.d("ShopService", "No featured shops found.");
+                        shops = new ArrayList<>(); // Prevent null issues
+                    }
+                    callback.onSuccess(shops);
                 } else {
-                    callback.onError("Failed with code: " + response.code());
+                    Log.e("ShopService", "Fetch failed: " + response.code() + " - " + response.message());
+                    callback.onError("Failed to fetch featured shops: " + response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<GetFeaturedShopsResponse> call, Throwable t) {
+                Log.e("ShopService", "Network error: " + t.getMessage(), t);
                 callback.onError("Network error: " + t.getMessage());
             }
         });
     }
+
 
     public interface FeaturedShopsCallback {
         void onSuccess(List<Shop> shops);
