@@ -11,14 +11,19 @@ import mobdev.agrikita.api.ProductServiceApi;
 import mobdev.agrikita.api.client.RetrofitClient;
 import mobdev.agrikita.models.products.request.CreateProductRequest;
 import mobdev.agrikita.models.products.request.RateProductRequest;
+import mobdev.agrikita.models.products.request.UpdateProductRequest;
 import mobdev.agrikita.models.products.response.CreateProductResponse;
 import mobdev.agrikita.models.products.response.GetAllProductsResponse;
 import mobdev.agrikita.models.products.response.GetFeaturedProductsResponse;
 import mobdev.agrikita.models.products.response.GetProductsByShopIDResponse;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.products.response.RateProductResponse;
+import mobdev.agrikita.models.products.response.UpdateProductImageResponse;
+import mobdev.agrikita.models.products.response.UpdateProductResponse;
 import mobdev.agrikita.models.products.response.UploadProductImageResponse;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -173,6 +178,59 @@ public class ProductService {
                 callback.onFailure(t);
             }
         });
+    }
+
+    public void updateProduct(UpdateProductRequest request, UpdateProductCallback callback) {
+        Call<UpdateProductResponse> call = serviceProductsApi.updateProduct(request);
+
+        call.enqueue(new Callback<UpdateProductResponse>() {
+            @Override
+            public void onResponse(Call<UpdateProductResponse> call, Response<UpdateProductResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().getMessage());
+                } else {
+                    callback.onFailure(new Exception("Failed to update product"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UpdateProductResponse> call, Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
+
+    public void updateProductImage(String productId, String oldImageUrl, MultipartBody.Part imagePart, UpdateImageCallback callback) {
+        RequestBody productIdBody = RequestBody.create(productId, MediaType.get("text/plain"));
+        RequestBody oldImageUrlBody = RequestBody.create(oldImageUrl, MediaType.get("text/plain"));
+
+        serviceProductsApi.updateProductImage(productIdBody, oldImageUrlBody, imagePart)
+                .enqueue(new Callback<UpdateProductImageResponse>() {
+                    @Override
+                    public void onResponse(Call<UpdateProductImageResponse> call, Response<UpdateProductImageResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            callback.onSuccess(response.body().getMessage(), response.body().getNewImageUrl());
+                        } else {
+                            callback.onFailure("Update image failed: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UpdateProductImageResponse> call, Throwable t) {
+                        callback.onFailure("Network error: " + t.getMessage());
+                    }
+                });
+    }
+
+
+    public interface UpdateImageCallback {
+        void onSuccess(String message, String newImageUrl);
+        void onFailure(String errorMessage);
+    }
+
+    public interface UpdateProductCallback {
+        void onSuccess(String message);
+        void onFailure(Throwable t);
     }
 
     public interface RateCallback {

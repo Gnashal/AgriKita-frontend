@@ -1,5 +1,7 @@
 package mobdev.agrikita.pages.shop;
 
+import static mobdev.agrikita.controllers.ImagePickerUtil.prepareFilePart;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,8 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -33,13 +33,18 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import mobdev.agrikita.R;
 import mobdev.agrikita.controllers.ImagePickerUtil;
+import mobdev.agrikita.controllers.ProductService;
+import mobdev.agrikita.controllers.UserService;
 import mobdev.agrikita.models.products.Products;
-import mobdev.agrikita.models.products.request.CreateProductRequest;
+import mobdev.agrikita.models.products.request.UpdateProductRequest;
 import mobdev.agrikita.models.user.CurrentUser;
+import mobdev.agrikita.models.user.response.UserResponse;
 import mobdev.agrikita.pages.addons.Navbar;
+import okhttp3.MultipartBody;
 
 public class ManageProducts extends AppCompatActivity {
     AutoCompleteTextView unitDropdown, categoryDropdown, freshnessDropdown, statusDropdown;
@@ -50,6 +55,7 @@ public class ManageProducts extends AppCompatActivity {
     Button updateButton, deleteButton, reselectBtn, addStock, minusStock, btnCancel, updateImgButton;
     Uri currentImageUri = null;
     LinearLayout uploadBox;
+    ProductService productService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,8 @@ public class ManageProducts extends AppCompatActivity {
         });
 
         setupNavbar();
+
+        productService = new ProductService(this);
 
         String[] units = {
                 "Kg",       // Kilogram
@@ -205,16 +213,58 @@ public class ManageProducts extends AppCompatActivity {
         });
 
         updateButton.setOnClickListener(v -> {
-//            if (!validateInputs()) return;
-
-
+            if (!validateInputs()) return;
 
             updateButton.setEnabled(false);
             updateButton.setText("Loading...");
 
-            handleUpdateProduct(product.getImageUrl());
+            CurrentUser user = CurrentUser.getInstance(this);
+            user.fetchUserData(user.getUid(), new UserService.FetchUserCallback() {
+                @Override
+                public void onSuccess(UserResponse resp) {
+                    if (currentImageUri != null) {
+                        MultipartBody.Part imgPart = prepareFilePart(ManageProducts.this, "newImage", currentImageUri);
+                        if (imgPart == null) {
+                            Toast.makeText(ManageProducts.this, "Failed to prepare image file. Please try again.", Toast.LENGTH_SHORT).show();
+                            resetSubmitButton();
+                            return;
+                        }
+                        // Upload image first, then update product
+                        CompletableFuture.runAsync(() -> {
+                            productService.updateProductImage(product.getProductID(), product.getImageUrl(), imgPart, new ProductService.UpdateImageCallback() {
+                                @Override
+                                public void onSuccess(String message, String newImageUrl) {
+                                    runOnUiThread(() -> {
+                                        handleUpdateProduct(newImageUrl, product.getProductID());
+                                        resetSubmitButton();
+                                    });
+                                }
 
-            resetSubmitButton();
+                                @Override
+                                public void onFailure(String errorMessage) {
+                                    runOnUiThread(() -> {
+                                        Toast.makeText(ManageProducts.this, "Image upload failed: " + errorMessage, Toast.LENGTH_SHORT).show();
+                                        resetSubmitButton();
+                                    });
+                                }
+                            });
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            handleUpdateProduct(product.getImageUrl(), product.getProductID());
+                            resetSubmitButton();
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(ManageProducts.this, "Failed to get shopID: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        resetSubmitButton();
+                    });
+                }
+            });
         });
 
         updateImgButton.setOnClickListener(v -> ImagePickerUtil.launchImagePicker(ManageProducts.this, imagePickerLauncher));
@@ -256,7 +306,7 @@ public class ManageProducts extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void resetSubmitButton() {
-        updateButton.setText("Update Product");
+        updateButton.setText("Update");
         updateButton.setEnabled(true);
     }
 
@@ -341,7 +391,7 @@ public class ManageProducts extends AppCompatActivity {
             descriptionField.setError("Product description field is required");
             return false;
         }
-        return false;
+        return true;
     }
 
     private int getCurrentQuantity() {
@@ -353,9 +403,7 @@ public class ManageProducts extends AppCompatActivity {
         }
     }
 
-    private void handleUpdateProduct(String imageUrl) {
-        CurrentUser user = CurrentUser.getInstance(this);
-        String shopId = user.getShopId();
+    private void handleUpdateProduct(String imageUrl, String productID) {
         String name = nameField.getText().toString().trim();
         String unit = unitDropdown.getText().toString().trim();
         String category = categoryDropdown.getText().toString().trim();
@@ -365,11 +413,13 @@ public class ManageProducts extends AppCompatActivity {
         String origin = Objects.requireNonNull(locationField.getText()).toString().trim();
         String storage = Objects.requireNonNull(productStorageField.getText()).toString().trim();
         String description = Objects.requireNonNull(descriptionField.getText()).toString().trim();
+        String status = Objects.requireNonNull(statusDropdown.getText()).toString().trim();
+
         boolean isOrganic = organicSwitch.isChecked();
         boolean isFeatured = featuredSwitch.isChecked();
 
         // Log the product details
-        Log.d("VALID_INPUT", "Shop ID: " + shopId);
+        Log.d("VALID_INPUT", "Prod ID: " + productID);
         Log.d("VALID_INPUT", "Product Image Url: " + imageUrl);
         Log.d("VALID_INPUT", "Product Name: " + name);
         Log.d("VALID_INPUT", "Unit: " + unit);
@@ -382,14 +432,31 @@ public class ManageProducts extends AppCompatActivity {
         Log.d("VALID_INPUT", "Description: " + description);
         Log.d("VALID_INPUT", "Is Organic: " + isOrganic);
         Log.d("VALID_INPUT", "Is Featured: " + isFeatured);
+        Log.d("VALID_INPUT", "Status: " + status);
 
-//        CreateProductRequest prodRequest = new CreateProductRequest(shopId, imageUrl,
-//                name, price, unit, category, quantity, origin, freshness,
-//                storage, description, isOrganic, isFeatured, "available"
-//        );
-//        productService.updateProduct(prodRequest);
+        UpdateProductRequest updateRequest = new UpdateProductRequest(
+                productID, name, price, unit, category, quantity,
+                origin, freshness, storage, description, isOrganic, isFeatured, status
+        );
 
-        Intent goBack = new Intent(ManageProducts.this, InventoryManagement.class);
-        startActivity(goBack);
+        productService.updateProduct(updateRequest, new ProductService.UpdateProductCallback() {
+            @Override
+            public void onSuccess(String message) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ManageProducts.this, message, Toast.LENGTH_SHORT).show();
+                    resetSubmitButton();
+                    Intent goBack = new Intent(ManageProducts.this, InventoryManagement.class);
+                    startActivity(goBack);
+                });
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ManageProducts.this, "Update failed: " + t, Toast.LENGTH_SHORT).show();
+                    resetSubmitButton();
+                });
+            }
+        });
     }
 }
