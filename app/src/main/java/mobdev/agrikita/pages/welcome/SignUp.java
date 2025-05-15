@@ -69,6 +69,7 @@ public class SignUp extends AppCompatActivity {
 
         if (!isFieldMissing(email, username, name, phone, password, confirmPassword)) return;
         if (!isPasswordsSame(password, confirmPassword)) return;
+        if (!isValidPassword(password)) return;
         if (!isCheckboxChecked()) return;
 
 
@@ -91,7 +92,16 @@ public class SignUp extends AppCompatActivity {
         }
         return true;
     }
-
+    public boolean isValidPassword(String password) {
+        if (password.length() < 8) {
+            Toast.makeText(this, "Password must be longer than 8 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (password.contains(" ") || password.contains("*") || password.contains("#") || password.contains("$")) {
+            Toast.makeText(this, "Password must not contain special characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
     public boolean isCheckboxChecked() {
         if (!checkbox.isChecked()) {
             Toast.makeText(this, "Please check the Terms and Conditions", Toast.LENGTH_SHORT).show();

@@ -11,7 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.List;
+
 import mobdev.agrikita.R;
+import mobdev.agrikita.controllers.NotificationService;
+import mobdev.agrikita.models.notifications.NotificationList;
+import mobdev.agrikita.models.notifications.Notifications;
 import mobdev.agrikita.pages.addons.checkout.ShoppingCartPage;
 import mobdev.agrikita.pages.index.Home;
 import mobdev.agrikita.pages.index.Profile;
@@ -19,6 +24,8 @@ import mobdev.agrikita.pages.index.Profile;
 public class Navbar extends Fragment {
     ImageView profileButton;
     ImageButton menuButton, cartButton, logoButton, notificationButton;
+    View notificationDot;
+
 
     public Navbar() {
         // Required empty public constructor
@@ -35,11 +42,14 @@ public class Navbar extends Fragment {
         cartButton = view.findViewById(R.id.cartIcon);
         logoButton = view.findViewById(R.id.homeButton);
         notificationButton = view.findViewById(R.id.notificationIcon);
+        notificationDot = view.findViewById(R.id.notificationDot);
 
         profileButton.setOnClickListener(v -> toProfile());
         cartButton.setOnClickListener(v -> toShoppingCart());
         logoButton.setOnClickListener(v -> toHome());
         notificationButton.setOnClickListener(v -> toNotification());
+
+        checkUnreadNotifications();
 
         return view;
     }
@@ -65,6 +75,15 @@ public class Navbar extends Fragment {
         }
     }*/
 
+    private void checkUnreadNotifications() {
+       boolean hasUnreadNotifications = NotificationList.getInstance().hasUnreadNotifications();
+       if (hasUnreadNotifications) {
+           notificationDot.setVisibility(View.VISIBLE);
+       } else {
+           notificationDot.setVisibility(View.GONE);
+       }
+    }
 
 
 }
+

@@ -51,15 +51,33 @@
                     android:scaleType="fitStart"
                     android:layout_gravity="start" />
 
-                <ImageButton
-                    android:id="@+id/toNotifications"
+                <FrameLayout
+                    android:id="@+id/notificationContainer"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:src="@drawable/ic_notification"
-                    android:layout_gravity="end"
-                    android:paddingEnd="8dp"
-                    android:background="@null"
-                    app:tint="@color/black" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp">
+
+                    <ImageButton
+                        android:id="@+id/toNotifications"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_notification"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:focusable="true"
+                        android:clickable="true" />
+
+                    <!-- Red dot -->
+                    <View
+                        android:id="@+id/notificationDot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/red_dot"
+                        android:layout_gravity="end|top"
+                        android:translationX="3dp"
+                        android:translationY="-3dp"
+                        android:visibility="gone" />
+                </FrameLayout>
             </LinearLayout>
 
 

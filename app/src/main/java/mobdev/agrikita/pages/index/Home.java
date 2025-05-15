@@ -43,9 +43,11 @@ import mobdev.agrikita.R;
 import mobdev.agrikita.adapters.BestSellersAdapter;
 import mobdev.agrikita.adapters.FeaturedFarmsAdapter;
 import mobdev.agrikita.adapters.ProductAdapter;
+import mobdev.agrikita.controllers.NotificationService;
 import mobdev.agrikita.controllers.ProductService;
 import mobdev.agrikita.controllers.ShopService;
 import mobdev.agrikita.controllers.WeatherService;
+import mobdev.agrikita.models.notifications.NotificationList;
 import mobdev.agrikita.models.products.Products;
 import mobdev.agrikita.models.shop.Shop;
 import mobdev.agrikita.models.user.CurrentUser;
@@ -71,6 +73,7 @@ public class Home extends AppCompatActivity {
     private SwipeRefreshLayout refresh;
     private ImageButton toNotifications;
     private Button toMarketplace, seeAllProducts;
+    private View notificationDot;
 
     private UserService userService;
     private OkHttpClient client = new OkHttpClient();
@@ -107,10 +110,10 @@ public class Home extends AppCompatActivity {
 
         productService = new ProductService(this);
         shopService = new ShopService(this);
-
         /* Initialize Views */
         profileButton = findViewById(R.id.profileButton);
         toNotifications = findViewById(R.id.toNotifications);
+        notificationDot = findViewById(R.id.notificationDot);
         toMarketplace = findViewById(R.id.see_all_BestSellers);
         seeAllProducts = findViewById(R.id.see_all_products);
         toWeather = findViewById(R.id.toWeatherForecast);
@@ -153,6 +156,9 @@ public class Home extends AppCompatActivity {
         fetchFeaturedFarms();
         fetchShopProducts();
 
+        /*Notification bar*/
+        checkUnreadNotifications();
+
         userService = new UserService(this);
 
         // Load user data if available
@@ -177,6 +183,7 @@ public class Home extends AppCompatActivity {
             fetchBestSellers();
             fetchFeaturedFarms();
             fetchShopProducts();
+            NotificationService.getInstance(this);
             refresh.setRefreshing(false);
         });
 
@@ -368,7 +375,9 @@ public class Home extends AppCompatActivity {
             @Override
             public void onSuccess(UserResponse userResponse) {
                 CurrentUser.getInstance(getBaseContext()).setUid(uid);
-                saveToPrefs();
+                saveToPrefs(() -> {
+                    NotificationService.getInstance(getBaseContext());
+                });
                 runOnUiThread(() -> setProfilePic());
             }
 
@@ -395,7 +404,7 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    private void saveToPrefs() {
+    private void saveToPrefs(Runnable r) {
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         CurrentUser currentUser = CurrentUser.getInstance(this);
@@ -414,6 +423,7 @@ public class Home extends AppCompatActivity {
         }
 
         editor.apply();
+        r.run();
     }
 
     private void fetchBestSellers() {
@@ -470,7 +480,14 @@ public class Home extends AppCompatActivity {
             }
         });
     }
-
+    private void checkUnreadNotifications() {
+        boolean hasUnreadNotifications = NotificationList.getInstance().hasUnreadNotifications();
+        if (hasUnreadNotifications) {
+            notificationDot.setVisibility(View.VISIBLE);
+        } else {
+            notificationDot.setVisibility(View.GONE);
+        }
+    }
 
 
 }
